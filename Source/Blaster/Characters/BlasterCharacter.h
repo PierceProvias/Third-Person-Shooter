@@ -45,9 +45,11 @@ public:
 	// Since SimProxies Tick is off, Used for replication of our root component's position and velocity (Inherited from Actor.h)
 	virtual void OnRep_ReplicatedMovement() override;
 	
+	void Elim();
+
 	// Handles player when eliminated
 	UFUNCTION(NetMulticast, Reliable)
-	void Elim();
+	void MulticastElim();
 
 protected:
 	
@@ -195,6 +197,14 @@ private:
 	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
 
 	bool bElimmed = false;
+
+	FTimerHandle ElimTimer;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ElimDelay = 3.f;
+
+	// Callback function for ElimTimer
+	void ElimTimerFinished();
 
 public:
 
