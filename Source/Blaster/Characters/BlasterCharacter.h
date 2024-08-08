@@ -40,11 +40,13 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	void PlayFireMontage(bool bAiming);
+	void PlayElimMontage();
 
 	// Since SimProxies Tick is off, Used for replication of our root component's position and velocity (Inherited from Actor.h)
 	virtual void OnRep_ReplicatedMovement() override;
 	
 	// Handles player when eliminated
+	UFUNCTION(NetMulticast, Reliable)
 	void Elim();
 
 protected:
@@ -159,6 +161,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage> ElimMontage;
+
 	void HideCameraIfCharacterClose();
 	
 	UPROPERTY(EditAnywhere)
@@ -189,6 +194,8 @@ private:
 
 	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
 
+	bool bElimmed = false;
+
 public:
 
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -200,6 +207,7 @@ public:
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
+	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	
 	AWeapon* GetEquippedWeapon();
 	FVector GetHitTarget() const;
