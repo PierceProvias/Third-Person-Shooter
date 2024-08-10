@@ -21,6 +21,7 @@ class UCombatComponent;
 class UAnimMontage;
 class ABlasterPlayerController;
 class AController;
+class USoundCue;
 
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
@@ -51,6 +52,8 @@ public:
 	// Handles player when eliminated
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
+
+	virtual void Destroyed() override;
 
 protected:
 	
@@ -232,6 +235,22 @@ private:
 	// Material instance set on the Blueprint, used with the dynamic material instance
 	UPROPERTY(EditAnywhere, Category = "Elim")
 	TObjectPtr<UMaterialInstance>  DissolveMaterialInstance;
+
+	//
+	// Elim Bot (must be spawned locally)
+	//
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UParticleSystem> ElimBotEffect;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UParticleSystemComponent> ElimBotComponent;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USoundCue> ElimBotSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ElimBotHoverDistance = 200.f;
 
 public:
 
