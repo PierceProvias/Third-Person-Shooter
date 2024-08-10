@@ -17,6 +17,7 @@ public:
 	TObjectPtr<ABlasterHUD> BlasterHUD;
 	void SetHUDHealth(float Health, float MaxHealth);
 	void OnPossess(APawn* InPawn) override;
+	void SetHUDScore(float Score);
 
 protected:
 	virtual void BeginPlay() override;

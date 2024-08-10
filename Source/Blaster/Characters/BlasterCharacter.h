@@ -22,6 +22,7 @@ class UAnimMontage;
 class ABlasterPlayerController;
 class AController;
 class USoundCue;
+class ABlasterPlayerState;
 
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
@@ -91,6 +92,10 @@ protected:
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
+
+	// Poll for any relevant classes and init our HUD
+	void PollInit();
+
 
 private:
 
@@ -251,6 +256,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float ElimBotHoverDistance = 200.f;
+
+
+	TObjectPtr<ABlasterPlayerState> BlasterPlayerState;
 
 public:
 
