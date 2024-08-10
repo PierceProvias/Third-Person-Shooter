@@ -113,8 +113,6 @@ void UCombatComponent::Fire()
 {
 	if (bCanFire && bFireButtonPressed)
 	{
-		
-		UE_LOG(LogTemp, Warning, TEXT("Firing"));
 		ServerFire(HitTarget);
 		if (EquippedWeapon)
 		{

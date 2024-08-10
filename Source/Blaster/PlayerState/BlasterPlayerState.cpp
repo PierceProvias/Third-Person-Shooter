@@ -4,6 +4,14 @@
 #include "BlasterPlayerState.h"
 #include "../Characters/BlasterCharacter.h"
 #include "../PlayerController/BlasterPlayerController.h"
+#include "Net/UnrealNetwork.h"
+
+void ABlasterPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABlasterPlayerState, Deaths);
+}
 
 // Client
 void ABlasterPlayerState::OnRep_Score()
@@ -16,7 +24,20 @@ void ABlasterPlayerState::OnRep_Score()
 		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
 		if (BlasterController)
 		{
-			BlasterController->SetHUDScore(Score);
+			BlasterController->SetHUDScore(GetScore());
+		}
+	}
+}
+
+void ABlasterPlayerState::OnRep_Deaths()
+{
+	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
+	if (BlasterCharacter)
+	{
+		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
+		if (BlasterController)
+		{
+			BlasterController->SetHUDDeaths(Deaths);
 		}
 	}
 }
@@ -24,15 +45,28 @@ void ABlasterPlayerState::OnRep_Score()
 // Server
 void ABlasterPlayerState::AddToScore(float ScoreAmount)
 {
-	
-	Score += ScoreAmount;
+	SetScore(GetScore() + ScoreAmount);
 	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
 	if (BlasterCharacter)
 	{
 		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
 		if (BlasterController)
 		{
-			BlasterController->SetHUDScore(Score);
+			BlasterController->SetHUDScore(GetScore());
+		}
+	}
+}
+
+void ABlasterPlayerState::AddToDeaths(int32 DeathsAmount)
+{
+	Deaths += DeathsAmount;
+	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
+	if (BlasterCharacter)
+	{
+		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
+		if (BlasterController)
+		{
+			BlasterController->SetHUDDeaths(Deaths);
 		}
 	}
 }
