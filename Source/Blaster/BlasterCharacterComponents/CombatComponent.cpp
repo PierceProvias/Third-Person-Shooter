@@ -111,8 +111,9 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 
 void UCombatComponent::Fire()
 {
-	if (bCanFire && bFireButtonPressed)
+	if (CanFire())
 	{
+		bCanFire = false;
 		ServerFire(HitTarget);
 		if (EquippedWeapon)
 		{
@@ -283,6 +284,15 @@ void UCombatComponent::FireTimerFinished()
 	{
 		Fire();
 	}
+}
+
+bool UCombatComponent::CanFire()
+{
+	if (!EquippedWeapon) return false;
+	if (EquippedWeapon->IsEmpty()) return false;
+	if (!bCanFire) return false;
+	return true;
+	
 }
 
 void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)

@@ -118,6 +118,8 @@ private:
 	void FireTimerStart();
 	void FireTimerFinished();
 
+	bool CanFire();
+
 public:	
 
 
