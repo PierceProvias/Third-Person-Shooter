@@ -130,6 +130,11 @@ private:
 
 	TMap<EWeaponType, int32> CarriedAmmoMap;	// TMap isn't replicated!
 
+	UPROPERTY(EditAnywhere)
+	int32 StartingARAmmo = 30;
+
+	void InitCarriedAmmo();
+
 public:	
 
 

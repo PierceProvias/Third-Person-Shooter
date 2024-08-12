@@ -37,6 +37,10 @@ void UCombatComponent::BeginPlay()
 			DefaultFOV = BlasterCharacter->GetCamera()->FieldOfView;
 			CurrentFOV = DefaultFOV;
 		}
+		if (BlasterCharacter->HasAuthority())
+		{
+			InitCarriedAmmo();
+		}
 	}
 }
 
@@ -298,6 +302,16 @@ bool UCombatComponent::CanFire()
 
 void UCombatComponent::OnRep_CarriedAmmo()
 {
+	BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
+	if (BlasterController)
+	{
+		BlasterController->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+}
+
+void UCombatComponent::InitCarriedAmmo()
+{
+	CarriedAmmoMap.Emplace(EWeaponType::EWT_AssaultRifle, StartingARAmmo);
 }
 
 void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
@@ -333,6 +347,17 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	// Set equipped weapon to controlled pawn 
 	EquippedWeapon->SetOwner(BlasterCharacter);
 	EquippedWeapon->SetHUDAmmo();
+
+	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+	}
+
+	BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
+	if (BlasterController)
+	{
+		BlasterController->SetHUDCarriedAmmo(CarriedAmmo);
+	}
 
 
 	// Disable orient to movement so we can strafe

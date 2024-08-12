@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "WeaponTypes.h"
 #include "Weapon.generated.h"
 
 class ACasing;
@@ -113,6 +114,9 @@ private:
 
 	void SpendRound();
 
+	UPROPERTY(EditAnywhere)
+	EWeaponType WeaponType;
+
 
 
 	//
@@ -147,6 +151,8 @@ private:
 public:	
 	
 	void SetWeaponState(EWeaponState State);
+	bool IsEmpty();
+	
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; }
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 
@@ -159,5 +165,6 @@ public:
 	FORCEINLINE float GetZoomedFOV() const { return ZoomedFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }
 
-	bool IsEmpty();
+	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
+
 };
