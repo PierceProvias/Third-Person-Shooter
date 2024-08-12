@@ -303,7 +303,10 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 {
 	if (BlasterCharacter == nullptr || WeaponToEquip == nullptr) return;
-
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->Dropped();
+	}
 	EquippedWeapon = WeaponToEquip;
 	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
 	const USkeletalMeshSocket* HandSocket = BlasterCharacter->GetMesh()->GetSocketByName(FName("RightHandSocket"));
@@ -314,6 +317,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 	// Set equipped weapon to controlled pawn 
 	EquippedWeapon->SetOwner(BlasterCharacter);
+	EquippedWeapon->SetHUDAmmo();
 
 
 	// Disable orient to movement so we can strafe

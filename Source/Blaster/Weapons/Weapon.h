@@ -8,6 +8,8 @@
 
 class ACasing;
 class UTexture2D;
+class ABlasterCharacter;
+class ABlasterPlayerController;
 
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
@@ -33,6 +35,7 @@ public:
 	AWeapon();
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void OnRep_Owner() override;
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& HitTarget);
 	void Dropped();
@@ -47,6 +50,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	bool bAutomatic = true;
+
+	void SetHUDAmmo();
 
 protected:
 	
@@ -93,6 +98,22 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ACasing> CasingClass;
+
+	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo)
+	int32 Ammo;
+
+	UPROPERTY(EditAnywhere)
+	int32 MagCapacity;
+
+	TObjectPtr<ABlasterCharacter> BlasterOwnerCharacter;
+	TObjectPtr<ABlasterPlayerController> BlasterOwnerController;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+
+	void SpendRound();
+
+
 
 	//
 	// Textures for the weapon crosshairs
