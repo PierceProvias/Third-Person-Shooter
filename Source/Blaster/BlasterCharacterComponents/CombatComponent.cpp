@@ -62,6 +62,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
 	DOREPLIFETIME(UCombatComponent, bAiming);
+	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 }
 void UCombatComponent::SetAiming(bool bIsAiming)
 
@@ -293,6 +294,10 @@ bool UCombatComponent::CanFire()
 	if (!bCanFire) return false;
 	return true;
 	
+}
+
+void UCombatComponent::OnRep_CarriedAmmo()
+{
 }
 
 void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
