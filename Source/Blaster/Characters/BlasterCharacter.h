@@ -43,6 +43,7 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	void PlayFireMontage(bool bAiming);
+	void PlayReloadMontage();
 	void PlayElimMontage();
 
 	// Since SimProxies Tick is off, Used for replication of our root component's position and velocity (Inherited from Actor.h)
@@ -71,6 +72,7 @@ protected:
 	void CrouchButtonPressed();
 	void AimButtonPressed(const FInputActionValue& Value);
 	void FireButtonPressed(const FInputActionValue& Value);
+	void ReloadButtonPressed();
 
 
 	// Aim Offsets
@@ -129,6 +131,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> FireAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> ReloadAction;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* OverheadWidget;
@@ -166,14 +171,22 @@ private:
 	ETurningInPlace TurningInPlace;
 	void TurnInPlace(float DeltaTime);
 
+	/*
+	* Animation Montages
+	*/
+
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> FireWeaponMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage> ReloadMontage;
+	
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> ElimMontage;
+
 
 	void HideCameraIfCharacterClose();
 	

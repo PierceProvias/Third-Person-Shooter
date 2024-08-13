@@ -27,6 +27,7 @@ public:
 
 	
 	void EquipWeapon(AWeapon* WeaponToEquip);
+	void Reload();
 
 protected:
 
@@ -55,6 +56,9 @@ protected:
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 	void SetHUDCrosshairs(float DeltaTime);
+
+	UFUNCTION(Server, Reliable)
+	void ServerReload();
 
 private:
 

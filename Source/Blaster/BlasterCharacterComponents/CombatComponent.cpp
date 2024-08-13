@@ -251,6 +251,13 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 	}
 }
 
+void UCombatComponent::ServerReload_Implementation()
+{
+	if (BlasterCharacter == nullptr) return;
+
+	BlasterCharacter->PlayReloadMontage();
+}
+
 void UCombatComponent::InterpFOV(float DeltaTime)
 {
 	if (EquippedWeapon == nullptr) return;
@@ -365,5 +372,13 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 	BlasterCharacter->bUseControllerRotationYaw = true;
 
+}
+
+void UCombatComponent::Reload()
+{
+	if (CarriedAmmo > 0)
+	{
+		ServerReload();
+	}
 }
 
