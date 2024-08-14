@@ -358,7 +358,10 @@ void UCombatComponent::FireTimerStart()
 		&UCombatComponent::FireTimerFinished,
 		EquippedWeapon->FireDelay 
 	);
-	
+	if (EquippedWeapon->IsEmpty())
+	{
+		Reload();
+	}
 }
 
 void UCombatComponent::FireTimerFinished()
@@ -448,6 +451,12 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 			BlasterCharacter->GetActorLocation()
 		);
 	}
+
+	if (EquippedWeapon->IsEmpty())
+	{
+		Reload();
+	}
+
 	// Disable orient to movement so we can strafe
 	// NOTE: This will only be done on the server therefore we need to use a RepNotify
 	BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
