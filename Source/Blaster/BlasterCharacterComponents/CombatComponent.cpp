@@ -13,6 +13,7 @@
 #include "Blaster/PlayerController/BlasterPlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "TimerManager.h"
+#include "Sound/SoundCue.h"
 
 
 UCombatComponent::UCombatComponent()
@@ -102,6 +103,15 @@ void UCombatComponent::OnRep_EquippedWeapon()
 		}
 		BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 		BlasterCharacter->bUseControllerRotationYaw = true;
+		
+		if (EquippedWeapon->EquipSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				EquippedWeapon->EquipSound,
+				BlasterCharacter->GetActorLocation()
+			);
+		}
 	}
 }
 
@@ -430,7 +440,14 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 		BlasterController->SetHUDCarriedAmmo(CarriedAmmo);
 	}
 
-
+	if (EquippedWeapon->EquipSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			EquippedWeapon->EquipSound,
+			BlasterCharacter->GetActorLocation()
+		);
+	}
 	// Disable orient to movement so we can strafe
 	// NOTE: This will only be done on the server therefore we need to use a RepNotify
 	BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;

@@ -11,6 +11,7 @@ class ACasing;
 class UTexture2D;
 class ABlasterCharacter;
 class ABlasterPlayerController;
+class USoundCue;
 
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
@@ -55,6 +56,9 @@ public:
 	void SetHUDAmmo();
 	
 	void AddAmmo(int32 AmmoToAdd);
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USoundCue> EquipSound;
 
 protected:
 	
