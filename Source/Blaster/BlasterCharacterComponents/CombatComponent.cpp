@@ -277,6 +277,12 @@ void UCombatComponent::OnRep_CombatState()
 	case ECombatState::ECS_Reloading:
 		HandleReload();
 		break;
+	case ECombatState::ECS_Unoccupied:
+		if (bFireButtonPressed)
+		{
+			Fire();
+		}
+		break;
 	}
 }
 
@@ -325,6 +331,7 @@ bool UCombatComponent::CanFire()
 	if (!EquippedWeapon) return false;
 	if (EquippedWeapon->IsEmpty()) return false;
 	if (!bCanFire) return false;
+	if (CombatState != ECombatState::ECS_Unoccupied) return false;
 	return true;
 	
 }
@@ -351,7 +358,7 @@ void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& Trac
 void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	if (EquippedWeapon == nullptr) return;
-	if (BlasterCharacter)
+	if (BlasterCharacter && CombatState == ECombatState::ECS_Unoccupied)
 	{
 		BlasterCharacter->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire(TraceHitTarget);
@@ -410,6 +417,10 @@ void UCombatComponent::FinishedReloading()
 	if (BlasterCharacter->HasAuthority())
 	{
 		CombatState = ECombatState::ECS_Unoccupied;
+	}
+	if (bFireButtonPressed)
+	{
+		Fire();
 	}
 }
 
