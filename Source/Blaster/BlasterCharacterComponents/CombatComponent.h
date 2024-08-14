@@ -29,6 +29,9 @@ public:
 	
 	void EquipWeapon(AWeapon* WeaponToEquip);
 	void Reload();
+	
+	UFUNCTION(BlueprintCallable)
+	void FinishedReloading();
 
 protected:
 

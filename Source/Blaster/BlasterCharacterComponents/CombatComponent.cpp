@@ -398,9 +398,18 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 void UCombatComponent::Reload()
 {
-	if (CarriedAmmo > 0)
+	if (CarriedAmmo > 0 && CombatState != ECombatState::ECS_Reloading)
 	{
 		ServerReload();
+	}
+}
+
+void UCombatComponent::FinishedReloading()
+{
+	if (BlasterCharacter == nullptr) return;
+	if (BlasterCharacter->HasAuthority())
+	{
+		CombatState = ECombatState::ECS_Unoccupied;
 	}
 }
 
