@@ -8,6 +8,7 @@
 #include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "Components/TimelineComponent.h"
 #include "Blaster/Interfaces/InteractWithCrosshairsInterface.h"
+#include "../BlasterTypes/CombatState.h"
 #include "BlasterCharacter.generated.h"
 
 class USpringArmComponent;
@@ -287,6 +288,8 @@ public:
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+	
+	ECombatState GetCombatState() const;
 
 	AWeapon* GetEquippedWeapon();
 	FVector GetHitTarget() const;

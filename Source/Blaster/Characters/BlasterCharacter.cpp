@@ -1,7 +1,3 @@
-
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "BlasterCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -27,7 +23,6 @@
 
 ABlasterCharacter::ABlasterCharacter()
 {
- 	
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -346,7 +341,6 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 	}
 
 	CalculateAO_Pitch();
-
 }
 
 void ABlasterCharacter::CalculateAO_Pitch()
@@ -415,7 +409,6 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 		CombatComponent->EquipWeapon(OverlappingWeapon);
 	}
 }
-
 
 void ABlasterCharacter::TurnInPlace(float DeltaTime)
 {
@@ -526,6 +519,12 @@ bool ABlasterCharacter::IsAiming()
 	return (CombatComponent && CombatComponent->bAiming);
 }
 
+ECombatState ABlasterCharacter::GetCombatState() const
+{
+	if (CombatComponent == nullptr) return ECombatState::ECS_MAX;
+	return CombatComponent->CombatState;
+}
+
 AWeapon* ABlasterCharacter::GetEquippedWeapon()
 {
 	if (CombatComponent == nullptr) return nullptr;
@@ -595,14 +594,14 @@ void ABlasterCharacter::PlayElimMontage()
 
 void ABlasterCharacter::PlayHitReactMontage()
 {
-	if (CombatComponent == nullptr || CombatComponent->EquippedWeapon == nullptr) return;
-
+	if (CombatComponent == nullptr || CombatComponent->EquippedWeapon == nullptr || ElimMontage) return;
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && HitReactMontage && !ElimMontage)
 	{
 		AnimInstance->Montage_Play(HitReactMontage);
 		FName SectionName("FromFront");
 		AnimInstance->Montage_JumpToSection(SectionName);
+		UE_LOG(LogTemp, Warning, TEXT("PlayHitReactMontage"));
 	}
 }
 
@@ -610,8 +609,8 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 {
 	// Since this is a replicated variable and sent to all clients, we do not need a MultiHit RPC. Variable replication is less expensive
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
-	UpdateHUDHealth();
 	PlayHitReactMontage();
+	UpdateHUDHealth();
 
 	if (Health == 0.f)
 	{
@@ -622,7 +621,6 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 			BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
 		}
 	}
-
 }
 
 void ABlasterCharacter::UpdateHUDHealth()
@@ -655,5 +653,3 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
 	DOREPLIFETIME(ABlasterCharacter, Health); // Health will be replicated down to the character
 }
-
-

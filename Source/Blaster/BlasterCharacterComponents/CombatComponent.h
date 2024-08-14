@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "Blaster/HUD/BlasterHUD.h"
 #include "../Weapons/WeaponTypes.h"
+#include "../BlasterTypes/CombatState.h"
 #include "CombatComponent.generated.h"
 
 #define TRACE_LENGTH 80'000.f
@@ -59,6 +60,9 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
+
+	// Happens on all machines (server and client)
+	void HandleReload();
 
 private:
 
@@ -138,6 +142,12 @@ private:
 	int32 StartingARAmmo = 30;
 
 	void InitCarriedAmmo();
+
+	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
+	ECombatState CombatState = ECombatState::ECS_Unoccupied;
+
+	UFUNCTION()
+	void OnRep_CombatState();
 
 public:	
 
