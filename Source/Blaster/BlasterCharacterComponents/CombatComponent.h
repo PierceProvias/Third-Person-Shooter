@@ -67,6 +67,8 @@ protected:
 	// Happens on all machines (server and client)
 	void HandleReload();
 
+	int32 AmountToReload();
+
 private:
 
 	TObjectPtr<ABlasterCharacter> BlasterCharacter;
@@ -152,8 +154,10 @@ private:
 	UFUNCTION()
 	void OnRep_CombatState();
 
+	void UpdateAmmoValues();
 public:	
 
 
 		
+
 };

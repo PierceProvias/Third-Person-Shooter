@@ -53,6 +53,8 @@ public:
 	bool bAutomatic = true;
 
 	void SetHUDAmmo();
+	
+	void AddAmmo(int32 AmmoToAdd);
 
 protected:
 	
@@ -166,5 +168,7 @@ public:
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }
 
 	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
+	FORCEINLINE int32 GetAmmo() const { return Ammo; }
+	FORCEINLINE int32 GetMagCapacity() const { return MagCapacity; }
 
 };
