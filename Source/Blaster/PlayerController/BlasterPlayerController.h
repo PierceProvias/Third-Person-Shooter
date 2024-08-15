@@ -14,6 +14,7 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
+	virtual void Tick(float DeltaTime) override;
 	TObjectPtr<ABlasterHUD> BlasterHUD;
 	void SetHUDHealth(float Health, float MaxHealth);
 	void OnPossess(APawn* InPawn) override;
@@ -21,7 +22,13 @@ public:
 	void SetHUDDeaths(int32 Deaths);
 	void SetHUDWeaponAmmo(int32 Ammo);
 	void SetHUDCarriedAmmo(int32 Ammo);
+	void SetHUDMatchCountdown(float CountdownTime);
 
 protected:
 	virtual void BeginPlay() override;
+	void SetHUDTime();
+
+private:
+	float MatchTime = 120.f;
+	uint32 CountdownInt = 0;
 };
