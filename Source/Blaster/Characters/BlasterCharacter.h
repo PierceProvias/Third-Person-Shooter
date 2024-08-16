@@ -39,14 +39,15 @@ public:
 	// Must be overidded in any class that we choose to replicate variables
 	// This is where we register variables to be replicated
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
+	
+	
 	// Used to construct components
 	virtual void PostInitializeComponents() override;
 
 	void PlayFireMontage(bool bAiming);
 	void PlayReloadMontage();
 	void PlayElimMontage();
-
+	
 	// Since SimProxies Tick is off, Used for replication of our root component's position and velocity (Inherited from Actor.h)
 	virtual void OnRep_ReplicatedMovement() override;
 	
@@ -61,6 +62,8 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
+
+	void InitializeInput();
 
 	//
 	// Callbacks for input
@@ -271,8 +274,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float ElimBotHoverDistance = 200.f;
 
-
 	TObjectPtr<ABlasterPlayerState> BlasterPlayerState;
+
+	
 
 public:
 

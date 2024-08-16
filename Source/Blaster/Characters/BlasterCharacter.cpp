@@ -159,20 +159,27 @@ void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
+	UE_LOG(LogTemp, Warning, TEXT("Blaster Character BeginPlay"));
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(CharacterMappingContext, 0);
+			UE_LOG(LogTemp, Warning, TEXT("Blaster Character Input Initialized"));
 		}
 	}
 
 	UpdateHUDHealth();
-
 	if (HasAuthority())
 	{
 		OnTakeAnyDamage.AddDynamic(this, &ABlasterCharacter::ReceiveDamage);
 	}
+}
+
+void ABlasterCharacter::InitializeInput()
+{
+	
 }
 
 void ABlasterCharacter::Tick(float DeltaTime)
