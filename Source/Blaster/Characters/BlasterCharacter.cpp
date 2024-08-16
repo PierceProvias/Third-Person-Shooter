@@ -598,8 +598,8 @@ void ABlasterCharacter::PlayHitReactMontage()
 	if (AnimInstance && HitReactMontage && !ElimMontage)
 	{
 		AnimInstance->Montage_Play(HitReactMontage);
-		FName SectionName("FromFront");
-		AnimInstance->Montage_JumpToSection(SectionName);
+		//FName SectionName("FromFront");
+		AnimInstance->Montage_JumpToSection("FromFront");
 		UE_LOG(LogTemp, Warning, TEXT("PlayHitReactMontage"));
 	}
 }
