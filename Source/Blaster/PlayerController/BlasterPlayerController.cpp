@@ -101,6 +101,8 @@ void ABlasterPlayerController::ServerCheckMatchState_Implementation()
 void ABlasterPlayerController::OnRep_MatchState()
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	/*
+	
 	if (MatchState == MatchState::WaitingToStart)
 	{
 		if (BlasterHUD && BlasterHUD->Annoucement)
@@ -108,36 +110,54 @@ void ABlasterPlayerController::OnRep_MatchState()
 			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
+	*/
 	if (MatchState == MatchState::InProgress)
 	{
-		if (BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->Annoucement)
-		{
-			BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Visible);
-			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Hidden);
-		}
+		HandleMatchHasStarted();
 	}
+	else if (MatchState == MatchState::Cooldown)
+	{
+		HandleCooldown();
+	}
+	
 }
 
 void ABlasterPlayerController::OnMatchStateSet(FName State)
 {
 	MatchState = State;
 
-	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	if (MatchState == MatchState::WaitingToStart)
+	if (MatchState == MatchState::InProgress)
 	{
-		if (BlasterHUD && BlasterHUD->Annoucement)
+		HandleMatchHasStarted();
+	}
+	else if (MatchState == MatchState::Cooldown)
+	{
+		HandleCooldown();
+	}
+}
+
+void ABlasterPlayerController::HandleCooldown()
+{
+	if (BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD)
+	{
+		BlasterHUD->CharacterOverlay->RemoveFromParent();
+		if (BlasterHUD->Annoucement)
 		{
 			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
-	if (MatchState == MatchState::InProgress)
+}
+
+
+void ABlasterPlayerController::HandleMatchHasStarted()
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	if (BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->Annoucement)
 	{
-		if (BlasterHUD && BlasterHUD->CharacterOverlay)
-		{
-			BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Visible);
-			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Hidden);
-		}
-	}
+		BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Visible);
+		BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Hidden);
+	}	
 }
 
 void ABlasterPlayerController::ServerRequestServerTime_Implementation(float TimeOfClientRequest)

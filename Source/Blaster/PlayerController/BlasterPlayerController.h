@@ -35,6 +35,10 @@ public:
 
 	UFUNCTION()
 	void OnRep_MatchState();
+	
+	void HandleMatchHasStarted();
+	void HandleCooldown();
+
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
