@@ -7,7 +7,6 @@
 
 ABlasterGameMode::ABlasterGameMode()
 {
-	//bDelayedStart = true;		--> Bug where controller input does not work on possessed pawn
 	bDelayedStart = true;
 }
 

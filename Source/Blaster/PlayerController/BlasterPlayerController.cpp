@@ -2,18 +2,18 @@
 
 
 #include "BlasterPlayerController.h"
-#include "Blaster/HUD/BlasterHUD.h"
-#include "Blaster/HUD/CharacterOverlay.h"
+#include "../HUD/BlasterHUD.h"
+#include "../HUD/CharacterOverlay.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "../Characters/BlasterCharacter.h"
 #include "Net/UnrealNetwork.h"
 #include "../GameModes/BlasterGameMode.h"
+#include "../HUD/Announcement.h"
 
 void ABlasterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	BlasterHUD = Cast<ABlasterHUD>(GetHUD());
 }
 
 void ABlasterPlayerController::Tick(float DeltaTime)
@@ -53,12 +53,42 @@ void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
 
 void ABlasterPlayerController::OnRep_MatchState()
 {
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	if (MatchState == MatchState::WaitingToStart)
+	{
+		if (BlasterHUD && BlasterHUD->Annoucement)
+		{
+			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
 	if (MatchState == MatchState::InProgress)
 	{
-		BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+		if (BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->Annoucement)
+		{
+			BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Visible);
+			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
+}
+
+void ABlasterPlayerController::OnMatchStateSet(FName State)
+{
+	MatchState = State;
+
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	if (MatchState == MatchState::WaitingToStart)
+	{
+		if (BlasterHUD && BlasterHUD->Annoucement)
+		{
+			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+	if (MatchState == MatchState::InProgress)
+	{
 		if (BlasterHUD && BlasterHUD->CharacterOverlay)
 		{
 			BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Visible);
+			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 }
@@ -193,15 +223,4 @@ void ABlasterPlayerController::ReceivedPlayer()
 	}
 }
 
-void ABlasterPlayerController::OnMatchStateSet(FName State)
-{
-	MatchState = State;
-	if (MatchState == MatchState::InProgress)
-	{
-		BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-		if (BlasterHUD && BlasterHUD->CharacterOverlay)
-		{
-			BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Visible);
-		}
-	}
-}
+
