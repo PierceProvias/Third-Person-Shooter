@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "BlasterGameMode.h"
 #include "Blaster/Characters/BlasterCharacter.h"
 #include "Blaster/PlayerController/BlasterPlayerController.h"
@@ -10,9 +7,9 @@
 
 ABlasterGameMode::ABlasterGameMode()
 {
-	//bDelayedStart = true;
+	//bDelayedStart = true;		--> Bug where controller input does not work on possessed pawn
+	bDelayedStart = true;
 }
-
 
 void ABlasterGameMode::BeginPlay()
 {
@@ -31,6 +28,7 @@ void ABlasterGameMode::Tick(float DeltaTime)
 		if (CountdownTime <= 0.f)
 		{
 			StartMatch();
+			UE_LOG(LogTemp, Warning, TEXT("Starting Game"));
 		}
 	}
 }

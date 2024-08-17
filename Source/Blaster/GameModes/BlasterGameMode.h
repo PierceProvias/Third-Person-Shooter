@@ -29,6 +29,8 @@ protected:
 
 private:
 	float CountdownTime = 0.f;
+	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
+	TObjectPtr<ABlasterCharacter> BlasterCharacter;
 
 public:
 

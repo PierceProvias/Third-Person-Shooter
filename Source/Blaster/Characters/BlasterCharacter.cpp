@@ -158,15 +158,15 @@ void ABlasterCharacter::Destroyed()
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
 	
-	UE_LOG(LogTemp, Warning, TEXT("Blaster Character BeginPlay"));
+	UE_LOG(LogTemp, Warning, TEXT("Blaster Character BeginPlay()"))
+	
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(CharacterMappingContext, 0);
-			UE_LOG(LogTemp, Warning, TEXT("Blaster Character Input Initialized"));
+			bInputsSet = true;
 		}
 	}
 
@@ -175,11 +175,6 @@ void ABlasterCharacter::BeginPlay()
 	{
 		OnTakeAnyDamage.AddDynamic(this, &ABlasterCharacter::ReceiveDamage);
 	}
-}
-
-void ABlasterCharacter::InitializeInput()
-{
-	
 }
 
 void ABlasterCharacter::Tick(float DeltaTime)
@@ -197,6 +192,18 @@ void ABlasterCharacter::Tick(float DeltaTime)
 			OnRep_ReplicatedMovement();
 		}
 		CalculateAO_Pitch();
+	}
+	if (HasAuthority() && Controller && !bInputsSet)
+	{
+		BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+		if (BlasterPlayerController)
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(BlasterPlayerController->GetLocalPlayer()))
+			{
+				Subsystem->AddMappingContext(CharacterMappingContext, 0);
+				bInputsSet = true;
+			}
+		}
 	}
 	// When character is backed up against a wall 
 	HideCameraIfCharacterClose();

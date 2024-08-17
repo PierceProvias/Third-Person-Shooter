@@ -62,9 +62,7 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
-
-	void InitializeInput();
-
+	
 	//
 	// Callbacks for input
 	//
@@ -276,6 +274,7 @@ private:
 
 	TObjectPtr<ABlasterPlayerState> BlasterPlayerState;
 
+	bool bInputsSet = false;
 	
 
 public:
