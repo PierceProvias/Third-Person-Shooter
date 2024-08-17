@@ -7,6 +7,7 @@
 #include "BlasterPlayerController.generated.h"
 
 class ABlasterHUD;
+class ABlasterGameMode;
 
 UCLASS()
 class BLASTER_API ABlasterPlayerController : public APlayerController
@@ -71,15 +72,18 @@ protected:
 	// Large client RPC which will only happen once (when joining)
 	
 	UFUNCTION(Client, Reliable)
-	void ClientJoinMidGame(FName StateOfMatch, float Warmup_Time, float Match_Time, float StartingTime);
+	void ClientJoinMidGame(FName StateOfMatch, float Warmup_Time, float Match_Time, float Cooldown_Time, float StartingTime);
 
 private:
 	TObjectPtr<ABlasterHUD> BlasterHUD;
 	float LevelStartingTime = 0.f;
 	float WarmupTime = 0.f;
 	float MatchTime = 0.f;	// Player controller should be getting the match time from the game mode
+	float CooldownTime = 0.f;
 
 	uint32 CountdownInt = 0;
+
+	TObjectPtr<ABlasterGameMode> GameMode;
 	
 
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)

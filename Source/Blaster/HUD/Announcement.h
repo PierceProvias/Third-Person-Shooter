@@ -20,4 +20,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> AnnouncementText;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> InfoText;
 };
