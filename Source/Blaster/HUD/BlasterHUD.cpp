@@ -13,7 +13,6 @@ void ABlasterHUD::BeginPlay()
 
 	AddCharacterOverlay();
 	CharacterOverlay->SetVisibility(ESlateVisibility::Hidden);
-	AddAnnouncement();
 }
 
 void ABlasterHUD::DrawHUD()
@@ -69,7 +68,7 @@ void ABlasterHUD::AddCharacterOverlay()
 void ABlasterHUD::AddAnnouncement()
 {
 	APlayerController* PlayerController = GetOwningPlayerController();
-	if (PlayerController && AnnouncementClass)
+	if (PlayerController && AnnouncementClass && Annoucement == nullptr)
 	{
 		Annoucement = CreateWidget<UAnnouncement>(PlayerController, AnnouncementClass);
 		Annoucement->AddToViewport();

@@ -12,7 +12,6 @@ void UMainMenu::MenuSetup()
 	AddToViewport();
 	SetVisibility(ESlateVisibility::Visible);
 	bIsFocusable = true;
-	
 
 	if (UWorld* World = GetWorld())
 	{
@@ -54,8 +53,8 @@ bool UMainMenu::Initialize()
 
 void UMainMenu::NativeDestruct()
 {
-//	MenuTeardown();
-	//Super::NativeDestruct();
+	MenuTeardown();
+	Super::NativeDestruct();
 }
 
 void UMainMenu::PlayButtonPressed()

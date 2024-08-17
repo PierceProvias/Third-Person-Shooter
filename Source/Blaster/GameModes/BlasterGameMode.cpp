@@ -3,7 +3,7 @@
 #include "Blaster/PlayerController/BlasterPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerStart.h"
-#include "../PlayerState/BlasterPlayerState.h"
+#include "../PlayerState/BlasterPlayerState.h" 
 
 ABlasterGameMode::ABlasterGameMode()
 {
@@ -40,7 +40,6 @@ void ABlasterGameMode::Tick(float DeltaTime)
 		if (CountdownTime <= 0.f)
 		{
 			StartMatch();
-			UE_LOG(LogTemp, Warning, TEXT("Starting Game"));
 		}
 	}
 }

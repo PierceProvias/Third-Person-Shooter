@@ -23,6 +23,7 @@ public:
 	void SetHUDWeaponAmmo(int32 Ammo);
 	void SetHUDCarriedAmmo(int32 Ammo);
 	void SetHUDMatchCountdown(float CountdownTime);
+	void SetHUDAnnouncementCountdown(float CountdownTime);
 
 	// Synced with server world clock
 	virtual float GetServerTime();
@@ -32,6 +33,8 @@ public:
 
 	void OnMatchStateSet(FName State);
 
+	UFUNCTION()
+	void OnRep_MatchState();
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
@@ -57,14 +60,26 @@ protected:
 
 	void CheckTimeSync(float DeltaTime);
 
+	// Server RPC to initialize the player controller in the right match state
+	UFUNCTION(Server, Reliable)
+	void ServerCheckMatchState();
+
+	// Large client RPC which will only happen once (when joining)
+	
+	UFUNCTION(Client, Reliable)
+	void ClientJoinMidGame(FName StateOfMatch, float Warmup_Time, float Match_Time, float StartingTime);
+
 private:
 	TObjectPtr<ABlasterHUD> BlasterHUD;
-	float MatchTime = 120.f;
+	float LevelStartingTime = 0.f;
+	float WarmupTime = 0.f;
+	float MatchTime = 0.f;	// Player controller should be getting the match time from the game mode
+
 	uint32 CountdownInt = 0;
+	
 
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
 	FName MatchState;
 
-	UFUNCTION()
-	void OnRep_MatchState();
+	
 };
