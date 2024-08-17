@@ -15,7 +15,7 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 	
 public:
 	virtual void Tick(float DeltaTime) override;
-	TObjectPtr<ABlasterHUD> BlasterHUD;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	void SetHUDHealth(float Health, float MaxHealth);
 	void OnPossess(APawn* InPawn) override;
 	void SetHUDScore(float Score);
@@ -29,6 +29,8 @@ public:
 
 	// Sync with server clock as soon as possible
 	virtual void ReceivedPlayer() override;
+
+	void OnMatchStateSet(FName State);
 
 protected:
 	virtual void BeginPlay() override;
@@ -56,6 +58,13 @@ protected:
 	void CheckTimeSync(float DeltaTime);
 
 private:
+	TObjectPtr<ABlasterHUD> BlasterHUD;
 	float MatchTime = 120.f;
 	uint32 CountdownInt = 0;
+
+	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
+	FName MatchState;
+
+	UFUNCTION()
+	void OnRep_MatchState();
 };

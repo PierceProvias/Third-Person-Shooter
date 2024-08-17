@@ -11,6 +11,7 @@ void ABlasterHUD::BeginPlay()
 	Super::BeginPlay();
 
 	AddCharacterOverlay();
+	CharacterOverlay->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ABlasterHUD::DrawHUD()
