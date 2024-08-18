@@ -13,7 +13,7 @@ class BLASTER_API ABlasterPlayerState : public APlayerState
 	GENERATED_BODY()
 
 public:
-	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	//
 	// Replication notifies
