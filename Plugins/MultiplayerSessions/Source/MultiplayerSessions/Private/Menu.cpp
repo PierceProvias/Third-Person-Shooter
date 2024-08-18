@@ -24,8 +24,8 @@ void UMenu::MenuSetup(int32 NumberOfPublicConnections, FString TypeOfMatch, FStr
 			FInputModeUIOnly InputModeData; // Focused only on UI
 			InputModeData.SetWidgetToFocus(TakeWidget());
 			InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
-			PlayerController->SetInputMode(InputModeData);
 			PlayerController->SetShowMouseCursor(true);
+			PlayerController->SetInputMode(InputModeData);
 		}
 	}
 

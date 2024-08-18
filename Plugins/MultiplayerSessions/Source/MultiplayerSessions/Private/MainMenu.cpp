@@ -19,7 +19,7 @@ void UMainMenu::MenuSetup()
 		{
 			FInputModeUIOnly InputModeData; // Focused only on UI
 			InputModeData.SetWidgetToFocus(TakeWidget());
-			InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
+			InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 			PlayerController->SetInputMode(InputModeData);
 			PlayerController->SetShowMouseCursor(true);
 		}
