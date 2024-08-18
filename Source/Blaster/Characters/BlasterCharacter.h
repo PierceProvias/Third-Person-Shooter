@@ -60,7 +60,7 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
-	
+	void RotateInPlace(float DeltaTime);
 	//
 	// Callbacks for input
 	//

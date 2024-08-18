@@ -103,8 +103,8 @@ bool UOptions::Initialize()
 
 void UOptions::NativeDestruct()
 {
-	//MenuTeardown();
-	//Super::NativeDestruct();
+	MenuTeardown();
+	Super::NativeDestruct();
 }
 
 void UOptions::GameplayButtonClicked()
@@ -148,9 +148,6 @@ void UOptions::WindowLeftButtonClicked()
 	int32 NewWindowMode = FMath::Clamp(WindowMode, 0, 2);
 	NewWindowMode = (WindowMode - 1);
 	WindowMode = NewWindowMode;
-
-
-
 }
 
 void UOptions::WindowRightButtonClicked()

@@ -8,6 +8,7 @@
 
 class ABlasterHUD;
 class ABlasterGameMode;
+class UInputMappingContext;
 
 UCLASS()
 class BLASTER_API ABlasterPlayerController : public APlayerController
@@ -89,5 +90,6 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
 	FName MatchState;
 
-	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputMappingContext> LookOnlyMappingContext;
 };

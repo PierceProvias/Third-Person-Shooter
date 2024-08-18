@@ -11,6 +11,7 @@
 #include "../GameModes/BlasterGameMode.h"
 #include "../HUD/Announcement.h"
 #include "Kismet/GameplayStatics.h"
+#include "EnhancedInputSubsystems.h"
 
 void ABlasterPlayerController::BeginPlay()
 {
@@ -165,6 +166,12 @@ void ABlasterPlayerController::HandleCooldown()
 			FString AnnouncementText("New Match Starts In: ");
 			BlasterHUD->Annoucement->AnnouncementText->SetText(FText::FromString(AnnouncementText));
 			BlasterHUD->Annoucement->InfoText->SetText(FText());
+
+			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+			{
+				Subsystem->ClearAllMappings();
+				Subsystem->AddMappingContext(LookOnlyMappingContext, 0);
+			}
 		}
 	}
 }
