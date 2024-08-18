@@ -335,8 +335,20 @@ void ABlasterPlayerController::SetHUDMatchCountdown(float CountdownTime)
 
 		FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
 		BlasterHUD->CharacterOverlay->MatchCountdownText->SetText(FText::FromString(CountdownText));
+		if (Minutes < 1 && Seconds <= 30 )
+		{
+			if (Seconds % 2 == 0)
+			{
+				BlasterHUD->CharacterOverlay->MatchCountdownText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
+			}
+			else 
+			{
+				BlasterHUD->CharacterOverlay->MatchCountdownText->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+			}
+		}
 	}
 }
+
 
 void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 {
