@@ -85,14 +85,23 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 				RightHandTransform.GetLocation(), 
 				RightHandTransform.GetLocation() + (RightHandTransform.GetLocation() - BlasterCharacter->GetHitTarget()));
 		}
-
-		FTransform MuzzleTipTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlash"), ERelativeTransformSpace::RTS_World);
-		FVector MuzzleX(FRotationMatrix(MuzzleTipTransform.GetRotation().Rotator()).GetUnitAxis(EAxis::X));
-		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), MuzzleTipTransform.GetLocation() + MuzzleX * 1000.f, FColor::Red);
-		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Orange);
+		Weapon_Crosshairs_DebugLines(ActivateDebugLines);
 	}
 
 	bUseFABRIK			= BlasterCharacter->GetCombatState() != ECombatState::ECS_Reloading;
 	bUseAimOffsets		= BlasterCharacter->GetCombatState() != ECombatState::ECS_Reloading;
 	bTransformRightHand = BlasterCharacter->GetCombatState() != ECombatState::ECS_Reloading;
+}
+
+void UBlasterAnimInstance::Weapon_Crosshairs_DebugLines(bool TurnOn)
+{
+	if (TurnOn)
+	{
+		FTransform MuzzleTipTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlash"), ERelativeTransformSpace::RTS_World);
+		FVector MuzzleX(FRotationMatrix(MuzzleTipTransform.GetRotation().Rotator()).GetUnitAxis(EAxis::X));
+		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), MuzzleTipTransform.GetLocation() + MuzzleX * 1000.f, FColor::Red);
+		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Orange);
+	}
+	else
+		return;
 }

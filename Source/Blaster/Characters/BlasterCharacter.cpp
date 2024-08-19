@@ -155,7 +155,7 @@ void ABlasterCharacter::Destroyed()
 	}
 	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
-		CombatComponent->EquippedWeapon->Destroy();
+		CombatComponent->EquippedWeapon->Destroy();		// Weapons should not be destoryed when player dies FIX!
 	}
 }
 

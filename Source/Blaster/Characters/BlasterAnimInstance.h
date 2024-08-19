@@ -20,6 +20,8 @@ public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
 
+	void Weapon_Crosshairs_DebugLines(bool TurnOn);
+
 private:
 
 	UPROPERTY(BlueprintReadOnly, Category = Character, meta = (AllowPrivateAccess = "true"))
@@ -92,4 +94,8 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	bool bTransformRightHand;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Debug")
+	bool ActivateDebugLines = false;
+
 };
