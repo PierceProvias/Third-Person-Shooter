@@ -22,6 +22,7 @@ class ABlasterPlayerController;
 class AController;
 class USoundCue;
 class ABlasterPlayerState;
+class ABlasterGameMode;
 
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
@@ -274,6 +275,7 @@ private:
 
 	bool bInputsSet = false;
 	
+	//TObjectPtr<ABlasterGameMode> BlasterGameMode;
 
 public:
 

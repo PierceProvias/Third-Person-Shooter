@@ -153,7 +153,8 @@ void ABlasterCharacter::Destroyed()
 	{
 		ElimBotComponent->DestroyComponent();
 	}
-	if (CombatComponent && CombatComponent->EquippedWeapon)
+	ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>();
+	if (CombatComponent && CombatComponent->EquippedWeapon && BlasterGameMode && BlasterGameMode->GetCountdownTime() <= 0.f)
 	{
 		CombatComponent->EquippedWeapon->Destroy();		// Weapons should not be destoryed when player dies FIX!
 	}
