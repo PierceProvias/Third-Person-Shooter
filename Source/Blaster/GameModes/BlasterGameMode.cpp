@@ -1,8 +1,9 @@
 #include "BlasterGameMode.h"
-#include "Blaster/Characters/BlasterCharacter.h"
-#include "Blaster/PlayerController/BlasterPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerStart.h"
+
+#include "../PlayerController/BlasterPlayerController.h"
+#include "../Characters/BlasterCharacter.h"
 #include "../PlayerState/BlasterPlayerState.h" 
 #include "../GameStates/BlasterGameState.h"
 

@@ -2,19 +2,19 @@
 
 
 #include "CombatComponent.h"
-#include "Blaster/Weapons/Weapon.h"
-#include "Blaster/Characters/BlasterCharacter.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Components/SphereComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
-#include "Blaster/PlayerController/BlasterPlayerController.h"
 #include "Camera/CameraComponent.h"
+#include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 #include "Sound/SoundCue.h"
 
+#include "../Weapons/Weapon.h"
+#include "../Characters/BlasterCharacter.h"
+#include "../PlayerController/BlasterPlayerController.h"
 
 UCombatComponent::UCombatComponent()
 {

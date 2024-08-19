@@ -3,10 +3,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "Components/TimelineComponent.h"
-#include "Blaster/Interfaces/InteractWithCrosshairsInterface.h"
+
+#include "../Interfaces/InteractWithCrosshairsInterface.h"
+#include "../BlasterTypes/TurningInPlace.h"
 #include "../BlasterTypes/CombatState.h"
+
 #include "BlasterCharacter.generated.h"
 
 class USpringArmComponent;
@@ -22,7 +24,6 @@ class ABlasterPlayerController;
 class AController;
 class USoundCue;
 class ABlasterPlayerState;
-class ABlasterGameMode;
 
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
@@ -275,7 +276,6 @@ private:
 
 	bool bInputsSet = false;
 	
-	//TObjectPtr<ABlasterGameMode> BlasterGameMode;
 
 public:
 

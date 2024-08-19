@@ -5,12 +5,13 @@
 #include "Weapon.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
-#include "Blaster/Characters/BlasterCharacter.h"
 #include "Net/UnrealNetwork.h"
 #include "Animation/AnimationAsset.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Casing.h"
 #include "Engine/SkeletalMeshSocket.h"
+
+#include "../Characters/BlasterCharacter.h"
 #include "../PlayerController/BlasterPlayerController.h"
 
 AWeapon::AWeapon()

@@ -6,18 +6,19 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Net/UnrealNetwork.h"
-#include "Blaster/Weapons/Weapon.h"
-#include "Blaster/BlasterCharacterComponents/CombatComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Blaster/Characters/BlasterAnimInstance.h"
-#include "Blaster/Blaster.h"
-#include "Blaster/PlayerController/BlasterPlayerController.h"
-#include "Blaster/GameModes/BlasterGameMode.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Particles/ParticleSystemComponent.h"
+
+#include "../Weapons/Weapon.h"
+#include "../BlasterCharacterComponents/CombatComponent.h"
+#include "../Characters/BlasterAnimInstance.h"
+#include "../Blaster.h"
+#include "../PlayerController/BlasterPlayerController.h"
+#include "../GameModes/BlasterGameMode.h"
 #include "../PlayerState/BlasterPlayerState.h"
 #include "../Weapons/WeaponTypes.h"
 
@@ -156,7 +157,7 @@ void ABlasterCharacter::Destroyed()
 	ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>();
 	if (CombatComponent && CombatComponent->EquippedWeapon && BlasterGameMode && BlasterGameMode->GetCountdownTime() <= 0.f)
 	{
-		CombatComponent->EquippedWeapon->Destroy();		// Weapons should not be destoryed when player dies FIX!
+		CombatComponent->EquippedWeapon->Destroy();	
 	}
 }
 

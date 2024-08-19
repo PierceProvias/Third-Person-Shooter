@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Blaster/HUD/BlasterHUD.h"
+
+#include "../HUD/BlasterHUD.h"
 #include "../Weapons/WeaponTypes.h"
 #include "../BlasterTypes/CombatState.h"
+
 #include "CombatComponent.generated.h"
 
 #define TRACE_LENGTH 80'000.f
