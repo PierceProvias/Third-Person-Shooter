@@ -8,8 +8,9 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Particles/ParticleSystem.h"
 #include "Sound/SoundCue.h"
-#include "Blaster/Characters/BlasterCharacter.h"
-#include "Blaster/Blaster.h"
+
+#include "../Characters/BlasterCharacter.h"
+#include "../Blaster.h"
 
 AProjectile::AProjectile()
 {

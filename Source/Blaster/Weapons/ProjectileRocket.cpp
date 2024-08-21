@@ -3,6 +3,8 @@
 
 #include "ProjectileRocket.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
+
 
 #define MIN_DAMAGE		10.f
 #define INNER_RADIUS	200.f
@@ -14,7 +16,27 @@ AProjectileRocket::AProjectileRocket()
 	RocketMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rocket Mesh"));
 	RocketMesh->SetupAttachment(GetRootComponent());
 	RocketMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 }
+
+void AProjectileRocket::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (TrailSystem)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAttached(
+			TrailSystem,
+			GetRootComponent(),
+			FName(),
+			GetActorLocation(),
+			GetActorRotation(),
+			EAttachLocation::KeepWorldPosition,
+			false
+		);
+	}
+}
+
 
 void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -40,3 +62,4 @@ void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	}
 	Super::OnHit(HitComp, OtherActor, OtherComp, NormalImpulse, Hit);
 }
+

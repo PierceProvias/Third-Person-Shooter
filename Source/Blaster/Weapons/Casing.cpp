@@ -6,8 +6,7 @@
 #include "Sound/SoundCue.h"
 
 ACasing::ACasing()
-{
- 	
+{ 	
 	PrimaryActorTick.bCanEverTick = false;
 
 	CasingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Casing Mesh"));

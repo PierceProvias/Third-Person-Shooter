@@ -2,17 +2,18 @@
 
 
 #include "BlasterPlayerController.h"
-#include "../HUD/BlasterHUD.h"
-#include "../HUD/CharacterOverlay.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-#include "../Characters/BlasterCharacter.h"
 #include "Net/UnrealNetwork.h"
-#include "../GameModes/BlasterGameMode.h"
-#include "../HUD/Announcement.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputSubsystems.h"
-#include "Blaster/GameStates/BlasterGameState.h"
+
+#include "../HUD/BlasterHUD.h"
+#include "../HUD/CharacterOverlay.h"
+#include "../Characters/BlasterCharacter.h"
+#include "../GameModes/BlasterGameMode.h"
+#include "../HUD/Announcement.h"
+#include "../GameStates/BlasterGameState.h"
 #include "../PlayerState/BlasterPlayerState.h"
 
 void ABlasterPlayerController::BeginPlay()

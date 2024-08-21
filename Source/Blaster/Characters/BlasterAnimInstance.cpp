@@ -5,6 +5,7 @@
 #include "BlasterCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+
 #include "../Weapons/Weapon.h"
 #include "../BlasterTypes/CombatState.h"
 

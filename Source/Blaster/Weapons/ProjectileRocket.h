@@ -6,6 +6,7 @@
 #include "Projectile.h"
 #include "ProjectileRocket.generated.h"
 
+class UNiagaraSystem;
 
 UCLASS()
 class BLASTER_API AProjectileRocket : public AProjectile
@@ -18,10 +19,15 @@ public:
 protected:
 
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, Category = "Niagara")
+	TObjectPtr<UNiagaraSystem> TrailSystem;
 
 private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> RocketMesh;
 	
+
 };
