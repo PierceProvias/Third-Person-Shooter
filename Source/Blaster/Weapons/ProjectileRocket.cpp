@@ -19,6 +19,11 @@ AProjectileRocket::AProjectileRocket()
 	
 }
 
+void AProjectileRocket::Destroyed()
+{
+
+}
+
 void AProjectileRocket::BeginPlay()
 {
 	Super::BeginPlay();
@@ -35,6 +40,11 @@ void AProjectileRocket::BeginPlay()
 			false
 		);
 	}
+}
+
+void AProjectileRocket::DestroyTimerFinished()
+{
+	Destroy();
 }
 
 
@@ -60,6 +70,11 @@ void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 			);
 		}
 	}
-	Super::OnHit(HitComp, OtherActor, OtherComp, NormalImpulse, Hit);
+	GetWorldTimerManager().SetTimer(
+		DestroyTimer,
+		this,
+		&AProjectileRocket::DestroyTimerFinished,
+		DestroyTime
+	);
 }
 

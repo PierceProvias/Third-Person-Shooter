@@ -54,9 +54,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundCue> ImpactSound;
 
-	
 
 public:	
-
+	
+	FORCEINLINE UParticleSystem* GetImpactParticles() const { return ImpactParticles; }
+	FORCEINLINE USoundCue* GetImpactSound() const { return ImpactSound; }
 
 };

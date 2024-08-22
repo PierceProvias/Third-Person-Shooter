@@ -92,6 +92,8 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	bUseFABRIK			= BlasterCharacter->GetCombatState() != ECombatState::ECS_Reloading;
 	bUseAimOffsets		= BlasterCharacter->GetCombatState() != ECombatState::ECS_Reloading;
 	bTransformRightHand = BlasterCharacter->GetCombatState() != ECombatState::ECS_Reloading;
+
+	
 }
 
 void UBlasterAnimInstance::Weapon_Crosshairs_DebugLines(bool TurnOn)

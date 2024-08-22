@@ -15,11 +15,13 @@ class BLASTER_API AProjectileRocket : public AProjectile
 
 public:
 	AProjectileRocket();
+	virtual void Destroyed() override;
 
 protected:
 
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 	virtual void BeginPlay() override;
+	void DestroyTimerFinished();
 
 	UPROPERTY(EditAnywhere, Category = "Niagara")
 	TObjectPtr<UNiagaraSystem> TrailSystem;
@@ -28,6 +30,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> RocketMesh;
+
+	FTimerHandle DestroyTimer;
 	
+	UPROPERTY(EditAnywhere)
+	float DestroyTime = 3.f;
 
 };
