@@ -4,6 +4,7 @@
 #include "ProjectileRocket.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/BoxComponent.h"
 
 
 #define MIN_DAMAGE		10.f
@@ -27,7 +28,10 @@ void AProjectileRocket::Destroyed()
 void AProjectileRocket::BeginPlay()
 {
 	Super::BeginPlay();
-
+	if (!HasAuthority())
+	{
+		GetCollisionBox()->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	}
 	if (TrailSystem)
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAttached(
@@ -40,6 +44,7 @@ void AProjectileRocket::BeginPlay()
 			false
 		);
 	}
+	
 }
 
 void AProjectileRocket::DestroyTimerFinished()

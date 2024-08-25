@@ -59,5 +59,6 @@ public:
 	
 	FORCEINLINE UParticleSystem* GetImpactParticles() const { return ImpactParticles; }
 	FORCEINLINE USoundCue* GetImpactSound() const { return ImpactSound; }
+	FORCEINLINE UBoxComponent* GetCollisionBox() const { return CollisionBox; }
 
 };
