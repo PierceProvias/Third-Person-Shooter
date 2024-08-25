@@ -34,11 +34,18 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float Damage = 20.f;
 
-private:
-
 	// Already replicated
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UBoxComponent> CollisionBox;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UParticleSystem> ImpactParticles;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USoundCue> ImpactSound;
+
+private:
+
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
@@ -48,17 +55,8 @@ private:
 
 	TObjectPtr< UParticleSystemComponent> TracerComponent;
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UParticleSystem> ImpactParticles;
-
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<USoundCue> ImpactSound;
 
 
-public:	
-	
-	FORCEINLINE UParticleSystem* GetImpactParticles() const { return ImpactParticles; }
-	FORCEINLINE USoundCue* GetImpactSound() const { return ImpactSound; }
-	FORCEINLINE UBoxComponent* GetCollisionBox() const { return CollisionBox; }
+
 
 };

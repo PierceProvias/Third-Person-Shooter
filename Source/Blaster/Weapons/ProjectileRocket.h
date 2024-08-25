@@ -7,6 +7,7 @@
 #include "ProjectileRocket.generated.h"
 
 class UNiagaraSystem;
+class UNiagaraComponent;
 
 UCLASS()
 class BLASTER_API AProjectileRocket : public AProjectile
@@ -25,6 +26,20 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Niagara")
 	TObjectPtr<UNiagaraSystem> TrailSystem;
+
+	TObjectPtr <UNiagaraComponent> TrailSystemComponent;
+
+	/*
+	* Projectile Rocket while in air
+	*/
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundCue> ProjectileLoop;
+
+	TObjectPtr<UAudioComponent> ProjectileLoopComponent;
+	
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundAttenuation> LoopingSoundAttenuation;
 
 private:
 
