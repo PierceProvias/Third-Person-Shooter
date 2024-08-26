@@ -44,11 +44,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundCue> ImpactSound;
 
-private:
-
-
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
+private:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UParticleSystem> Tracer;

@@ -8,6 +8,7 @@
 #include "Sound/SoundCue.h"
 #include "NiagaraComponent.h"
 #include "Components/AudioComponent.h"
+#include "RocketMovementComponent.h"
 
 #define MIN_DAMAGE			10.f
 #define INNER_RADIUS		200.f
@@ -21,7 +22,14 @@ AProjectileRocket::AProjectileRocket()
 	RocketMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rocket Mesh"));
 	RocketMesh->SetupAttachment(GetRootComponent());
 	RocketMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	RocketMovementComponent = CreateDefaultSubobject<URocketMovementComponent>(TEXT("RocketMovementComponent"));
+	RocketMovementComponent->bRotationFollowsVelocity = true;
+	RocketMovementComponent->SetIsReplicated(true);
 	
+	RocketMovementComponent->InitialSpeed = 1500.f;
+	RocketMovementComponent->MaxSpeed = 1500.f;
+	RocketMovementComponent->ProjectileGravityScale = 0.f;
 }
 
 void AProjectileRocket::Destroyed()
@@ -76,6 +84,7 @@ void AProjectileRocket::DestroyTimerFinished()
 
 void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if (OtherActor == GetOwner()) return;
 	// Returns pawn that owns this rocket
 	APawn* FiringPawn = GetInstigator();
 	if (FiringPawn && HasAuthority())

@@ -19,10 +19,10 @@ AWeapon::AWeapon()
  	
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;	// If false it would be authoritative on all machines. The tracer for instance would be spawned locally on all machines
+	SetReplicateMovement(true);
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon Mesh"));
 	SetRootComponent(WeaponMesh);
-
 
 	// When the weapon is dropped
 	WeaponMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
@@ -30,7 +30,6 @@ AWeapon::AWeapon()
 	
 	// When weapon is spawned
 	WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 
 	AreaSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Area Sphere"));
 	AreaSphere->SetupAttachment(RootComponent);
