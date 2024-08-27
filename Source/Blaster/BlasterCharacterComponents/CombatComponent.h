@@ -123,9 +123,9 @@ private:
 
 	void InterpFOV(float DeltaTime);
 
-	//
-	// Automatic Fire
-	//
+	/*
+	* Automatic Fire
+	*/
 
 	FTimerHandle FireTimer;
 
@@ -150,6 +150,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int32 StartingRocketAmmo = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 StartingPistolAmmo = 30;
 
 	void InitCarriedAmmo();
 

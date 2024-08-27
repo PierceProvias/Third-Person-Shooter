@@ -12,8 +12,8 @@ AProjectileBullet::AProjectileBullet()
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	ProjectileMovementComponent->SetIsReplicated(true);
 
-	ProjectileMovementComponent->InitialSpeed = 1500.f;
-	ProjectileMovementComponent->MaxSpeed = 1500.f;
+	ProjectileMovementComponent->InitialSpeed = 15000.f;
+	ProjectileMovementComponent->MaxSpeed = 15000.f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 }
 
