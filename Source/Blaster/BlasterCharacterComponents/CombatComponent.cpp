@@ -11,7 +11,9 @@
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 #include "Sound/SoundCue.h"
+#include "EnhancedInputSubsystems.h"
 
+#include "../PlayerController/BlasterPlayerController.h"
 #include "../Weapons/Weapon.h"
 #include "../Characters/BlasterCharacter.h"
 #include "../PlayerController/BlasterPlayerController.h"
@@ -362,7 +364,39 @@ void UCombatComponent::FireTimerFinished()
 	bCanFire = true;
 	if (bFireButtonPressed && EquippedWeapon->bAutomatic)
 	{
-		Fire();
+
+		if (APlayerController* PlayerController = Cast<APlayerController>(BlasterCharacter->GetController()))
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+			{
+				//Subsystem->AddPlayerMappedKey(FName("CharacterMappingContext"), FKey(EKeys::LeftMouseButton), &FModifyContextOptions::bForceImmediately);
+				//Subsystem->ClearAllMappings();
+				//Subsystem->AddMappingContext(LookOnlyMappingContext, 0);
+				FKey FireKey = Subsystem->GetPlayerMappedKey(FName("FireAction"));
+
+				//EInputActionValueType Action EInputActionValueType::Boolean, 0.f);
+				EInputActionValueType ValueType = EInputActionValueType::Boolean;
+				FInputActionValue ActionValue;
+				ActionValue.ConvertToType(ValueType);
+
+				TArray<UInputModifier*> Modifiers;
+				TArray<UInputTrigger*> Triggers;
+				//UInputTriggerPressed* Pressed = EInputEvent::IE_Pressed;
+				
+				//if (Pressed)
+				//{
+					//Triggers.Emplace(Pressed);
+
+				//}
+			
+
+			
+
+					// TODO: Change FireAction Input Mapping Key trigger to pressed when !automatic weapon
+				Subsystem->InjectInputForAction(BlasterCharacter->GetFireAction(), ActionValue, Modifiers, Triggers);
+				Fire();
+			}
+		}
 	}
 }
 

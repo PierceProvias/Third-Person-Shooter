@@ -198,7 +198,6 @@ void ABlasterPlayerController::HandleCooldown()
 				BlasterHUD->Annoucement->InfoText->SetText(FText::FromString(InfoTextString));
 			}
 
-
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 			{
 				Subsystem->ClearAllMappings();

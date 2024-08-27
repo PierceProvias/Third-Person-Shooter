@@ -291,7 +291,9 @@ public:
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
-	
+	FORCEINLINE UInputMappingContext* GetCharacterInputMappingContext() const { return CharacterMappingContext; }
+	FORCEINLINE UInputAction* GetFireAction() const { return FireAction; }
+
 	ECombatState GetCombatState() const;
 
 	AWeapon* GetEquippedWeapon();
