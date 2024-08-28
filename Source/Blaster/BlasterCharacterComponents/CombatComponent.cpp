@@ -389,9 +389,6 @@ void UCombatComponent::FireTimerFinished()
 
 				//}
 			
-
-			
-
 					// TODO: Change FireAction Input Mapping Key trigger to pressed when !automatic weapon
 				Subsystem->InjectInputForAction(BlasterCharacter->GetFireAction(), ActionValue, Modifiers, Triggers);
 				Fire();
@@ -424,6 +421,7 @@ void UCombatComponent::InitCarriedAmmo()
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_AssaultRifle, StartingARAmmo);
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_RocketLauncher, StartingRocketAmmo);
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_Pistol, StartingPistolAmmo);
+	CarriedAmmoMap.Emplace(EWeaponType::EWT_SMG, StartingSMGAmmo);
 }
 
 void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
