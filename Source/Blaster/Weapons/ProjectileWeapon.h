@@ -17,6 +17,10 @@ class BLASTER_API AProjectileWeapon : public AWeapon
 public: 
 
 	virtual void Fire(const FVector& HitTarget) override;
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastFireSound();
+
 private:
 
 	UPROPERTY(EditAnywhere)

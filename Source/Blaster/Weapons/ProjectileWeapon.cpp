@@ -6,6 +6,7 @@
 #include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+//#include "Net/UnrealNetwork.h"
 
 void AProjectileWeapon::Fire(const FVector& HitTarget)
 {
@@ -13,7 +14,13 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 
 	if (!HasAuthority()) return;
 
-	APawn* InstigatorPawn = Cast<APawn>(GetOwner());
+	//BlasterCharacter&& HasAuthority() && InstigatorController
+	//APawn* InstigatorPawn = Cast<APawn>(GetOwner());
+	//AController* InstigatorController = InstigatorPawn->GetController();
+
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if (OwnerPawn == nullptr) return;
+	AController* InstigatorController = OwnerPawn->GetController();
 
 	if (const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName(FName("MuzzleFlash")))
 	{
@@ -22,11 +29,11 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 		// From muzzle flash socket to hit location from TraceUnderCrosshairs
 		FVector ToTarget = HitTarget - SocketTransform.GetLocation();
 		FRotator TargetRotation = ToTarget.Rotation();
-		if (ProjectileClass && InstigatorPawn)
+		if (ProjectileClass && InstigatorController)
 		{
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Owner = GetOwner();
-			SpawnParams.Instigator = InstigatorPawn;
+			SpawnParams.Instigator = OwnerPawn;
 			if (UWorld* World = GetWorld())
 			{
 				World->SpawnActor<AProjectile>(
@@ -35,6 +42,7 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 					TargetRotation,
 					SpawnParams
 				);
+
 			}
 		}
 		if (UWorld* World = GetWorld())
@@ -46,7 +54,7 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 					BeamParticles,
 					SocketTransform
 				);
-			
+
 			}
 			if (MuzzleFlash)
 			{
@@ -58,12 +66,17 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 			}
 			if (FireSound)
 			{
-				UGameplayStatics::PlaySoundAtLocation(
-					this,
-					FireSound,
-					GetActorLocation()
-				);
+				MulticastFireSound();
 			}
 		}
 	}
+}
+
+void AProjectileWeapon::MulticastFireSound_Implementation()
+{
+	UGameplayStatics::PlaySoundAtLocation(
+		this,
+		FireSound,
+		GetActorLocation()
+	);
 }
