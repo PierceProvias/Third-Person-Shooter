@@ -6,7 +6,6 @@
 #include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
-//#include "Net/UnrealNetwork.h"
 
 void AProjectileWeapon::Fire(const FVector& HitTarget)
 {
