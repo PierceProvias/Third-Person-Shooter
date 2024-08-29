@@ -7,6 +7,7 @@
 #include "HitScanWeapon.generated.h"
 
 class UParticleSystem;
+class USoundCue;
 
 UCLASS()
 class BLASTER_API AHitScanWeapon : public AWeapon
@@ -22,10 +23,18 @@ private:
 	UPROPERTY(EditAnywhere)
 	float Damage = 20.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Particles")
 	TObjectPtr<UParticleSystem> ImpactParticles;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Particles")
 	TObjectPtr<UParticleSystem> BeamParticles;
+
+	UPROPERTY(EditAnywhere, Category = "Particles")
+	TObjectPtr<UParticleSystem> MuzzleFlash;
 	
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundCue> FireSound;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundCue> HitSound;
 };
