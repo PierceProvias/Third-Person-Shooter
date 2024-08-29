@@ -21,6 +21,9 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 	void MulticastFireSound();
 
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastMuzzleFlash();
+
 private:
 
 	UPROPERTY(EditAnywhere)

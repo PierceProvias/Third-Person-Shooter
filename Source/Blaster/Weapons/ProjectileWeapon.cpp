@@ -58,16 +58,28 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 			}
 			if (MuzzleFlash)
 			{
-				UGameplayStatics::SpawnEmitterAtLocation(
-					World,
-					MuzzleFlash,
-					SocketTransform
-				);
+				MulticastMuzzleFlash();
 			}
 			if (FireSound)
 			{
 				MulticastFireSound();
 			}
+		}
+	}
+}
+
+void AProjectileWeapon::MulticastMuzzleFlash_Implementation()
+{
+	if (const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName(FName("MuzzleFlash")))
+	{
+		if (UWorld* World = GetWorld())
+		{
+			FTransform SocketTransform = MuzzleFlashSocket->GetSocketTransform(GetWeaponMesh());
+			UGameplayStatics::SpawnEmitterAtLocation(
+				World,
+				MuzzleFlash,
+				SocketTransform
+			);
 		}
 	}
 }
