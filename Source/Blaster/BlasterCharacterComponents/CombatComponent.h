@@ -11,7 +11,7 @@
 
 #include "CombatComponent.generated.h"
 
-#define TRACE_LENGTH 80'000.f
+
 class AWeapon;
 class ABlasterPlayerController;
 class ABlasterHUD;
@@ -156,6 +156,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingSMGAmmo = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
+	int32 StartingShotgunAmmo = 0;
 
 	void InitCarriedAmmo();
 

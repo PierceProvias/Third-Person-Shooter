@@ -12,6 +12,7 @@ class UTexture2D;
 class ABlasterCharacter;
 class ABlasterPlayerController;
 class USoundCue;
+class UMapIconComponent;
 
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
@@ -153,6 +154,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float ZoomInterpSpeed = 20.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Icon")
+	TObjectPtr<UMapIconComponent> WeaponMapIcon;
 
 public:	
 	

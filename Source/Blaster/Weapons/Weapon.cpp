@@ -10,6 +10,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Casing.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "MapIconComponent.h"
+
 
 #include "../Characters/BlasterCharacter.h"
 #include "../PlayerController/BlasterPlayerController.h"
@@ -41,6 +43,9 @@ AWeapon::AWeapon()
 	
 	PickupWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Pickup Widget"));
 	PickupWidget->SetupAttachment(RootComponent);
+
+	WeaponMapIcon = CreateDefaultSubobject<UMapIconComponent>(TEXT("Weapon Map Icon"));
+	WeaponMapIcon->SetupAttachment(GetRootComponent());
 }
 
 void AWeapon::BeginPlay()
