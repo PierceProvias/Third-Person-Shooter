@@ -368,6 +368,35 @@ void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 
 		FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
 		BlasterHUD->Annoucement->WarmupTimerText->SetText(FText::FromString(CountdownText));
+		if (Minutes < 1 && Seconds == 10)
+		{
+			UGameplayStatics::PlaySound2D(this, WarmupCountdownSound);
+			BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
+		}
+		if (CountdownTime <= 10.f && CountdownTime > 1.f)
+		{
+			UGameplayStatics::PlaySound2D(this, WarmupCountdownSound);
+			if (Seconds % 2 == 0)
+			{
+				BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
+			}
+			else
+			{
+				BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+			}
+		} 
+		else if (CountdownTime <= 1.f)
+		{
+			UGameplayStatics::PlaySound2D(this, WarmupCountdownSoundEnd);
+			if (Seconds % 2 == 0)
+			{
+				BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
+			}
+			else
+			{
+				BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+			}
+		}
 	}
 }
 
