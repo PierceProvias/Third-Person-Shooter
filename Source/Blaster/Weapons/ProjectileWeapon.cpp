@@ -4,6 +4,8 @@
 #include "ProjectileWeapon.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Projectile.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 void AProjectileWeapon::Fire(const FVector& HitTarget)
 {
@@ -32,6 +34,34 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 					SocketTransform.GetLocation(),
 					TargetRotation,
 					SpawnParams
+				);
+			}
+		}
+		if (UWorld* World = GetWorld())
+		{
+			if (BeamParticles)
+			{
+				UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(
+					World,
+					BeamParticles,
+					SocketTransform
+				);
+			
+			}
+			if (MuzzleFlash)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(
+					World,
+					MuzzleFlash,
+					SocketTransform
+				);
+			}
+			if (FireSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(
+					this,
+					FireSound,
+					GetActorLocation()
 				);
 			}
 		}

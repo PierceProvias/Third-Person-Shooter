@@ -145,16 +145,16 @@ private:
 
 	TMap<EWeaponType, int32> CarriedAmmoMap;	// TMap isn't replicated!
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingARAmmo = 30;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingRocketAmmo = 0;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingPistolAmmo = 30;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingSMGAmmo = 0;
 
 	void InitCarriedAmmo();

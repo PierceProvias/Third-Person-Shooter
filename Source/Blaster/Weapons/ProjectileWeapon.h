@@ -7,6 +7,7 @@
 #include "ProjectileWeapon.generated.h"
 
 class AProjectile;
+class USound;
 
 UCLASS()
 class BLASTER_API AProjectileWeapon : public AWeapon
@@ -20,4 +21,20 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectile> ProjectileClass;
+
+
+	UPROPERTY(EditAnywhere, Category = "Particles")
+	TObjectPtr<UParticleSystem> ImpactParticles;
+
+	UPROPERTY(EditAnywhere, Category = "Particles")
+	TObjectPtr<UParticleSystem> BeamParticles;
+
+	UPROPERTY(EditAnywhere, Category = "Particles")
+	TObjectPtr<UParticleSystem> MuzzleFlash;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundCue> FireSound;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundCue> HitSound;
 };
