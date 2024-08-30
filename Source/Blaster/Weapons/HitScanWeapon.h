@@ -21,6 +21,9 @@ public:
 protected:
 
 	FVector TraceEndWithScatter(const FVector& TraceStart, const FVector& HitTarget, bool DebugEnabled = false);
+
+	UPROPERTY(EditAnywhere, Category = "Debug")
+	bool bEnableDebug = true;
 	
 private:
 
@@ -54,5 +57,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
 	bool bUseScatter = false;
+
+	
 
 };

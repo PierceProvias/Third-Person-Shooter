@@ -27,7 +27,7 @@ void AShotgun::Fire(const FVector& HitTarget)
 		FVector Start = SocketTransform.GetLocation();
 		for (uint32 i = 0; i < NumberOfPellets; i++)
 		{
-			FVector End = TraceEndWithScatter(Start, HitTarget, true);
+			FVector End = TraceEndWithScatter(Start, HitTarget, bEnableDebug);
 		}
 	}
 }
