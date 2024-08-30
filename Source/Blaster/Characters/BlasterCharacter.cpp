@@ -599,6 +599,9 @@ void ABlasterCharacter::PlayReloadMontage()
 		case EWeaponType::EWT_AssaultRifle:
 			SectionName = FName("AssaultRifle");
 			break;
+		case EWeaponType::EWT_AK47:
+			SectionName = FName("AssaultRifle");
+			break;
 		case EWeaponType::EWT_RocketLauncher:
 			SectionName = FName("AssaultRifle");
 			break;
@@ -609,6 +612,9 @@ void ABlasterCharacter::PlayReloadMontage()
 			SectionName = FName("AssaultRifle");
 			break;
 		case EWeaponType::EWT_Shotgun:
+			SectionName = FName("AssaultRifle");
+			break;
+		case EWeaponType::EWT_Sniper:
 			SectionName = FName("AssaultRifle");
 			break;
 		}
