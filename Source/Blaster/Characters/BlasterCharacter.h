@@ -59,6 +59,9 @@ public:
 
 	virtual void Destroyed() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowSniperScopeWidget(bool bShowScope);
+
 protected:
 	
 	virtual void BeginPlay() override;

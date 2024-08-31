@@ -71,15 +71,18 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 }
 void UCombatComponent::SetAiming(bool bIsAiming)
-
 {
+	if (BlasterCharacter == nullptr || EquippedWeapon == nullptr) return;
 	bAiming = bIsAiming;
 	ServerSetAiming(bIsAiming);
 	if (BlasterCharacter)
 	{
 		BlasterCharacter->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
 	}
-		
+	if (BlasterCharacter->IsLocallyControlled() && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_Sniper)
+	{
+		BlasterCharacter->ShowSniperScopeWidget(bIsAiming);
+	}
 }
 
 // _Implementation is for RPC
