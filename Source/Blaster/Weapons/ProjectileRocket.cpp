@@ -30,6 +30,7 @@ AProjectileRocket::AProjectileRocket()
 	RocketMovementComponent->InitialSpeed = 1500.f;
 	RocketMovementComponent->MaxSpeed = 1500.f;
 	RocketMovementComponent->ProjectileGravityScale = 0.f;
+	SetLifeSpan(10.f);
 }
 
 void AProjectileRocket::Destroyed()
