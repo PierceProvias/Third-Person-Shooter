@@ -35,6 +35,7 @@ protected:
 	
 	void StartDestroyTimer();
 	void DestroyTimerFinished();
+	void ExplodeDamage();
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 20.f;

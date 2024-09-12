@@ -13,6 +13,13 @@
 #include "../Characters/BlasterCharacter.h"
 #include "../Blaster.h"
 
+#define MIN_DAMAGE			10.f
+#define INNER_RADIUS		200.f
+#define OUTER_RADIUS		500.f
+#define DAMAGE_FALLOFF		1.f
+#define VOLUME_MULTIPLIER	1.f
+#define PITCH_MULTIPLIER	1.f
+
 AProjectile::AProjectile()
 {
 
@@ -71,6 +78,31 @@ void AProjectile::StartDestroyTimer()
 void AProjectile::DestroyTimerFinished()
 {
 	Destroy();
+}
+
+void AProjectile::ExplodeDamage()
+{
+	// Returns pawn that owns this rocket
+	APawn* FiringPawn = GetInstigator();
+	if (FiringPawn && HasAuthority())
+	{
+		if (AController* FiringController = FiringPawn->GetController())
+		{
+			UGameplayStatics::ApplyRadialDamageWithFalloff(
+				this,						// World context object
+				Damage,						// Base Damage
+				MIN_DAMAGE,
+				GetActorLocation(),			// Origin
+				INNER_RADIUS,
+				OUTER_RADIUS,
+				DAMAGE_FALLOFF,
+				UDamageType::StaticClass(),	// Damage type class
+				TArray<AActor*>(),			// Ignore Actors
+				this,						// Damage cause
+				FiringController			// Instigator controller
+			);
+		}
+	}
 }
 
 void AProjectile::Destroyed()

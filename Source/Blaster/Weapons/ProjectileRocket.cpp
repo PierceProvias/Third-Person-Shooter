@@ -69,27 +69,7 @@ void AProjectileRocket::BeginPlay()
 void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor == GetOwner()) return;
-	// Returns pawn that owns this rocket
-	APawn* FiringPawn = GetInstigator();
-	if (FiringPawn && HasAuthority())
-	{
-		if (AController* FiringController = FiringPawn->GetController())
-		{
-			UGameplayStatics::ApplyRadialDamageWithFalloff(
-				this,						// World context object
-				Damage,						// Base Damage
-				MIN_DAMAGE,
-				GetActorLocation(),			// Origin
-				INNER_RADIUS,
-				OUTER_RADIUS,
-				DAMAGE_FALLOFF,
-				UDamageType::StaticClass(),	// Damage type class
-				TArray<AActor*>(),			// Ignore Actors
-				this,						// Damage cause
-				FiringController			// Instigator controller
-			);
-		}
-	}
+	ExplodeDamage();
 
 	StartDestroyTimer();
 
