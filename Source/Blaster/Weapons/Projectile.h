@@ -11,6 +11,8 @@ class UProjectileMovementComponent;
 class UParticleSystem;
 class UParticleSystemComponent;
 class USoundCue;
+class UNiagaraSystem;
+class UNiagaraComponent;
 
 UCLASS()
 class BLASTER_API AProjectile : public AActor
@@ -30,6 +32,9 @@ protected:
 	UFUNCTION()
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	virtual void Destroyed() override;
+	
+	void StartDestroyTimer();
+	void DestroyTimerFinished();
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 20.f;
@@ -44,8 +49,18 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundCue> ImpactSound;
 
+	UPROPERTY(EditAnywhere, Category = "Niagara")
+	TObjectPtr<UNiagaraSystem> TrailSystem;
+
+	TObjectPtr <UNiagaraComponent> TrailSystemComponent;
+
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
+	void SpawnTrailSystem();
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UStaticMeshComponent> ProjectileMesh;
 
 private:
 
@@ -54,7 +69,10 @@ private:
 
 	TObjectPtr< UParticleSystemComponent> TracerComponent;
 
+	FTimerHandle DestroyTimer;
 
+	UPROPERTY(EditAnywhere)
+	float DestroyTime = 3.f;
 
 
 
