@@ -61,6 +61,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundCue> EquipSound;
 
+	/*
+	* Enable or disable custom depth
+	*/
+
+	void EnableCustomDepth(bool bEnable);
+
 protected:
 	
 	virtual void BeginPlay() override;
