@@ -22,6 +22,8 @@
 #include "../PlayerState/BlasterPlayerState.h"
 #include "../Weapons/WeaponTypes.h"
 
+
+
 ABlasterCharacter::ABlasterCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -243,6 +245,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::AimButtonPressed);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::FireButtonPressed);
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::ReloadButtonPressed);
+		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::DropWeaponPressed);
 
 		// TODO: Find Jump animation for unequipped pose (Current one lags)
 	}
@@ -340,6 +343,21 @@ void ABlasterCharacter::ReloadButtonPressed()
 	{
 		CombatComponent->Reload();
 	}
+}
+
+void ABlasterCharacter::DropWeaponPressed()
+{
+	if (CombatComponent && CombatComponent->EquippedWeapon == nullptr) return;
+	
+	GetEquippedWeapon()->GetWeaponMesh()->SetSimulatePhysics(true);
+	GetEquippedWeapon()->GetWeaponMesh()->SetEnableGravity(true);
+	GetEquippedWeapon()->GetWeaponMesh()->AddImpulse(GetActorForwardVector() * WEAPON_DROP_VELOCITY);
+	
+	GetEquippedWeapon()->SetWeaponState(EWeaponState::EWS_Dropped);
+	GetEquippedWeapon()->SetOwner(nullptr);
+	
+	UE_LOG(LogTemp, Warning, TEXT("Weapon Dropped Button Pressed"));
+	
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)

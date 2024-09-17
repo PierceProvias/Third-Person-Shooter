@@ -78,7 +78,7 @@ protected:
 	void AimButtonPressed(const FInputActionValue& Value);
 	void FireButtonPressed(const FInputActionValue& Value);
 	void ReloadButtonPressed();
-
+	void DropWeaponPressed();
 
 	// Aim Offsets
 	void AimOffset(float DeltaTime);
@@ -139,6 +139,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> ReloadAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> DropWeaponAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* OverheadWidget;

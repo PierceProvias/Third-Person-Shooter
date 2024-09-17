@@ -1,6 +1,7 @@
 #pragma once
 
 #define TRACE_LENGTH 80'000
+#define WEAPON_DROP_VELOCITY 250.f
 
 #define CUSTOM_DEPTH_PURPLE 250
 #define CUSTOM_DEPTH_BLUE 251
