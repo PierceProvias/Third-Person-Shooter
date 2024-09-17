@@ -48,6 +48,9 @@ protected:
 	void OnRep_EquippedWeapon();
 
 	UFUNCTION()
+	void OnRep_DropCurrentWeapon();
+
+	UFUNCTION()
 	void FireButtonPressed(bool bPressed);
 
 	void Fire();
@@ -78,7 +81,7 @@ private:
 	TObjectPtr<ABlasterHUD> BlasterHUD;
 
 	// Replicated so that all machines are in the correct animation pose
-	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
+	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon, ReplicatedUsing = OnRep_DropCurrentWeapon)
 	TObjectPtr<AWeapon> EquippedWeapon;
 
 	UPROPERTY(Replicated)

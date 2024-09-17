@@ -347,16 +347,13 @@ void ABlasterCharacter::ReloadButtonPressed()
 
 void ABlasterCharacter::DropWeaponPressed()
 {
-	if (CombatComponent && CombatComponent->EquippedWeapon == nullptr) return;
+	if (IsWeaponEquipped())
+	{
+		CombatComponent->OnRep_DropCurrentWeapon();
+	}
 	
-	GetEquippedWeapon()->GetWeaponMesh()->SetSimulatePhysics(true);
-	GetEquippedWeapon()->GetWeaponMesh()->SetEnableGravity(true);
-	GetEquippedWeapon()->GetWeaponMesh()->AddImpulse(GetActorForwardVector() * WEAPON_DROP_VELOCITY);
-	
-	GetEquippedWeapon()->SetWeaponState(EWeaponState::EWS_Dropped);
-	GetEquippedWeapon()->SetOwner(nullptr);
-	
-	UE_LOG(LogTemp, Warning, TEXT("Weapon Dropped Button Pressed"));
+	// TODO: Detach weapon mesh from right hand socket 
+	// TODO: Probably best to move this to the combat component
 	
 }
 

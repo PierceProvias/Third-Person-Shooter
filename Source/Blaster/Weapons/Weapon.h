@@ -13,6 +13,9 @@ class ABlasterCharacter;
 class ABlasterPlayerController;
 class USoundCue;
 class UMapIconComponent;
+class USphereComponent;
+class UWidgetComponent;
+class UAnimationAsset;
 
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
@@ -23,10 +26,6 @@ enum class EWeaponState : uint8
 
 	EWS_MAX				UMETA(DisplayName = "DefaultMAX")  // Used to check number of enums 
 };
-
-class USphereComponent;
-class UWidgetComponent;
-class UAnimationAsset;
 
 UCLASS()
 class BLASTER_API AWeapon : public AActor

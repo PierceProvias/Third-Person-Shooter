@@ -118,6 +118,18 @@ void UCombatComponent::OnRep_EquippedWeapon()
 	}
 }
 
+void UCombatComponent::OnRep_DropCurrentWeapon()
+{
+	if (BlasterCharacter && EquippedWeapon)
+	{
+		EquippedWeapon->GetWeaponMesh()->SetSimulatePhysics(true);
+		EquippedWeapon->GetWeaponMesh()->SetEnableGravity(true);
+		EquippedWeapon->GetWeaponMesh()->AddImpulse(BlasterCharacter->GetActorForwardVector() * WEAPON_DROP_VELOCITY);
+		EquippedWeapon->Dropped();
+		
+	}
+}
+
 void UCombatComponent::FireButtonPressed(bool bPressed)
 {
 	bFireButtonPressed = bPressed;	// Locally controlled
