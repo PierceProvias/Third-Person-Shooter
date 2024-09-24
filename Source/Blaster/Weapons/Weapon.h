@@ -22,6 +22,7 @@ enum class EWeaponState : uint8
 {
 	EWS_Initial			UMETA(DisplayName = "Initial State"),
 	EWS_Equipped		UMETA(DisplayName = "Equipped"),
+	EWS_Swapped			UMETA(DisplayName = "Swapped"),
 	EWS_Dropped			UMETA(DisplayName = "Dropped"),
 
 	EWS_MAX				UMETA(DisplayName = "DefaultMAX")  // Used to check number of enums 
@@ -40,6 +41,7 @@ public:
 	virtual void OnRep_Owner() override;
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& HitTarget);
+	void Swapped();
 	void Dropped();
 
 	//

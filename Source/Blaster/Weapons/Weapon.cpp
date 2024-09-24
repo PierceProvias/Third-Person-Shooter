@@ -142,7 +142,7 @@ void AWeapon::OnRep_WeaponState()
 		}
 		EnableCustomDepth(false);
 		break;
-	case EWeaponState::EWS_Dropped:
+	case EWeaponState::EWS_Swapped:
 		
 		WeaponMesh->SetSimulatePhysics(true);
 		WeaponMesh->SetEnableGravity(true);
@@ -150,8 +150,15 @@ void AWeapon::OnRep_WeaponState()
 		WeaponMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 		WeaponMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 		WeaponMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
-		WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_PURPLE);
-		WeaponMesh->MarkRenderStateDirty();
+		EnableCustomDepth(true);
+		break;
+	case EWeaponState::EWS_Dropped:
+		WeaponMesh->SetSimulatePhysics(true);
+		WeaponMesh->SetEnableGravity(true);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		WeaponMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+		WeaponMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+		WeaponMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 		EnableCustomDepth(true);
 		break;
 	}
@@ -205,8 +212,9 @@ void AWeapon::SetWeaponState(EWeaponState State)
 			WeaponMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		}
 		EnableCustomDepth(false);
+
 		break;
-	case EWeaponState::EWS_Dropped:
+	case EWeaponState::EWS_Swapped:
 		if (HasAuthority())
 		{
 			AreaSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -217,10 +225,8 @@ void AWeapon::SetWeaponState(EWeaponState State)
 		WeaponMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 		WeaponMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 		WeaponMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
-		break;
-		WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_PURPLE);
-		WeaponMesh->MarkRenderStateDirty();
 		EnableCustomDepth(true);
+		break;
 	}
 }
 
@@ -263,6 +269,17 @@ void AWeapon::Fire(const FVector& HitTarget)
 	SpendRound();
 }
 
+void AWeapon::Swapped()
+{
+	// Enum class is replicated
+	SetWeaponState(EWeaponState::EWS_Swapped);
+	FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, true);
+	WeaponMesh->DetachFromComponent(DetachRules);
+	SetOwner(nullptr);
+	BlasterOwnerCharacter = nullptr;
+	BlasterOwnerController = nullptr;
+}
+
 void AWeapon::Dropped()
 {
 	// Enum class is replicated
@@ -273,4 +290,3 @@ void AWeapon::Dropped()
 	BlasterOwnerCharacter = nullptr;
 	BlasterOwnerController = nullptr;
 }
-

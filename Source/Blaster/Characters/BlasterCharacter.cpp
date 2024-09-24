@@ -83,7 +83,7 @@ void ABlasterCharacter::Elim()
 {
 	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
-		CombatComponent->EquippedWeapon->Dropped();
+		CombatComponent->EquippedWeapon->Swapped();		// TODO: Need to be dropped here (create function for dropping current weapon)
 	}
 	MulticastElim();
 	GetWorldTimerManager().SetTimer(
@@ -295,7 +295,7 @@ void ABlasterCharacter::Jump()
 
 void ABlasterCharacter::EquipButtonPressed()
 {
-	if (CombatComponent )
+	if (CombatComponent)
 	{
 		if (HasAuthority())
 		{
@@ -347,7 +347,7 @@ void ABlasterCharacter::ReloadButtonPressed()
 
 void ABlasterCharacter::DropWeaponPressed()
 {
-	if (IsWeaponEquipped())
+	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
 		CombatComponent->OnRep_DropCurrentWeapon();
 	}

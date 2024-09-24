@@ -81,8 +81,11 @@ private:
 	TObjectPtr<ABlasterHUD> BlasterHUD;
 
 	// Replicated so that all machines are in the correct animation pose
-	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon, ReplicatedUsing = OnRep_DropCurrentWeapon)
+	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	TObjectPtr<AWeapon> EquippedWeapon;
+
+	//UPROPERTY()
+	//TObjectPtr<AWeapon> CurrentWeapon;
 
 	UPROPERTY(Replicated)
 	bool bAiming;

@@ -66,6 +66,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
+	//DOREPLIFETIME(UCombatComponent, CurrentWeapon);
 	DOREPLIFETIME(UCombatComponent, bAiming);
 	DOREPLIFETIME(UCombatComponent, CombatState);
 	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
@@ -115,6 +116,10 @@ void UCombatComponent::OnRep_EquippedWeapon()
 				BlasterCharacter->GetActorLocation()
 			);
 		}
+		//if (BlasterCharacter->GetInputAxisValue(FName("DropWeaponAction")))
+		//{
+			//OnRep_DropCurrentWeapon();
+		//}
 	}
 }
 
@@ -122,11 +127,13 @@ void UCombatComponent::OnRep_DropCurrentWeapon()
 {
 	if (BlasterCharacter && EquippedWeapon)
 	{
-		EquippedWeapon->GetWeaponMesh()->SetSimulatePhysics(true);
-		EquippedWeapon->GetWeaponMesh()->SetEnableGravity(true);
-		EquippedWeapon->GetWeaponMesh()->AddImpulse(BlasterCharacter->GetActorForwardVector() * WEAPON_DROP_VELOCITY);
-		EquippedWeapon->Dropped();
-		
+		EquippedWeapon->GetWeaponMesh()->AddImpulse(
+			BlasterCharacter->GetActorForwardVector() * WEAPON_FORWARD_DROP_VELOCITY + 
+			BlasterCharacter->GetActorUpVector() * WEAPON_UPWARD_DROP_VELOCITY
+		);
+		//EquippedWeapon->Dropped();
+		EquippedWeapon->Swapped();
+		BlasterCharacter->DestroyConstructedComponents();
 	}
 }
 
@@ -462,7 +469,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	if (BlasterCharacter == nullptr || WeaponToEquip == nullptr) return;
 	if (EquippedWeapon)
 	{
-		EquippedWeapon->Dropped();
+		EquippedWeapon->Swapped();
 	}
 	EquippedWeapon = WeaponToEquip;
 	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
