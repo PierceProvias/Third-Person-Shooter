@@ -9,6 +9,7 @@
 class UButton;
 class UWidgetSwitcher;
 class UComboBoxString;
+class UCheckBox;
 
 UCLASS()
 class MULTIPLAYERSESSIONS_API UOptions : public UUserWidget
@@ -25,22 +26,33 @@ public:
 
 protected:
 
+	void InitializeResolutionComboBox();
+	void InitializeVSync();
+	
 	UPROPERTY()
 	TObjectPtr<UGameUserSettings> GameUserSettings;
 
+	/*
+	* Resolution Settings
+	*/
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	TObjectPtr<UComboBoxString> ResolutionComboBox;
 
 	UPROPERTY()
 	TArray<FIntPoint> Resolutions;
 
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UCheckBox> VSyncCheckBox;
+
 	virtual bool Initialize() override;
 	virtual void NativeDestruct() override;
 
-	void InitializeResolutionComboBox();
 
 	UFUNCTION()
 	void OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType);
+
+	UFUNCTION()
+	void OnVSyncChanged(bool InIsChecked);
 
 private:
 
@@ -72,28 +84,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> WindowRightButton;
-	/*
 	
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> ResolutionLeftButton;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> ResolutionRightButton;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> GraphicsLeftButton;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> GraphicsRightButton;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> VSyncLeftButton;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> VSyncRightButton;
-
-	*/
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> BackButton;
 

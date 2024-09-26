@@ -9,6 +9,7 @@
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/ComboBoxString.h"
+#include "Components/CheckBox.h"
 
 void UOptions::MenuSetup()
 {
@@ -34,6 +35,10 @@ void UOptions::MenuSetup()
 void UOptions::NativeConstruct()
 {
 	GameUserSettings = UGameUserSettings::GetGameUserSettings();
+
+	InitializeResolutionComboBox();
+	InitializeVSync();
+
 }
 
 bool UOptions::Initialize()
@@ -140,10 +145,23 @@ void UOptions::InitializeResolutionComboBox()
 	ResolutionComboBox->OnSelectionChanged.AddDynamic(this, &UOptions::OnResolutionChanged);
 }
 
+void UOptions::InitializeVSync()
+{
+	VSyncCheckBox->SetIsChecked(GameUserSettings->IsVSyncEnabled());
+	VSyncCheckBox->OnCheckStateChanged.Clear();
+	VSyncCheckBox->OnCheckStateChanged.AddDynamic(this, &UOptions::OnVSyncChanged);
+}
+
 void UOptions::OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType)
 {
 	const auto SelectedResolution = Resolutions[ResolutionComboBox->GetSelectedIndex()];
 	GameUserSettings->SetScreenResolution(SelectedResolution);
+	GameUserSettings->ApplySettings(false);
+}
+
+void UOptions::OnVSyncChanged(bool InIsChecked)
+{
+	GameUserSettings->SetVSyncEnabled(InIsChecked);
 	GameUserSettings->ApplySettings(false);
 }
 
