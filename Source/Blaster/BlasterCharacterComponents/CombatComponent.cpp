@@ -12,6 +12,7 @@
 #include "TimerManager.h"
 #include "Sound/SoundCue.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/InputSettings.h"
 
 #include "../PlayerController/BlasterPlayerController.h"
 #include "../Weapons/Weapon.h"
@@ -116,10 +117,24 @@ void UCombatComponent::OnRep_EquippedWeapon()
 				BlasterCharacter->GetActorLocation()
 			);
 		}
-		//if (BlasterCharacter->GetInputAxisValue(FName("DropWeaponAction")))
-		//{
-			//OnRep_DropCurrentWeapon();
-		//}
+		/*
+		
+			TArray<FInputAxisKeyMapping> AxisMappings;
+			FName AxisName;
+			UInputSettings::GetInputSettings()->GetAxisMappingByName(AxisName, AxisMappings);
+			for (auto Axis : AxisMappings)
+			{
+				if (BlasterController->WasInputKeyJustPressed(Axis.Key))
+				{
+					return true;
+				}
+			}
+			return false;
+			if (BlasterCharacter->GetInputAxisValue(FName("DropWeaponAction")))
+			{
+				//OnRep_DropCurrentWeapon();
+			}
+		*/
 	}
 }
 
@@ -532,4 +547,5 @@ void UCombatComponent::FinishedReloading()
 		UpdateAmmoValues();
 	}
 }
+
 

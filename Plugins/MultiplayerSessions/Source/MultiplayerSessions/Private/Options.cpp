@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Components/WidgetSwitcher.h"
 #include "Math/UnrealMathUtility.h"
+#include "GameFramework/GameUserSettings.h"
 
 void UOptions::MenuSetup()
 {
@@ -26,6 +27,11 @@ void UOptions::MenuSetup()
 			PlayerController->SetShowMouseCursor(true);
 		}
 	}
+}
+
+void UOptions::NativeConstruct()
+{
+	GameUserSettings = UGameUserSettings::GetGameUserSettings();
 }
 
 bool UOptions::Initialize()
@@ -91,12 +97,12 @@ bool UOptions::Initialize()
 	{
 		VSyncRightButton->OnClicked.AddDynamic(this, &ThisClass::VSyncRightButtonClicked);
 	}
+	
+	*/
 	if (BackButton)
 	{
 		BackButton->OnClicked.AddDynamic(this, &ThisClass::BackButtonClicked);
 	}
-	
-	*/
 	
 	return true;
 }
@@ -181,6 +187,16 @@ void UOptions::VSyncRightButtonClicked()
 
 void UOptions::BackButtonClicked()
 {
+	RemoveFromParent();
+	if (UWorld* World = GetWorld())
+	{
+		if (APlayerController* PlayerController = World->GetFirstPlayerController())
+		{
+			FInputModeGameOnly InputMode;
+			PlayerController->SetInputMode(InputMode);
+			PlayerController->SetShowMouseCursor(false);
+		}
+	}
 }
 
 void UOptions::MenuTeardown()
@@ -190,9 +206,9 @@ void UOptions::MenuTeardown()
 	{
 		if (APlayerController* PlayerController = World->GetFirstPlayerController())
 		{
-			FInputModeGameOnly InputMode;
+			FInputModeUIOnly InputMode;
 			PlayerController->SetInputMode(InputMode);
-			PlayerController->SetShowMouseCursor(false);
+			PlayerController->SetShowMouseCursor(true);
 		}
 	}
 }

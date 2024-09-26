@@ -21,7 +21,7 @@
 #include "../GameModes/BlasterGameMode.h"
 #include "../PlayerState/BlasterPlayerState.h"
 #include "../Weapons/WeaponTypes.h"
-
+#include "PauseMenu.h"
 
 
 ABlasterCharacter::ABlasterCharacter()
@@ -246,6 +246,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::FireButtonPressed);
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::ReloadButtonPressed);
 		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::DropWeaponPressed);
+		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::PauseMenuPressed);
 
 		// TODO: Find Jump animation for unequipped pose (Current one lags)
 	}
@@ -355,6 +356,27 @@ void ABlasterCharacter::DropWeaponPressed()
 	// TODO: Detach weapon mesh from right hand socket 
 	// TODO: Probably best to move this to the combat component
 	
+}
+
+void ABlasterCharacter::PauseMenuPressed()
+{
+	// TODO: Leave 
+	/*
+		if (IsLocallyControlled() && PauseMenu)
+	UPauseMenu* PauseMenu = CreateWidget<UPauseMenu>(this, UPauseMenu::StaticClass(), FName("WBP_PauseMenu"));
+	if (IsLocallyControlled() && PauseMenu)
+	{
+		PauseMenu->MenuSetup();
+		UE_LOG(LogTemp, Warning, TEXT("Paused"));
+	}
+		{
+			PauseMenu->MenuSetup();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Paused NOT WORKING"));
+		}
+	*/
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)

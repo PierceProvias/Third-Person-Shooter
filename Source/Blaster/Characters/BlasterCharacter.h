@@ -24,6 +24,7 @@ class ABlasterPlayerController;
 class AController;
 class USoundCue;
 class ABlasterPlayerState;
+class UPauseMenu;
 
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
@@ -68,6 +69,7 @@ protected:
 	
 	virtual void BeginPlay() override;
 	void RotateInPlace(float DeltaTime);
+
 	//
 	// Callbacks for input
 	//
@@ -81,6 +83,8 @@ protected:
 	void FireButtonPressed(const FInputActionValue& Value);
 	void ReloadButtonPressed();
 	void DropWeaponPressed();
+	UFUNCTION(BlueprintCallable)
+	void PauseMenuPressed();
 
 	// Aim Offsets
 	void AimOffset(float DeltaTime);
@@ -143,6 +147,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> DropWeaponAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> PauseAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* OverheadWidget;
@@ -282,7 +289,7 @@ private:
 	TObjectPtr<ABlasterPlayerState> BlasterPlayerState;
 
 	bool bInputsSet = false;
-	
+
 
 public:
 

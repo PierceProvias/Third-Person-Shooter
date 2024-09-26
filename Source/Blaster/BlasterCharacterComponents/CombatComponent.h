@@ -35,6 +35,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FinishedReloading();
 
+
+
 protected:
 
 	virtual void BeginPlay() override;

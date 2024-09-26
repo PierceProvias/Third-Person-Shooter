@@ -1,13 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MainMenu.h"
+#include "PauseMenu.h"
 #include "Components/Button.h"
 #include "GameFramework/PlayerController.h"
 #include "Options.h"
 
-
-void UMainMenu::MenuSetup()
+void UPauseMenu::MenuSetup()
 {
 	AddToViewport();
 	SetVisibility(ESlateVisibility::Visible);
@@ -26,18 +25,15 @@ void UMainMenu::MenuSetup()
 	}
 }
 
-bool UMainMenu::Initialize()
+bool UPauseMenu::Initialize()
 {
 	if (!Super::Initialize()) return false;
+
+	if (ResumeButton)
+	{
+		ResumeButton->OnClicked.AddDynamic(this, &ThisClass::ResumeButtonPressed);
+	}
 	
-	if (PlayButton)
-	{
-		PlayButton->OnClicked.AddDynamic(this, &ThisClass::PlayButtonPressed);
-	}
-	if (CharacterButton)
-	{
-		CharacterButton->OnClicked.AddDynamic(this, &ThisClass::CharacterButtonPressed);
-	}
 	if (OptionsButton)
 	{
 		OptionsButton->OnClicked.AddDynamic(this, &ThisClass::OptionsButtonPressed);
@@ -46,49 +42,39 @@ bool UMainMenu::Initialize()
 	{
 		QuitButton->OnClicked.AddDynamic(this, &ThisClass::QuitButtonPressed);
 	}
-	
+
 	return true;
 }
 
-
-void UMainMenu::NativeDestruct()
+void UPauseMenu::NativeDestruct()
 {
 	MenuTeardown();
 	Super::NativeDestruct();
 }
 
-void UMainMenu::PlayButtonPressed()
-{
-}
-
-void UMainMenu::CharacterButtonPressed()
-{
-}
-
-void UMainMenu::OptionsButtonPressed()
+void UPauseMenu::ResumeButtonPressed()
 {
 	RemoveFromParent();
-	
 	if (UWorld* World = GetWorld())
 	{
 		if (APlayerController* PlayerController = World->GetFirstPlayerController())
 		{
-			FInputModeUIOnly InputMode;
+			FInputModeGameOnly InputMode;
 			PlayerController->SetInputMode(InputMode);
-			PlayerController->SetShowMouseCursor(true);
+			PlayerController->SetShowMouseCursor(false);
 		}
 	}
 }
 
-void UMainMenu::QuitButtonPressed()
+void UPauseMenu::OptionsButtonPressed()
 {
-	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
-	{
-		PlayerController->ConsoleCommand(FString("quit"));
-	}
 }
 
-void UMainMenu::MenuTeardown()
+void UPauseMenu::QuitButtonPressed()
+{
+}
+
+void UPauseMenu::MenuTeardown()
 {
 	RemoveFromParent();
 	if (UWorld* World = GetWorld())

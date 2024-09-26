@@ -4,18 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MainMenu.generated.h"
-
+#include "PauseMenu.generated.h"
 
 class UButton;
-class UOptions;
 
 UCLASS()
-class MULTIPLAYERSESSIONS_API UMainMenu : public UUserWidget
+class MULTIPLAYERSESSIONS_API UPauseMenu : public UUserWidget
 {
 	GENERATED_BODY()
-
-
+	
 public:
 
 	UFUNCTION(BlueprintCallable)
@@ -29,10 +26,7 @@ protected:
 private:
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> PlayButton;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> CharacterButton;
+	TObjectPtr<UButton> ResumeButton;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> OptionsButton;
@@ -41,10 +35,7 @@ private:
 	TObjectPtr<UButton> QuitButton;
 
 	UFUNCTION()
-	void PlayButtonPressed();
-
-	UFUNCTION()
-	void CharacterButtonPressed();
+	void ResumeButtonPressed();
 
 	UFUNCTION()
 	void OptionsButtonPressed();
@@ -53,7 +44,4 @@ private:
 	void QuitButtonPressed();
 
 	void MenuTeardown();
-
-	TObjectPtr<UOptions> OptionsMenu;
-
 };

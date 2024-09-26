@@ -8,6 +8,7 @@
 
 class UButton;
 class UWidgetSwitcher;
+class UComboBoxString;
 
 UCLASS()
 class MULTIPLAYERSESSIONS_API UOptions : public UUserWidget
@@ -19,7 +20,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MenuSetup();
 
+	virtual void NativeConstruct() override;
+	
+
 protected:
+
+	UPROPERTY()
+	TObjectPtr<UGameUserSettings> GameUserSettings;
+
+	//UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	//TObjectPtr<UComboBoxString> ResolutionComboBox;
+
+
 
 	virtual bool Initialize() override;
 	virtual void NativeDestruct() override;
@@ -96,7 +108,6 @@ private:
 
 	UFUNCTION()
 	void VideoButtonClicked();
-
 
 	UFUNCTION()
 	void WindowLeftButtonClicked();
