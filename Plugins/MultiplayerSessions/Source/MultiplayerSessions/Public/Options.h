@@ -10,6 +10,7 @@ class UButton;
 class UWidgetSwitcher;
 class UComboBoxString;
 class UCheckBox;
+class USelectionBase;
 
 UCLASS()
 class MULTIPLAYERSESSIONS_API UOptions : public UUserWidget
@@ -26,33 +27,41 @@ public:
 
 protected:
 
-	void InitializeResolutionComboBox();
-	void InitializeVSync();
-	
-	UPROPERTY()
-	TObjectPtr<UGameUserSettings> GameUserSettings;
-
-	/*
-	* Resolution Settings
-	*/
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	TObjectPtr<UComboBoxString> ResolutionComboBox;
-
-	UPROPERTY()
-	TArray<FIntPoint> Resolutions;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	TObjectPtr<UCheckBox> VSyncCheckBox;
-
 	virtual bool Initialize() override;
 	virtual void NativeDestruct() override;
 
-
+	UPROPERTY()
+	TObjectPtr<UGameUserSettings> GameUserSettings;
+	
+	/*
+	* Functions and Callbacks
+	*/
+	void InitializeResolutionComboBox();
+	void InitializeVSync();
+	void InitializeFramerate();
+	
 	UFUNCTION()
 	void OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType);
 
 	UFUNCTION()
 	void OnVSyncChanged(bool InIsChecked);
+
+	UPROPERTY()
+	TArray<FIntPoint> Resolutions;
+
+	/*
+	* Widget Components
+	*/
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UComboBoxString> ResolutionComboBox;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UCheckBox> VSyncCheckBox;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> FramerateSelection;
+
+
 
 private:
 

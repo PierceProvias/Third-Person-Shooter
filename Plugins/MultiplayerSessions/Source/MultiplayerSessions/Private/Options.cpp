@@ -10,6 +10,20 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/ComboBoxString.h"
 #include "Components/CheckBox.h"
+#include "SelectionBase.h"
+#include "Framerates.h"
+
+// Anonymous namespace used only in this implementation file and prevents it from leaking to other files
+namespace
+{
+	constexpr EFramerate FramerateOptions[] = {
+			EFramerate::FPS_30,
+			EFramerate::FPS_60,
+			EFramerate::FPS_120,
+			EFramerate::FPS_240,
+			EFramerate::FPS_Uncapped
+	};
+}
 
 void UOptions::MenuSetup()
 {
@@ -38,7 +52,9 @@ void UOptions::NativeConstruct()
 
 	InitializeResolutionComboBox();
 	InitializeVSync();
+	InitializeFramerate();
 
+	
 }
 
 bool UOptions::Initialize()
@@ -150,6 +166,33 @@ void UOptions::InitializeVSync()
 	VSyncCheckBox->SetIsChecked(GameUserSettings->IsVSyncEnabled());
 	VSyncCheckBox->OnCheckStateChanged.Clear();
 	VSyncCheckBox->OnCheckStateChanged.AddDynamic(this, &UOptions::OnVSyncChanged);
+}
+
+void UOptions::InitializeFramerate()
+{
+	FramerateSelection->Clear();
+
+	int FramerateOptionIndex = 0;
+	
+	const auto CurrentFramerate = GameUserSettings->GetFrameRateLimit();
+	for (const auto& Framerate : FramerateOptions)
+	{
+		FramerateSelection->AddOption({
+
+			FText::FromString(FFramerateUtils::EnumToString(Framerate))
+		});
+
+		if (CurrentFramerate == FFramerateUtils::EnumToValue(Framerate))
+		{
+			FramerateSelection->SetCurrentSelection(FramerateOptionIndex);
+		}
+		FramerateOptionIndex++;
+	}
+	FramerateSelection->OnSelectionChange.BindLambda([this](const int InSelection)
+	{
+			GameUserSettings->SetFrameRateLimit(FFramerateUtils::EnumToValue(FramerateOptions[InSelection]));
+			GameUserSettings->ApplySettings(false);
+	});
 }
 
 void UOptions::OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType)
