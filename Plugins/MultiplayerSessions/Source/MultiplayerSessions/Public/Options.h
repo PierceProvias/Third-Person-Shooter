@@ -61,7 +61,20 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<USelectionBase> FramerateSelection;
 
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> ShadingQualitySelection;
 
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> GlobalIlluminationQualitySelection;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> PostProcessingQualitySelection;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> VisualEffectsQualitySelection;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> ShadowQualittSelection;
 
 private:
 

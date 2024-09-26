@@ -12,6 +12,8 @@
 #include "Components/CheckBox.h"
 #include "SelectionBase.h"
 #include "Framerates.h"
+#include <functional>
+//#include <iostream>
 
 // Anonymous namespace used only in this implementation file and prevents it from leaking to other files
 namespace
@@ -22,6 +24,16 @@ namespace
 			EFramerate::FPS_120,
 			EFramerate::FPS_240,
 			EFramerate::FPS_Uncapped
+	};
+
+	typedef int32(UGameUserSettings::*GetFunc)() const;
+	typedef void(UGameUserSettings::*SetFunc)(int);
+
+	struct FSelectionElement
+	{
+		USelectionBase* Widget;
+		GetFunc GetFunc;
+		SetFunc SetFunc;
 	};
 }
 
@@ -54,7 +66,24 @@ void UOptions::NativeConstruct()
 	InitializeVSync();
 	InitializeFramerate();
 
-	
+	const FSelectionElement SelectionElements[] = {
+		{ ShadingQualitySelection, &UGameUserSettings::GetShadingQuality, &UGameUserSettings::SetShadingQuality },
+		{ GlobalIlluminationQualitySelection, &UGameUserSettings::GetGlobalIlluminationQuality, &UGameUserSettings::SetGlobalIlluminationQuality },
+		{ PostProcessingQualitySelection, &UGameUserSettings::GetPostProcessingQuality, &UGameUserSettings::SetPostProcessingQuality },
+		{ VisualEffectsQualitySelection, &UGameUserSettings::GetVisualEffectQuality, &UGameUserSettings::SetVisualEffectQuality },
+		{ ShadowQualittSelection, &UGameUserSettings::GetShadowQuality, &UGameUserSettings::SetShadowQuality }
+	};
+
+	for (const auto& [Widget, GetFunc, SetFunc] : SelectionElements)
+	{
+		const auto CurrentSelection = std::invoke(GetFunc, GameUserSettings);
+		Widget->SetCurrentSelection(CurrentSelection);
+		Widget->OnSelectionChange.BindLambda([this, SetFunc](int InSelection)
+		{
+				std::invoke(SetFunc, GameUserSettings, InSelection);
+				GameUserSettings->ApplySettings(false);
+		});
+	}
 }
 
 bool UOptions::Initialize()
