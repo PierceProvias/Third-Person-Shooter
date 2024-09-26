@@ -7,6 +7,8 @@
 #include "Components/WidgetSwitcher.h"
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/GameUserSettings.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Components/ComboBoxString.h"
 
 void UOptions::MenuSetup()
 {
@@ -111,6 +113,38 @@ void UOptions::NativeDestruct()
 {
 	MenuTeardown();
 	Super::NativeDestruct();
+}
+
+void UOptions::InitializeResolutionComboBox()
+{
+	Resolutions.Reset();
+	UKismetSystemLibrary::GetSupportedFullscreenResolutions(Resolutions);
+
+	ResolutionComboBox->ClearOptions();
+	for (const auto& Resolution : Resolutions)
+	{
+		const auto ResolutionString = FString::Printf(TEXT("%dx%d"), Resolution.X, Resolution.Y);
+		ResolutionComboBox->AddOption(ResolutionString);
+	}
+
+	// Find current resolution
+	const auto CurrentResolution = GameUserSettings->GetScreenResolution();
+	const auto SelectedIndex = Resolutions.IndexOfByPredicate([&CurrentResolution](const FIntPoint& InResolution)
+		{
+			return InResolution == CurrentResolution;
+		});
+	check(SelectedIndex >= 0);
+
+	// Listen to changes
+	ResolutionComboBox->OnSelectionChanged.Clear();
+	ResolutionComboBox->OnSelectionChanged.AddDynamic(this, &UOptions::OnResolutionChanged);
+}
+
+void UOptions::OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType)
+{
+	const auto SelectedResolution = Resolutions[ResolutionComboBox->GetSelectedIndex()];
+	GameUserSettings->SetScreenResolution(SelectedResolution);
+	GameUserSettings->ApplySettings(false);
 }
 
 void UOptions::GameplayButtonClicked()

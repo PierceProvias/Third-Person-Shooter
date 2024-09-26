@@ -28,20 +28,26 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UGameUserSettings> GameUserSettings;
 
-	//UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	//TObjectPtr<UComboBoxString> ResolutionComboBox;
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UComboBoxString> ResolutionComboBox;
 
-
+	UPROPERTY()
+	TArray<FIntPoint> Resolutions;
 
 	virtual bool Initialize() override;
 	virtual void NativeDestruct() override;
 
+	void InitializeResolutionComboBox();
+
+	UFUNCTION()
+	void OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType);
 
 private:
 
-	//
-	// Option Categories
-	//
+	/*
+	* Widget Switcher Option Categories 
+	*/
+	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> GameplayButton;
 
