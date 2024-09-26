@@ -71,7 +71,7 @@ void UOptions::NativeConstruct()
 		{ GlobalIlluminationQualitySelection, &UGameUserSettings::GetGlobalIlluminationQuality, &UGameUserSettings::SetGlobalIlluminationQuality },
 		{ PostProcessingQualitySelection, &UGameUserSettings::GetPostProcessingQuality, &UGameUserSettings::SetPostProcessingQuality },
 		{ VisualEffectsQualitySelection, &UGameUserSettings::GetVisualEffectQuality, &UGameUserSettings::SetVisualEffectQuality },
-		{ ShadowQualittSelection, &UGameUserSettings::GetShadowQuality, &UGameUserSettings::SetShadowQuality }
+		{ ShadowQualitySelection, &UGameUserSettings::GetShadowQuality, &UGameUserSettings::SetShadowQuality }
 	};
 
 	for (const auto& [Widget, GetFunc, SetFunc] : SelectionElements)

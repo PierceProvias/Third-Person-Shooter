@@ -74,7 +74,7 @@ protected:
 	TObjectPtr<USelectionBase> VisualEffectsQualitySelection;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<USelectionBase> ShadowQualittSelection;
+	TObjectPtr<USelectionBase> ShadowQualitySelection;
 
 private:
 
