@@ -69,6 +69,7 @@ void UPauseMenu::ResumeButtonPressed()
 
 void UPauseMenu::OptionsButtonPressed()
 {
+
 }
 
 void UPauseMenu::QuitButtonPressed()
@@ -83,7 +84,6 @@ void UPauseMenu::QuitButtonPressed()
 			EQuitPreference::Quit,
 			true
 		);
-
 	}
 }
 

@@ -126,6 +126,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> BackButton;
 
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> ApplyButton;
+
 	UFUNCTION()
 	void GameplayButtonClicked();
 
@@ -152,6 +155,9 @@ private:
 
 	UFUNCTION()
 	void BackButtonClicked();
+
+	UFUNCTION()
+	void ApplyButtonClicked();
 
 	void MenuTeardown();
 

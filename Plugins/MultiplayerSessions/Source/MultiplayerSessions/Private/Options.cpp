@@ -91,7 +91,7 @@ void UOptions::NativeConstruct()
 		Widget->OnSelectionChange.BindLambda([this, SetFunc](int InSelection)
 		{
 				std::invoke(SetFunc, GameUserSettings, InSelection);
-				GameUserSettings->ApplySettings(false);
+				//GameUserSettings->ApplySettings(false);
 		});
 	}
 }
@@ -137,6 +137,10 @@ bool UOptions::Initialize()
 	if (BackButton)
 	{
 		BackButton->OnClicked.AddDynamic(this, &ThisClass::BackButtonClicked);
+	}
+	if (ApplyButton)
+	{
+		ApplyButton->OnClicked.AddDynamic(this, &ThisClass::ApplyButtonClicked);
 	}
 	
 	return true;
@@ -214,7 +218,7 @@ void UOptions::InitializeFramerate()
 	FramerateSelection->OnSelectionChange.BindLambda([this](const int InSelection)
 	{
 			GameUserSettings->SetFrameRateLimit(FFramerateUtils::EnumToValue(FramerateOptions[InSelection]));
-			GameUserSettings->ApplySettings(false);
+			//GameUserSettings->ApplySettings(false);
 			
 	});
 }
@@ -223,13 +227,13 @@ void UOptions::OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InS
 {
 	const auto SelectedResolution = Resolutions[ResolutionComboBox->GetSelectedIndex()];
 	GameUserSettings->SetScreenResolution(SelectedResolution);
-	GameUserSettings->ApplySettings(false);
+	//GameUserSettings->ApplySettings(false);
 }
 
 void UOptions::OnVSyncChanged(bool InIsChecked)
 {
 	GameUserSettings->SetVSyncEnabled(InIsChecked);
-	GameUserSettings->ApplySettings(false);
+	//GameUserSettings->ApplySettings(false);
 }
 
 void UOptions::GameplayButtonClicked()
@@ -290,6 +294,11 @@ void UOptions::BackButtonClicked()
 			PlayerController->SetShowMouseCursor(false);
 		}
 	}
+}
+
+void UOptions::ApplyButtonClicked()
+{
+	GameUserSettings->ApplySettings(false);
 }
 
 void UOptions::MenuTeardown()
