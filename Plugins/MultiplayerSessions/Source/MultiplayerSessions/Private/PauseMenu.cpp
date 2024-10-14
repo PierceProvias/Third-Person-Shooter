@@ -55,7 +55,7 @@ void UPauseMenu::NativeDestruct()
 
 void UPauseMenu::ResumeButtonPressed()
 {
-	RemoveFromParent();
+	MenuTeardown();
 	if (UWorld* World = GetWorld())
 	{
 		if (APlayerController* PlayerController = World->GetFirstPlayerController())

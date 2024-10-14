@@ -92,9 +92,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<USelectionBase> FoliageQualitySelection;
 
-	
-
-
 private:
 
 	/*
