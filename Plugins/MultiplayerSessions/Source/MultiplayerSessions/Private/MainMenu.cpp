@@ -5,7 +5,7 @@
 #include "Components/Button.h"
 #include "GameFramework/PlayerController.h"
 #include "Options.h"
-
+#include "Kismet/KismetSystemLibrary.h"
 
 void UMainMenu::MenuSetup()
 {
@@ -82,9 +82,16 @@ void UMainMenu::OptionsButtonPressed()
 
 void UMainMenu::QuitButtonPressed()
 {
-	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	UWorld* World = GetWorld();
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (World && PlayerController)
 	{
-		PlayerController->ConsoleCommand(FString("quit"));
+		UKismetSystemLibrary::QuitGame(
+			World,
+			PlayerController,
+			EQuitPreference::Quit,
+			true
+		);
 	}
 }
 

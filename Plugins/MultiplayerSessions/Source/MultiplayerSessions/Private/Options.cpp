@@ -12,6 +12,9 @@
 #include "Components/CheckBox.h"
 #include "SelectionBase.h"
 #include "Framerates.h"
+//#include "GameSettingCollection.h"
+//#include "GameSetting.h"
+//#include "Engine/LocalPlayer.h"
 #include <functional>
 //#include <iostream>
 
@@ -67,11 +70,18 @@ void UOptions::NativeConstruct()
 	InitializeFramerate();
 
 	const FSelectionElement SelectionElements[] = {
-		{ ShadingQualitySelection, &UGameUserSettings::GetShadingQuality, &UGameUserSettings::SetShadingQuality },
-		{ GlobalIlluminationQualitySelection, &UGameUserSettings::GetGlobalIlluminationQuality, &UGameUserSettings::SetGlobalIlluminationQuality },
-		{ PostProcessingQualitySelection, &UGameUserSettings::GetPostProcessingQuality, &UGameUserSettings::SetPostProcessingQuality },
-		{ VisualEffectsQualitySelection, &UGameUserSettings::GetVisualEffectQuality, &UGameUserSettings::SetVisualEffectQuality },
-		{ ShadowQualitySelection, &UGameUserSettings::GetShadowQuality, &UGameUserSettings::SetShadowQuality }
+		//{WindowModeSelection, UGameUserSettings::GetDefaultWindowMode, UGameUserSettings::SetFullscreenMode(EWindowMode::Type WindowModeSelection)},
+		
+		{ ShadingQualitySelection,				&UGameUserSettings::GetShadingQuality,				&UGameUserSettings::SetShadingQuality },
+		{ GlobalIlluminationQualitySelection,	&UGameUserSettings::GetGlobalIlluminationQuality,	&UGameUserSettings::SetGlobalIlluminationQuality },
+		{ PostProcessingQualitySelection,		&UGameUserSettings::GetPostProcessingQuality,		&UGameUserSettings::SetPostProcessingQuality },
+		{ VisualEffectsQualitySelection,		&UGameUserSettings::GetVisualEffectQuality,			&UGameUserSettings::SetVisualEffectQuality },
+		{ ShadowQualitySelection,				&UGameUserSettings::GetShadowQuality,				&UGameUserSettings::SetShadowQuality },
+		{ AntiAliasingQualitySelection,			&UGameUserSettings::GetAntiAliasingQuality,			&UGameUserSettings::SetAntiAliasingQuality },
+		{ ReflectionQualitySelection,			&UGameUserSettings::GetReflectionQuality,			&UGameUserSettings::SetReflectionQuality },
+		{ TextureQualitySelection,				&UGameUserSettings::GetTextureQuality,				&UGameUserSettings::SetTextureQuality },
+		{ FoliageQualitySelection,				&UGameUserSettings::GetFoliageQuality,				&UGameUserSettings::SetFoliageQuality }
+
 	};
 
 	for (const auto& [Widget, GetFunc, SetFunc] : SelectionElements)
@@ -123,34 +133,7 @@ bool UOptions::Initialize()
 	{
 		WindowRightButton->OnClicked.AddDynamic(this, &ThisClass::WindowRightButtonClicked);
 	}
-	/*
-	
-	if (ResolutionLeftButton)
-	{
-		ResolutionLeftButton->OnClicked.AddDynamic(this, &ThisClass::ResolutionLeftButtonClicked);
-	}
-	if (ResolutionRightButton)
-	{
-		ResolutionRightButton->OnClicked.AddDynamic(this, &ThisClass::ResolutionRightButtonClicked);
-	}
-	if (GraphicsLeftButton)
-	{
-		GraphicsLeftButton->OnClicked.AddDynamic(this, &ThisClass::GraphicsLeftButtonClicked);
-	}
-	if (GraphicsRightButton)
-	{
-		GraphicsRightButton->OnClicked.AddDynamic(this, &ThisClass::GraphicsRightButtonClicked);
-	}
-	if (VSyncLeftButton)
-	{
-		VSyncLeftButton->OnClicked.AddDynamic(this, &ThisClass::VSyncLeftButtonClicked);
-	}
-	if (VSyncRightButton)
-	{
-		VSyncRightButton->OnClicked.AddDynamic(this, &ThisClass::VSyncRightButtonClicked);
-	}
-	
-	*/
+
 	if (BackButton)
 	{
 		BackButton->OnClicked.AddDynamic(this, &ThisClass::BackButtonClicked);
@@ -165,8 +148,18 @@ void UOptions::NativeDestruct()
 	Super::NativeDestruct();
 }
 
+/*
+	UGameSettingCollection* UOptions::InitializeVideoSettings(ULocalPlayer* InLocalPlayer)
+{
+	UGameSettingCollection* Screen = NewObject<UGameSettingCollection>();
+	Screen->SetDevName(TEXT("VideoCollection"));
+	return nullptr;
+}
+*/
+
 void UOptions::InitializeResolutionComboBox()
 {
+	// TODO: Fix combo box to display current resolution settings
 	Resolutions.Reset();
 	UKismetSystemLibrary::GetSupportedFullscreenResolutions(Resolutions);
 
@@ -186,6 +179,7 @@ void UOptions::InitializeResolutionComboBox()
 	check(SelectedIndex >= 0);
 
 	// Listen to changes
+	//ResolutionComboBox->SetDisplayLabel(GameUserSettings->GetScreenResolution().ToString());
 	ResolutionComboBox->OnSelectionChanged.Clear();
 	ResolutionComboBox->OnSelectionChanged.AddDynamic(this, &UOptions::OnResolutionChanged);
 }
@@ -221,6 +215,7 @@ void UOptions::InitializeFramerate()
 	{
 			GameUserSettings->SetFrameRateLimit(FFramerateUtils::EnumToValue(FramerateOptions[InSelection]));
 			GameUserSettings->ApplySettings(false);
+			
 	});
 }
 
@@ -245,7 +240,7 @@ void UOptions::GameplayButtonClicked()
 
 void UOptions::ControllerButtonClicked()
 {
-	SwitcherIndex = 1;
+	SwitcherIndex = 5;
 	UpdateSwitcherPanel(SwitcherIndex);
 }
 
@@ -269,44 +264,18 @@ void UOptions::AudioButtonClicked()
 
 void UOptions::VideoButtonClicked()
 {
-	SwitcherIndex = 5;
+	SwitcherIndex = 1;
 	UpdateSwitcherPanel(SwitcherIndex);
 }
 
 void UOptions::WindowLeftButtonClicked()
 {
-	int32 NewWindowMode = FMath::Clamp(WindowMode, 0, 2);
-	NewWindowMode = (WindowMode - 1);
-	WindowMode = NewWindowMode;
+	
 }
 
 void UOptions::WindowRightButtonClicked()
 {
 
-}
-
-void UOptions::ResolutionLeftButtonClicked()
-{
-}
-
-void UOptions::ResolutionRightButtonClicked()
-{
-}
-
-void UOptions::GraphicsLeftButtonClicked()
-{
-}
-
-void UOptions::GraphicsRightButtonClicked()
-{
-}
-
-void UOptions::VSyncLeftButtonClicked()
-{
-}
-
-void UOptions::VSyncRightButtonClicked()
-{
 }
 
 void UOptions::BackButtonClicked()
@@ -355,7 +324,6 @@ void UOptions::UpdateSwitcherPanel(int32 Index)
 		int32 CurrentIndex = WidgetSwitcher->GetActiveWidgetIndex();
 		if (CurrentIndex != Index)
 		{
-
 			WidgetSwitcher->SetActiveWidgetIndex(Index);
 		}
 

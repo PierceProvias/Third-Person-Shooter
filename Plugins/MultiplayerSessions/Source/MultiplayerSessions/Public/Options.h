@@ -11,6 +11,8 @@ class UWidgetSwitcher;
 class UComboBoxString;
 class UCheckBox;
 class USelectionBase;
+class UGameSettingCollection;
+class ULocalPlayer;
 
 UCLASS()
 class MULTIPLAYERSESSIONS_API UOptions : public UUserWidget
@@ -36,6 +38,8 @@ protected:
 	/*
 	* Functions and Callbacks
 	*/
+	
+	//UGameSettingCollection* InitializeVideoSettings(ULocalPlayer* InLocalPlayer);
 	void InitializeResolutionComboBox();
 	void InitializeVSync();
 	void InitializeFramerate();
@@ -75,6 +79,21 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<USelectionBase> ShadowQualitySelection;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> AntiAliasingQualitySelection;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> ReflectionQualitySelection;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> TextureQualitySelection;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<USelectionBase> FoliageQualitySelection;
+
+	
+
 
 private:
 
@@ -135,24 +154,6 @@ private:
 	void WindowRightButtonClicked();
 
 	UFUNCTION()
-	void ResolutionLeftButtonClicked();
-
-	UFUNCTION()
-	void ResolutionRightButtonClicked();
-
-	UFUNCTION()
-	void GraphicsLeftButtonClicked();
-
-	UFUNCTION()
-	void GraphicsRightButtonClicked();
-
-	UFUNCTION()
-	void VSyncLeftButtonClicked();
-
-	UFUNCTION()
-	void VSyncRightButtonClicked();
-
-	UFUNCTION()
 	void BackButtonClicked();
 
 	void MenuTeardown();
@@ -165,5 +166,4 @@ private:
 	void UpdateSwitcherPanel(int32 Index);
 	// TODO: Add WidgetSwitcher for options menu and character selection
 
-	int32 WindowMode = EWindowMode::Fullscreen;
 };
