@@ -65,13 +65,14 @@ void UOptions::NativeConstruct()
 {
 	GameUserSettings = UGameUserSettings::GetGameUserSettings();
 
+	//InitializeWindowMode();
 	InitializeResolutionComboBox();
 	InitializeVSync();
 	InitializeFramerate();
 
 	const FSelectionElement SelectionElements[] = {
-		//{WindowModeSelection, UGameUserSettings::GetDefaultWindowMode, UGameUserSettings::SetFullscreenMode(EWindowMode::Type WindowModeSelection)},
-		
+	
+		//{ WindowModeSelection, &UGameUserSettings::GetFullscreenMode, &UGameUserSettings::SetFullscreenMode},
 		{ ShadingQualitySelection,				&UGameUserSettings::GetShadingQuality,				&UGameUserSettings::SetShadingQuality },
 		{ GlobalIlluminationQualitySelection,	&UGameUserSettings::GetGlobalIlluminationQuality,	&UGameUserSettings::SetGlobalIlluminationQuality },
 		{ PostProcessingQualitySelection,		&UGameUserSettings::GetPostProcessingQuality,		&UGameUserSettings::SetPostProcessingQuality },
@@ -161,6 +162,44 @@ void UOptions::NativeDestruct()
 }
 */
 
+	
+	/*
+		FramerateSelection->OnSelectionChange.BindLambda([this](const int InSelection)
+void UOptions::InitializeWindowMode()
+{
+	GameUserSettings->GetPreferredFullscreenMode();
+	WindowModeSelection->Clear();
+	int WindowModeOptionIndex = 0;
+	const auto CurrentWindowModeOption = GameUserSettings->GetFullscreenMode();
+	if (CurrentWindowModeOption != WindowModeSelection)
+	{
+		switch (WindowModeOptionIndex)
+		{
+		case EWindowMode::Fullscreen:
+			GameUserSettings->SetFullscreenMode(EWindowMode::Fullscreen);
+			break;
+		case EWindowMode::WindowedFullscreen:
+			GameUserSettings->SetFullscreenMode(EWindowMode::WindowedFullscreen);
+			break;
+		case EWindowMode::Windowed:
+			GameUserSettings->SetFullscreenMode(EWindowMode::Windowed);
+			break;
+		}
+	}
+			{
+				GameUserSettings->SetFrameRateLimit(FFramerateUtils::EnumToValue(FramerateOptions[InSelection]));
+				//GameUserSettings->ApplySettings(false);
+				//GameUserSettings->ResetToCurrentSettings
+
+			});
+	WindowModeSelection->OnSelectionChange.BindLambda([this](const int InFullscreeMode)
+		{
+			GameUserSettings->SetFullscreenMode(EWindowMode::ConvertIntToWindowMode(InFullscreeMode));
+		});
+}
+	*/
+
+
 void UOptions::InitializeResolutionComboBox()
 {
 	// TODO: Fix combo box to display current resolution settings
@@ -219,9 +258,19 @@ void UOptions::InitializeFramerate()
 	{
 			GameUserSettings->SetFrameRateLimit(FFramerateUtils::EnumToValue(FramerateOptions[InSelection]));
 			//GameUserSettings->ApplySettings(false);
+			//GameUserSettings->ResetToCurrentSettings
 			
 	});
 }
+
+/*
+void UOptions::OnWindowModeChanged(EWindowMode::Type InFullScreenMode)
+{
+	GameUserSettings->SetFullscreenMode(InFullScreenMode);
+}
+
+*/
+
 
 void UOptions::OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType)
 {
@@ -285,15 +334,7 @@ void UOptions::WindowRightButtonClicked()
 void UOptions::BackButtonClicked()
 {
 	RemoveFromParent();
-	if (UWorld* World = GetWorld())
-	{
-		if (APlayerController* PlayerController = World->GetFirstPlayerController())
-		{
-			FInputModeGameOnly InputMode;
-			PlayerController->SetInputMode(InputMode);
-			PlayerController->SetShowMouseCursor(false);
-		}
-	}
+	MenuTeardown();
 }
 
 void UOptions::ApplyButtonClicked()

@@ -56,15 +56,7 @@ void UPauseMenu::NativeDestruct()
 void UPauseMenu::ResumeButtonPressed()
 {
 	MenuTeardown();
-	if (UWorld* World = GetWorld())
-	{
-		if (APlayerController* PlayerController = World->GetFirstPlayerController())
-		{
-			FInputModeGameOnly InputMode;
-			PlayerController->SetInputMode(InputMode);
-			PlayerController->SetShowMouseCursor(false);
-		}
-	}
+	RemoveFromParent();
 }
 
 void UPauseMenu::OptionsButtonPressed()

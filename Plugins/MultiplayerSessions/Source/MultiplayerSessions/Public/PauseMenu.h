@@ -18,6 +18,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MenuSetup();
 
+
 protected:
 
 	virtual bool Initialize() override;

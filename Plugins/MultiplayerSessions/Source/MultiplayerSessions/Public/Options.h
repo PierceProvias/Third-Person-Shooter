@@ -40,10 +40,14 @@ protected:
 	*/
 	
 	//UGameSettingCollection* InitializeVideoSettings(ULocalPlayer* InLocalPlayer);
+	//void InitializeWindowMode();
 	void InitializeResolutionComboBox();
 	void InitializeVSync();
 	void InitializeFramerate();
 	
+	//UFUNCTION()
+	//void OnWindowModeChanged(EWindowMode::Type InFullScreenMode);
+
 	UFUNCTION()
 	void OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType);
 
@@ -56,6 +60,10 @@ protected:
 	/*
 	* Widget Components
 	*/
+
+	//UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	//TObjectPtr<USelectionBase> WindowModeSelection;
+
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	TObjectPtr<UComboBoxString> ResolutionComboBox;
 
