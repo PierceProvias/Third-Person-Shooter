@@ -15,6 +15,8 @@ void UMainMenu::MenuSetup()
 
 	if (UWorld* World = GetWorld())
 	{
+		// TODO: Change player controllers to local player controllers
+		//ULocalPlayer* PlayerController = World->GetFirstLocalPlayerFromController();
 		if (APlayerController* PlayerController = World->GetFirstPlayerController())
 		{
 			FInputModeUIOnly InputModeData; // Focused only on UI
@@ -67,7 +69,9 @@ void UMainMenu::CharacterButtonPressed()
 
 void UMainMenu::OptionsButtonPressed()
 {
-	RemoveFromParent();
+	//RemoveFromViewport();
+	
+	/*
 	
 	if (UWorld* World = GetWorld())
 	{
@@ -78,6 +82,7 @@ void UMainMenu::OptionsButtonPressed()
 			PlayerController->SetShowMouseCursor(true);
 		}
 	}
+	*/
 }
 
 void UMainMenu::QuitButtonPressed()

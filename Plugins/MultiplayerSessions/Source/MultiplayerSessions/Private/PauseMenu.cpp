@@ -56,12 +56,16 @@ void UPauseMenu::NativeDestruct()
 void UPauseMenu::ResumeButtonPressed()
 {
 	MenuTeardown();
-	RemoveFromParent();
+	//RemoveFromParent();
 }
 
 void UPauseMenu::OptionsButtonPressed()
 {
-
+	//MenuTeardown();
+	//UOptions* OptionsMenu = NewObject<UOptions>();
+	//RemoveFromParent();
+	//OptionsMenu->MenuSetup();
+	
 }
 
 void UPauseMenu::QuitButtonPressed()

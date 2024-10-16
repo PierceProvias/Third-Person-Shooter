@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Options.h"
 #include "Components/Button.h"
 #include "GameFramework/PlayerController.h"
@@ -143,6 +140,10 @@ bool UOptions::Initialize()
 	{
 		ApplyButton->OnClicked.AddDynamic(this, &ThisClass::ApplyButtonClicked);
 	}
+	if (RestoreButton)
+	{
+		RestoreButton->OnClicked.AddDynamic(this, &ThisClass::RestoreButtonClicked);
+	}
 	
 	return true;
 }
@@ -200,6 +201,22 @@ void UOptions::InitializeWindowMode()
 	*/
 
 
+void UOptions::InitializeWindowMode()
+{
+	/*
+	
+	WindowModeSelection->Clear();
+	WindowModeSelection->AddOption({ FText::FromString("Fullscreen") });
+	WindowModeSelection->AddOption({ FText::FromString("Windowed Fullscreen") });
+	WindowModeSelection->AddOption({ FText::FromString("Windowed") });
+
+	const auto CurrentWindowMode = GameUserSettings->GetFullscreenMode();
+	
+	//WindowModeSelection->OnSelectionChange.AddDynamic(this, &UOptions::OnWindowModeChanged);
+	*/
+
+}
+
 void UOptions::InitializeResolutionComboBox()
 {
 	// TODO: Fix combo box to display current resolution settings
@@ -222,7 +239,7 @@ void UOptions::InitializeResolutionComboBox()
 	check(SelectedIndex >= 0);
 
 	// Listen to changes
-	//ResolutionComboBox->SetDisplayLabel(GameUserSettings->GetScreenResolution().ToString());
+	ResolutionComboBox->SetDisplayLabel(GameUserSettings->GetScreenResolution().ToString());
 	ResolutionComboBox->OnSelectionChanged.Clear();
 	ResolutionComboBox->OnSelectionChanged.AddDynamic(this, &UOptions::OnResolutionChanged);
 }
@@ -263,13 +280,13 @@ void UOptions::InitializeFramerate()
 	});
 }
 
-/*
+
 void UOptions::OnWindowModeChanged(EWindowMode::Type InFullScreenMode)
 {
 	GameUserSettings->SetFullscreenMode(InFullScreenMode);
 }
 
-*/
+
 
 
 void UOptions::OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType)
@@ -340,6 +357,12 @@ void UOptions::BackButtonClicked()
 void UOptions::ApplyButtonClicked()
 {
 	GameUserSettings->ApplySettings(false);
+	//GameUserSettings->GetGameUserSettings()->ApplySettings(false);
+}
+
+void UOptions::RestoreButtonClicked()
+{
+	GameUserSettings->GetGameUserSettings()->ResetToCurrentSettings();
 }
 
 void UOptions::MenuTeardown()
