@@ -364,7 +364,6 @@ void UCombatComponent::UpdateWeapon2DTextures()
 			UE_LOG(LogTemp, Warning, TEXT("Texture: %s"), *EquippedWeaponTexture2D->GetName());
 		}
 	}
-	
 }
 
 void UCombatComponent::OnRep_CombatState()
