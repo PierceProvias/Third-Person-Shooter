@@ -182,36 +182,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingGrenadeLauncherAmmo = 0;
 
-	/*
-	* 2D textures for each weapon to be displayed in HUD for current equipped weapon
-	*/
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> ARTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> AKTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> RocketLauncherTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> PistolTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> SMGTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> ShotgunTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> SniperTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> GrenadeLauncherTexture2D;
-
 	void InitCarriedAmmo();
-	void InitWeaponTextureHUD();
 
 	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
 	ECombatState CombatState = ECombatState::ECS_Unoccupied;

@@ -326,14 +326,13 @@ void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWea
 	bool bHUDValid = BlasterHUD &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->WeaponImage;
+	
 	if (bHUDValid)
 	{
-		UE_LOG(LogTemp, Error, TEXT("HUD is valid"));
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn()))
 		{
 			CurrentWeaponTexture = BlasterCharacter->GetEquippedWeapon()->GetWeaponTexture2D();
 			BlasterHUD->CharacterOverlay->WeaponImage->SetBrushFromTexture(CurrentWeaponTexture);
-			UE_LOG(LogTemp, Error, TEXT("BlasterPlayerController"));
 		}			
 	}
 }

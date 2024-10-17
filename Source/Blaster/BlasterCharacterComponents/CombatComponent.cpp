@@ -480,18 +480,6 @@ void UCombatComponent::InitCarriedAmmo()
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_GrenadeLauncher, StartingGrenadeLauncherAmmo);
 }
 
-void UCombatComponent::InitWeaponTextureHUD()
-{
-	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_AssaultRifle, ARTexture2D);
-	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_AK47, AKTexture2D);
-	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_RocketLauncher, RocketLauncherTexture2D);
-	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_Pistol, PistolTexture2D);
-	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_SMG, SMGTexture2D);
-	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_Shotgun, ShotgunTexture2D);
-	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_Sniper, SniperTexture2D);
-	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_GrenadeLauncher, GrenadeLauncherTexture2D);
-}
-
 void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	MulticastFire(TraceHitTarget);   // Runs on server and all clients
@@ -536,7 +524,6 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	if (BlasterController)
 	{
 		BlasterController->SetHUDCarriedAmmo(CarriedAmmo);
-		//BlasterController->SetHUDCarriedWeaponTexture(WeaponToEquip->GetWeaponTexture2D());
 	}
 
 	if (EquippedWeapon->EquipSound)
@@ -577,5 +564,3 @@ void UCombatComponent::FinishedReloading()
 		UpdateAmmoValues();
 	}
 }
-
-
