@@ -107,7 +107,7 @@ void UCombatComponent::OnRep_EquippedWeapon()
 		}
 		BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 		BlasterCharacter->bUseControllerRotationYaw = true;
-		
+		UpdateWeapon2DTextures();
 		if (EquippedWeapon->EquipSound)
 		{
 			UGameplayStatics::PlaySoundAtLocation(
@@ -135,6 +135,58 @@ void UCombatComponent::OnRep_EquippedWeapon()
 			}
 		*/
 	}
+}
+
+void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
+{
+	if (BlasterCharacter == nullptr || WeaponToEquip == nullptr) return;
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->Swapped();
+	}
+	EquippedWeapon = WeaponToEquip;
+	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+	const USkeletalMeshSocket* HandSocket = BlasterCharacter->GetMesh()->GetSocketByName(FName("RightHandSocket"));
+	if (HandSocket)
+	{
+		HandSocket->AttachActor(EquippedWeapon, BlasterCharacter->GetMesh());
+	}
+
+	// Set equipped weapon to controlled pawn 
+	EquippedWeapon->SetOwner(BlasterCharacter);
+	EquippedWeapon->SetHUDAmmo();
+	UpdateWeapon2DTextures();
+
+	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+	}
+
+	BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
+	if (BlasterController)
+	{
+		BlasterController->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+
+	if (EquippedWeapon->EquipSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			EquippedWeapon->EquipSound,
+			BlasterCharacter->GetActorLocation()
+		);
+	}
+
+	if (EquippedWeapon->IsEmpty())
+	{
+		Reload();
+	}
+
+	// Disable orient to movement so we can strafe
+	// NOTE: This will only be done on the server therefore we need to use a RepNotify
+	BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
+	BlasterCharacter->bUseControllerRotationYaw = true;
+
 }
 
 void UCombatComponent::OnRep_DropCurrentWeapon()
@@ -494,57 +546,7 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 	}
 }
 
-void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
-{
-	if (BlasterCharacter == nullptr || WeaponToEquip == nullptr) return;
-	if (EquippedWeapon)
-	{
-		EquippedWeapon->Swapped();
-	}
-	EquippedWeapon = WeaponToEquip;
-	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
-	const USkeletalMeshSocket* HandSocket = BlasterCharacter->GetMesh()->GetSocketByName(FName("RightHandSocket"));
-	if (HandSocket)
-	{
-		HandSocket->AttachActor(EquippedWeapon, BlasterCharacter->GetMesh());
-	}
 
-	// Set equipped weapon to controlled pawn 
-	EquippedWeapon->SetOwner(BlasterCharacter);
-	EquippedWeapon->SetHUDAmmo();
-	UpdateWeapon2DTextures();
-
-	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
-	{
-		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
-	}
-
-	BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
-	if (BlasterController)
-	{
-		BlasterController->SetHUDCarriedAmmo(CarriedAmmo);
-	}
-
-	if (EquippedWeapon->EquipSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(
-			this,
-			EquippedWeapon->EquipSound,
-			BlasterCharacter->GetActorLocation()
-		);
-	}
-
-	if (EquippedWeapon->IsEmpty())
-	{
-		Reload();
-	}
-
-	// Disable orient to movement so we can strafe
-	// NOTE: This will only be done on the server therefore we need to use a RepNotify
-	BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
-	BlasterCharacter->bUseControllerRotationYaw = true;
-
-}
 
 void UCombatComponent::Reload()
 {
