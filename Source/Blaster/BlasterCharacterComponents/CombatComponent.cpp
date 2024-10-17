@@ -351,14 +351,18 @@ void UCombatComponent::UpdateAmmoValues()
 	EquippedWeapon->AddAmmo(-ReloadAmount);
 }
 
-void UCombatComponent::UpdateWeapon2DTextures(AWeapon* NewWeapon)
+void UCombatComponent::UpdateWeapon2DTextures()
 {
 	// Where is this used
-	if (EquippedWeapon && NewWeapon && EquippedWeapon != NewWeapon)
+	BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
+	if (BlasterController)
 	{
-		UTexture2D* NewWeaponTexture = NewWeapon->GetWeaponType2DTexture();
-		UTexture2D* EquipedWeaponTexture = EquippedWeapon->GetWeaponType2DTexture();
-		EquipedWeaponTexture = NewWeaponTexture;
+		UTexture2D* EquippedWeaponTexture2D = EquippedWeapon->GetWeaponTexture2D();
+		if (EquippedWeapon && EquippedWeaponTexture2D)
+		{
+			BlasterController->SetHUDCarriedWeaponTexture(EquippedWeaponTexture2D);
+			UE_LOG(LogTemp, Warning, TEXT("Texture: %s"), *EquippedWeaponTexture2D->GetName());
+		}
 	}
 	
 }
@@ -521,7 +525,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	// Set equipped weapon to controlled pawn 
 	EquippedWeapon->SetOwner(BlasterCharacter);
 	EquippedWeapon->SetHUDAmmo();
-	UpdateWeapon2DTextures(WeaponToEquip);
+	UpdateWeapon2DTextures();
 
 	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
 	{
@@ -532,6 +536,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	if (BlasterController)
 	{
 		BlasterController->SetHUDCarriedAmmo(CarriedAmmo);
+		//BlasterController->SetHUDCarriedWeaponTexture(WeaponToEquip->GetWeaponTexture2D());
 	}
 
 	if (EquippedWeapon->EquipSound)

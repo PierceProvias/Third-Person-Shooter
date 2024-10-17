@@ -56,6 +56,7 @@ public:
 	bool bAutomatic = true;
 
 	void SetHUDAmmo();
+	void SetHUDWeaponTexture2D();
 	
 	void AddAmmo(int32 AmmoToAdd);
 
@@ -95,6 +96,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(EditAnywhere, Category = WeaponProperties)
+	TObjectPtr<UTexture2D> Weapon2DTexture;
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<USphereComponent> AreaSphere;
@@ -204,6 +208,7 @@ public:
 
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; }
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
+	FORCEINLINE UTexture2D* GetWeaponTexture2D() const { return Weapon2DTexture; }
 
 	FORCEINLINE UTexture2D* GetCrosshairs_Center() const { return CrosshairsCenter; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Left() const { return CrosshairsLeft; }

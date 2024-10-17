@@ -220,7 +220,7 @@ private:
 	void OnRep_CombatState();
 
 	void UpdateAmmoValues();
-	void UpdateWeapon2DTextures(AWeapon* NewWeapon);
+	void UpdateWeapon2DTextures();
 
 public:	
 
