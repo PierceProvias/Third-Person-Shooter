@@ -17,7 +17,6 @@
 #include "../PlayerController/BlasterPlayerController.h"
 #include "../Weapons/Weapon.h"
 #include "../Characters/BlasterCharacter.h"
-#include "../PlayerController/BlasterPlayerController.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -352,6 +351,18 @@ void UCombatComponent::UpdateAmmoValues()
 	EquippedWeapon->AddAmmo(-ReloadAmount);
 }
 
+void UCombatComponent::UpdateWeapon2DTextures(AWeapon* NewWeapon)
+{
+	// Where is this used
+	if (EquippedWeapon && NewWeapon && EquippedWeapon != NewWeapon)
+	{
+		UTexture2D* NewWeaponTexture = NewWeapon->GetWeaponType2DTexture();
+		UTexture2D* EquipedWeaponTexture = EquippedWeapon->GetWeaponType2DTexture();
+		EquipedWeaponTexture = NewWeaponTexture;
+	}
+	
+}
+
 void UCombatComponent::OnRep_CombatState()
 {
 	switch (CombatState)
@@ -456,12 +467,25 @@ void UCombatComponent::OnRep_CarriedAmmo()
 void UCombatComponent::InitCarriedAmmo()
 {
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_AssaultRifle, StartingARAmmo);
+	CarriedAmmoMap.Emplace(EWeaponType::EWT_AK47, StartingAKAmmo);
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_RocketLauncher, StartingRocketAmmo);
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_Pistol, StartingPistolAmmo);
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_SMG, StartingSMGAmmo);
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_Shotgun, StartingShotgunAmmo);
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_Sniper, StartingSniperAmmo);
 	CarriedAmmoMap.Emplace(EWeaponType::EWT_GrenadeLauncher, StartingGrenadeLauncherAmmo);
+}
+
+void UCombatComponent::InitWeaponTextureHUD()
+{
+	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_AssaultRifle, ARTexture2D);
+	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_AK47, AKTexture2D);
+	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_RocketLauncher, RocketLauncherTexture2D);
+	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_Pistol, PistolTexture2D);
+	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_SMG, SMGTexture2D);
+	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_Shotgun, ShotgunTexture2D);
+	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_Sniper, SniperTexture2D);
+	CurrentWeaponTextureMap.Emplace(EWeaponType::EWT_GrenadeLauncher, GrenadeLauncherTexture2D);
 }
 
 void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
@@ -497,6 +521,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	// Set equipped weapon to controlled pawn 
 	EquippedWeapon->SetOwner(BlasterCharacter);
 	EquippedWeapon->SetHUDAmmo();
+	UpdateWeapon2DTextures(WeaponToEquip);
 
 	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
 	{

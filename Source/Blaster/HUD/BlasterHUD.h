@@ -8,7 +8,6 @@
 
 class UTexture2D;
 class UCharacterOverlay;
-class UCharacterOverlay;
 class UAnnouncement;
 
 USTRUCT(BlueprintType)

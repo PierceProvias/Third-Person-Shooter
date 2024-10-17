@@ -40,13 +40,13 @@ protected:
 	*/
 	
 	//UGameSettingCollection* InitializeVideoSettings(ULocalPlayer* InLocalPlayer);
-	//void InitializeWindowMode();
+	void InitializeWindowMode();
 	void InitializeResolutionComboBox();
 	void InitializeVSync();
 	void InitializeFramerate();
 	
-	//UFUNCTION()
-	//void OnWindowModeChanged(EWindowMode::Type InFullScreenMode);
+	UFUNCTION()
+	void OnWindowModeChanged(EWindowMode::Type InFullScreenMode);
 
 	UFUNCTION()
 	void OnResolutionChanged(FString InSelectedItem, ESelectInfo::Type InSelectionType);
@@ -124,7 +124,6 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> VideoButton;
 
-
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> WindowLeftButton;
 
@@ -136,6 +135,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> ApplyButton;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> RestoreButton;
 
 	UFUNCTION()
 	void GameplayButtonClicked();
@@ -166,6 +168,9 @@ private:
 
 	UFUNCTION()
 	void ApplyButtonClicked();
+
+	UFUNCTION()
+	void RestoreButtonClicked();
 
 	void MenuTeardown();
 

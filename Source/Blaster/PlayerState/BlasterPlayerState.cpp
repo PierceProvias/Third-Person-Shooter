@@ -6,6 +6,7 @@
 
 #include "../PlayerController/BlasterPlayerController.h"
 #include "../Characters/BlasterCharacter.h"
+#include "../Weapons/Weapon.h"
 
 void ABlasterPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -68,6 +69,19 @@ void ABlasterPlayerState::AddToDeaths(int32 DeathsAmount)
 		if (BlasterController)
 		{
 			BlasterController->SetHUDDeaths(Deaths);
+		}
+	}
+}
+
+void ABlasterPlayerState::AddWeaponTextureToHUD()
+{
+	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
+	if (BlasterCharacter)
+	{
+		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
+		if (BlasterController)
+		{
+			BlasterController->SetHUDCarriedWeaponTexture(BlasterCharacter->GetEquippedWeapon()->GetWeaponType2DTexture());
 		}
 	}
 }

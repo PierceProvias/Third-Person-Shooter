@@ -15,9 +15,9 @@ class BLASTER_API ABlasterPlayerState : public APlayerState
 public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
-	//
-	// Replication notifies
-	//
+	/* 
+	* Replication notifies
+	*/
 
 	virtual void OnRep_Score() override;
 
@@ -27,6 +27,8 @@ public:
 	
 	void AddToScore(float ScoreAmount);
 	void AddToDeaths(int32 DeathsAmount);
+
+	void AddWeaponTextureToHUD();
 	
 private:
 

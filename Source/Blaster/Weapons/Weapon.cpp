@@ -194,6 +194,18 @@ void AWeapon::AddAmmo(int32 AmmoToAdd)
 	SetHUDAmmo();
 }
 
+void AWeapon::InitWeaponTextureHUD()
+{
+	Weapon2DTextureMap.Emplace(EWeaponType::EWT_AssaultRifle, ARTexture2D);
+	Weapon2DTextureMap.Emplace(EWeaponType::EWT_AK47, AKTexture2D);
+	Weapon2DTextureMap.Emplace(EWeaponType::EWT_RocketLauncher, RocketLauncherTexture2D);
+	Weapon2DTextureMap.Emplace(EWeaponType::EWT_Pistol, PistolTexture2D);
+	Weapon2DTextureMap.Emplace(EWeaponType::EWT_SMG, SMGTexture2D);
+	Weapon2DTextureMap.Emplace(EWeaponType::EWT_Shotgun, ShotgunTexture2D);
+	Weapon2DTextureMap.Emplace(EWeaponType::EWT_Sniper, SniperTexture2D);
+	Weapon2DTextureMap.Emplace(EWeaponType::EWT_GrenadeLauncher, GrenadeLauncherTexture2D);
+}
+
 void AWeapon::SetWeaponState(EWeaponState State)
 {
 	WeaponState = State;

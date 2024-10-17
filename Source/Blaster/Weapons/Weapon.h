@@ -114,10 +114,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ACasing> CasingClass;
 
-	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo)
+	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo, Category = "Ammo")
 	int32 Ammo;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Ammo")
 	int32 MagCapacity;
 
 	TObjectPtr<ABlasterCharacter> BlasterOwnerCharacter;
@@ -131,12 +131,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	EWeaponType WeaponType;
 
-
-
-	//
-	// Textures for the weapon crosshairs
-	//
-
+	/*
+	* Textures for the weapon crosshairs
+	*/
+	
 	UPROPERTY(EditAnywhere, Category = "Crosshairs")
 	TObjectPtr<UTexture2D> CrosshairsCenter;
 
@@ -152,9 +150,43 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Crosshairs")
 	TObjectPtr<UTexture2D> CrosshairsBottom;
 
-	//
-	// Zoomed FOV while aiming
-	//
+	/*
+	* Zoomed FOV while aiming
+	*/
+	
+	/*
+	* 2D textures for each weapon to be displayed in HUD for current equipped weapon
+	*/
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> ARTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> AKTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> RocketLauncherTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> PistolTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> SMGTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> ShotgunTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> SniperTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> GrenadeLauncherTexture2D;
+
+	TMap<EWeaponType, UTexture2D*> Weapon2DTextureMap;
+
+	void InitWeaponTextureHUD();
+
+	//const UTexture2D EquippedWeaponTexture2D;
 
 	UPROPERTY(EditAnywhere)
 	float ZoomedFOV = 30.f;
@@ -169,7 +201,7 @@ public:
 	
 	void SetWeaponState(EWeaponState State);
 	bool IsEmpty();
-	
+
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; }
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 
@@ -178,6 +210,7 @@ public:
 	FORCEINLINE UTexture2D* GetCrosshairs_Right() const { return CrosshairsRight; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Top() const { return CrosshairsTop; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Bottom() const { return CrosshairsBottom; }
+	FORCEINLINE UTexture2D* GetWeaponType2DTexture() const { return Weapon2DTextureMap.FindRef(WeaponType); }
 	
 	FORCEINLINE float GetZoomedFOV() const { return ZoomedFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }

@@ -8,6 +8,8 @@
 
 class UProgressBar;
 class UTextBlock;
+class UImage;
+
 
 UCLASS()
 class BLASTER_API UCharacterOverlay : public UUserWidget
@@ -36,4 +38,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> MatchCountdownText;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UImage> WeaponImage;
 };

@@ -15,6 +15,7 @@
 class AWeapon;
 class ABlasterPlayerController;
 class ABlasterHUD;
+class UTexture2D;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BLASTER_API UCombatComponent : public UActorComponent
@@ -152,9 +153,16 @@ private:
 	void OnRep_CarriedAmmo();
 
 	TMap<EWeaponType, int32> CarriedAmmoMap;	// TMap isn't replicated!
+	TMap<EWeaponType, UTexture2D*> CurrentWeaponTextureMap;
 
+	/*
+	* Starting ammo for each weapon type
+	*/
 	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingARAmmo = 30;
+
+	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
+	int32 StartingAKAmmo = 30;
 
 	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingRocketAmmo = 0;
@@ -174,7 +182,36 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 StartingGrenadeLauncherAmmo = 0;
 
+	/*
+	* 2D textures for each weapon to be displayed in HUD for current equipped weapon
+	*/
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> ARTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> AKTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> RocketLauncherTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> PistolTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> SMGTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> ShotgunTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> SniperTexture2D;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
+	TObjectPtr<UTexture2D> GrenadeLauncherTexture2D;
+
 	void InitCarriedAmmo();
+	void InitWeaponTextureHUD();
 
 	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
 	ECombatState CombatState = ECombatState::ECS_Unoccupied;
@@ -183,9 +220,8 @@ private:
 	void OnRep_CombatState();
 
 	void UpdateAmmoValues();
+	void UpdateWeapon2DTextures(AWeapon* NewWeapon);
+
 public:	
-
-
-		
 
 };

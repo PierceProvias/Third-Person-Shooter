@@ -4,6 +4,7 @@
 #include "BlasterPlayerController.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
 #include "Net/UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputSubsystems.h"
@@ -15,6 +16,8 @@
 #include "../HUD/Announcement.h"
 #include "../GameStates/BlasterGameState.h"
 #include "../PlayerState/BlasterPlayerState.h"
+#include "../BlasterCharacterComponents/CombatComponent.h"
+#include "../Weapons/Weapon.h"
 
 void ABlasterPlayerController::BeginPlay()
 {
@@ -313,6 +316,22 @@ void ABlasterPlayerController::SetHUDCarriedAmmo(int32 Ammo)
 	{
 		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->CarriedAmmoAmountText->SetText(FText::FromString(AmmoText));
+	}
+}
+
+void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWeaponTexture)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	bool bHUDValid = BlasterHUD &&
+		BlasterHUD->CharacterOverlay &&
+		BlasterHUD->CharacterOverlay->WeaponImage;
+	if (bHUDValid)
+	{
+		ABlasterCharacter* BlasterCharacter = NewObject<ABlasterCharacter>();
+		//ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetInstigatorController()->GetPawn());
+		AWeapon* WeaponType = BlasterCharacter->GetEquippedWeapon();
+		BlasterHUD->CharacterOverlay->WeaponImage->SetBrushFromTexture(WeaponType->GetWeaponType2DTexture());
 	}
 }
 
