@@ -27,8 +27,6 @@ public:
 	
 	void AddToScore(float ScoreAmount);
 	void AddToDeaths(int32 DeathsAmount);
-
-	void AddWeaponTextureToHUD();
 	
 private:
 

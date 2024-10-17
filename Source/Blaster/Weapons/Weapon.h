@@ -56,7 +56,6 @@ public:
 	bool bAutomatic = true;
 
 	void SetHUDAmmo();
-	void SetHUDWeaponTexture2D();
 	
 	void AddAmmo(int32 AmmoToAdd);
 
@@ -157,40 +156,6 @@ private:
 	/*
 	* Zoomed FOV while aiming
 	*/
-	
-	/*
-	* 2D textures for each weapon to be displayed in HUD for current equipped weapon
-	*/
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> ARTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> AKTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> RocketLauncherTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> PistolTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> SMGTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> ShotgunTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> SniperTexture2D;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Texture")
-	TObjectPtr<UTexture2D> GrenadeLauncherTexture2D;
-
-	TMap<EWeaponType, UTexture2D*> Weapon2DTextureMap;
-
-	void InitWeaponTextureHUD();
-
-	//const UTexture2D EquippedWeaponTexture2D;
 
 	UPROPERTY(EditAnywhere)
 	float ZoomedFOV = 30.f;
@@ -215,7 +180,6 @@ public:
 	FORCEINLINE UTexture2D* GetCrosshairs_Right() const { return CrosshairsRight; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Top() const { return CrosshairsTop; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Bottom() const { return CrosshairsBottom; }
-	FORCEINLINE UTexture2D* GetWeaponType2DTexture() const { return Weapon2DTextureMap.FindRef(WeaponType); }
 	
 	FORCEINLINE float GetZoomedFOV() const { return ZoomedFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }

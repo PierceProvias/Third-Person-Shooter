@@ -73,15 +73,3 @@ void ABlasterPlayerState::AddToDeaths(int32 DeathsAmount)
 	}
 }
 
-void ABlasterPlayerState::AddWeaponTextureToHUD()
-{
-	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
-	if (BlasterCharacter)
-	{
-		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
-		if (BlasterController)
-		{
-			BlasterController->SetHUDCarriedWeaponTexture(BlasterCharacter->GetEquippedWeapon()->GetWeaponType2DTexture());
-		}
-	}
-}
