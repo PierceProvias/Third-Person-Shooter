@@ -116,6 +116,7 @@ void UCombatComponent::OnRep_EquippedWeapon()
 				BlasterCharacter->GetActorLocation()
 			);
 		}
+	
 		/*
 		
 			TArray<FInputAxisKeyMapping> AxisMappings;
@@ -189,6 +190,20 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 }
 
+void UCombatComponent::DropCurrentWeapon()
+{
+	if (BlasterCharacter == nullptr || EquippedWeapon == nullptr) return;
+	
+	EquippedWeapon->GetWeaponMesh()->AddImpulse(
+		BlasterCharacter->GetActorForwardVector() * WEAPON_FORWARD_DROP_VELOCITY +
+		BlasterCharacter->GetActorUpVector() * WEAPON_UPWARD_DROP_VELOCITY
+	);
+	EquippedWeapon->Dropped();
+	//EquippedWeapon->Swapped();
+	//BlasterCharacter->DestroyConstructedComponents();
+	
+}
+
 void UCombatComponent::OnRep_DropCurrentWeapon()
 {
 	if (BlasterCharacter && EquippedWeapon)
@@ -197,9 +212,9 @@ void UCombatComponent::OnRep_DropCurrentWeapon()
 			BlasterCharacter->GetActorForwardVector() * WEAPON_FORWARD_DROP_VELOCITY + 
 			BlasterCharacter->GetActorUpVector() * WEAPON_UPWARD_DROP_VELOCITY
 		);
-		//EquippedWeapon->Dropped();
-		EquippedWeapon->Swapped();
-		BlasterCharacter->DestroyConstructedComponents();
+		EquippedWeapon->Dropped();
+		//EquippedWeapon->Swapped();
+		//BlasterCharacter->DestroyConstructedComponents();
 	}
 }
 
@@ -207,7 +222,7 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 {
 	bFireButtonPressed = bPressed;	// Locally controlled
 	
-	if (EquippedWeapon )
+	if (EquippedWeapon)
 	{
 		Fire();
 	}

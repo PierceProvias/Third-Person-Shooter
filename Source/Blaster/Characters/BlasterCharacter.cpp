@@ -350,9 +350,16 @@ void ABlasterCharacter::DropWeaponPressed()
 {
 	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
-		CombatComponent->OnRep_DropCurrentWeapon();
+		if (HasAuthority())
+		{
+			CombatComponent->DropCurrentWeapon();
+		}
+		else
+		{
+			ServerDropWeaponButtonPressed();
+		}
 	}
-	
+
 	// TODO: Detach weapon mesh from right hand socket 
 	// TODO: Probably best to move this to the combat component
 	
@@ -477,6 +484,14 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 	if (CombatComponent)
 	{
 		CombatComponent->EquipWeapon(OverlappingWeapon);
+	}
+}
+
+void ABlasterCharacter::ServerDropWeaponButtonPressed_Implementation()
+{
+	if (CombatComponent && CombatComponent->EquippedWeapon)
+	{
+		CombatComponent->DropCurrentWeapon();
 	}
 }
 

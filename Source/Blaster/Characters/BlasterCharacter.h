@@ -177,6 +177,9 @@ private:
 	// NOTE: RPCs can be called from the server and propagated to the clients
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
+
+	UFUNCTION(Server, Reliable)
+	void ServerDropWeaponButtonPressed();
 	
 	// Used for calculations
 	float AO_Yaw;

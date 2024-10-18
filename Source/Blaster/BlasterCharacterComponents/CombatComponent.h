@@ -31,6 +31,7 @@ public:
 
 	
 	void EquipWeapon(AWeapon* WeaponToEquip);
+	void DropCurrentWeapon();
 	void Reload();
 	
 	UFUNCTION(BlueprintCallable)
@@ -86,9 +87,6 @@ private:
 	// Replicated so that all machines are in the correct animation pose
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	TObjectPtr<AWeapon> EquippedWeapon;
-
-	//UPROPERTY()
-	//TObjectPtr<AWeapon> CurrentWeapon;
 
 	UPROPERTY(Replicated)
 	bool bAiming;
@@ -153,7 +151,6 @@ private:
 	void OnRep_CarriedAmmo();
 
 	TMap<EWeaponType, int32> CarriedAmmoMap;	// TMap isn't replicated!
-	TMap<EWeaponType, UTexture2D*> CurrentWeaponTextureMap;
 
 	/*
 	* Starting ammo for each weapon type
