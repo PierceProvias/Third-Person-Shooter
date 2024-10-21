@@ -19,6 +19,8 @@
 #include "../BlasterCharacterComponents/CombatComponent.h"
 #include "../Weapons/Weapon.h"
 
+#define RENDER_OPACITY_FULL 1.0f
+
 void ABlasterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -302,6 +304,7 @@ void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
 	{
 		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmountText->SetText(FText::FromString(AmmoText));
+		BlasterHUD->CharacterOverlay->WeaponAmmoAmountText->SetRenderOpacity(RENDER_OPACITY_FULL);
 	}
 }
 
@@ -316,6 +319,7 @@ void ABlasterPlayerController::SetHUDCarriedAmmo(int32 Ammo)
 	{
 		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->CarriedAmmoAmountText->SetText(FText::FromString(AmmoText));
+		BlasterHUD->CharacterOverlay->CarriedAmmoAmountText->SetRenderOpacity(RENDER_OPACITY_FULL);
 	}
 }
 
@@ -334,7 +338,7 @@ void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWea
 		{
 			CurrentWeaponTexture = BlasterCharacter->GetEquippedWeapon()->GetWeaponTexture2D();
 			BlasterHUD->CharacterOverlay->WeaponImage->SetBrushFromTexture(CurrentWeaponTexture);
-			BlasterHUD->CharacterOverlay->WeaponImage->SetRenderOpacity(1.f);
+			BlasterHUD->CharacterOverlay->WeaponImage->SetRenderOpacity(RENDER_OPACITY_FULL);
 		}			
 	}
 }
