@@ -11,10 +11,12 @@
 #include "Casing.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "MapIconComponent.h"
-
+#include "Components/Image.h"
+#include "Components/TextBlock.h"
 
 #include "../Characters/BlasterCharacter.h"
 #include "../PlayerController/BlasterPlayerController.h"
+#include "../HUD/PickupWidget.h"
 
 AWeapon::AWeapon()
 {
@@ -75,7 +77,7 @@ void AWeapon::BeginPlay()
 	}
 	if (PickupWidget)
 	{
-		PickupWidget->SetVisibility(false);
+		ShowPickupWidget(false);
 	}
 }
 
@@ -235,11 +237,30 @@ bool AWeapon::IsEmpty()
 	return Ammo <= 0;
 }
 
+
 void AWeapon::ShowPickupWidget(bool bShowWidget)
 {
 	if (PickupWidget)
 	{
+		SetPickupWidgetWeaponInfo();
 		PickupWidget->SetVisibility(bShowWidget);
+	}
+}
+
+void AWeapon::SetPickupWidgetWeaponInfo()
+{
+	// TODO: Most likely cast in begin play 
+	if (BlasterOwnerCharacter && BlasterOwnerController && PickupWidget && Weapon2DTexture)
+	{
+		UUserWidget* WidgetInstance = PickupWidget->GetUserWidgetObject();
+		if (UPickupWidget* PickupWidgetInstance = Cast<UPickupWidget>(WidgetInstance))
+		{
+			PickupWidgetInstance->WeaponImage->SetBrushFromTexture(Weapon2DTexture);
+			FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
+			FString WeaponName = Weapon2DTexture->GetName();
+			PickupWidgetInstance->WeaponName->SetText(FText::FromString(WeaponName));
+			PickupWidgetInstance->AmmoText->SetText(FText::FromString(AmmoText));
+		}
 	}
 }
 

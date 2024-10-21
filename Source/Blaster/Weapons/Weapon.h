@@ -16,6 +16,7 @@ class UMapIconComponent;
 class USphereComponent;
 class UWidgetComponent;
 class UAnimationAsset;
+class UPickupWidget;
 
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
@@ -40,6 +41,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void OnRep_Owner() override;
 	void ShowPickupWidget(bool bShowWidget);
+	void SetPickupWidgetWeaponInfo();
 	virtual void Fire(const FVector& HitTarget);
 	void Swapped();
 	void Dropped();
@@ -91,6 +93,8 @@ protected:
 		int32 OtherBodyIndex
 	);
 
+	TObjectPtr<UMaterialInstanceDynamic> WidgetMaterialInstance;
+
 private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
@@ -108,8 +112,15 @@ private:
 	UFUNCTION()
 	void OnRep_WeaponState();
 
+	
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UWidgetComponent> PickupWidget;
+	
+
+	/*
+		UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
+		TObjectPtr<UPickupWidget> PickupWidget;
+	*/
 
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	TObjectPtr<UAnimationAsset> FireAnimation;

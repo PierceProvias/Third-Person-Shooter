@@ -333,7 +333,6 @@ void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWea
 	
 	if (bHUDValid)
 	{
-		//BlasterHUD->CharacterOverlay->WeaponImage->SetVisibility(ESlateVisibility::Hidden);
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn()))
 		{
 			CurrentWeaponTexture = BlasterCharacter->GetEquippedWeapon()->GetWeaponTexture2D();
