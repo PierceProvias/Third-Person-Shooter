@@ -77,6 +77,8 @@ void AWeapon::BeginPlay()
 	}
 	if (PickupWidget)
 	{
+		UUserWidget* WidgetInstance = PickupWidget->GetUserWidgetObject();
+		PickupWidgetInstance = PickupWidgetInstance == nullptr ? Cast<UPickupWidget>(WidgetInstance) : PickupWidgetInstance;
 		ShowPickupWidget(false);
 	}
 }
@@ -242,18 +244,17 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 {
 	if (PickupWidget)
 	{
-		SetPickupWidgetWeaponInfo();
 		PickupWidget->SetVisibility(bShowWidget);
+		SetPickupWidgetWeaponInfo();
 	}
 }
 
 void AWeapon::SetPickupWidgetWeaponInfo()
 {
 	// TODO: Most likely cast in begin play 
-	if (BlasterOwnerCharacter && BlasterOwnerController && PickupWidget && Weapon2DTexture)
+	if (PickupWidget && Weapon2DTexture)
 	{
-		UUserWidget* WidgetInstance = PickupWidget->GetUserWidgetObject();
-		if (UPickupWidget* PickupWidgetInstance = Cast<UPickupWidget>(WidgetInstance))
+		if (PickupWidgetInstance)
 		{
 			PickupWidgetInstance->WeaponImage->SetBrushFromTexture(Weapon2DTexture);
 			FString AmmoText = FString::Printf(TEXT("%d"), Ammo);

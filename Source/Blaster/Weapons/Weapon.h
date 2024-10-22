@@ -177,6 +177,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Icon")
 	TObjectPtr<UMapIconComponent> WeaponMapIcon;
 
+	TObjectPtr<UPickupWidget> PickupWidgetInstance;
 public:	
 	
 	void SetWeaponState(EWeaponState State);
