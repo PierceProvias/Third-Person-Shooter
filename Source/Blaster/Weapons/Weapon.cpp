@@ -251,7 +251,6 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 
 void AWeapon::SetPickupWidgetWeaponInfo()
 {
-	// TODO: Most likely cast in begin play 
 	if (PickupWidget && Weapon2DTexture)
 	{
 		if (PickupWidgetInstance)

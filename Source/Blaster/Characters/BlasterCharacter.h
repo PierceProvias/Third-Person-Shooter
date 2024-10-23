@@ -45,9 +45,14 @@ public:
 	// Used to construct components
 	virtual void PostInitializeComponents() override;
 
+	/*
+	* Play animation montages
+	*/
 	void PlayFireMontage(bool bAiming);
 	void PlayReloadMontage();
 	void PlayElimMontage();
+	void PlayThrowGrenadeMontage();
+	void PlayHitReactMontage();
 	
 	// Since SimProxies Tick is off, Used for replication of our root component's position and velocity (Inherited from Actor.h)
 	virtual void OnRep_ReplicatedMovement() override;
@@ -70,9 +75,9 @@ protected:
 	virtual void BeginPlay() override;
 	void RotateInPlace(float DeltaTime);
 
-	//
-	// Callbacks for input
-	//
+	/*
+	* Callbacks for input
+	*/
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -83,12 +88,17 @@ protected:
 	void FireButtonPressed(const FInputActionValue& Value);
 	void ReloadButtonPressed();
 	void DropWeaponPressed();
+	
 	UFUNCTION(BlueprintCallable)
 	void PauseMenuPressed();
 
-	// Aim Offsets
-	void AimOffset(float DeltaTime);
+	void ThrowGrenadeButtonPressed();
 
+	/*
+	* Aim Offsets
+	*/
+	
+	void AimOffset(float DeltaTime);
 	void CalculateAO_Pitch();
 
 	
@@ -99,7 +109,7 @@ protected:
 	void SimProxiesTurn();
 
 	
-	void PlayHitReactMontage();
+	
 
 	// Binded to OnTakeAnyDamage delegate (needs UFUNCTION macro)
 	UFUNCTION()
@@ -150,6 +160,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> PauseAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> ThrowGrenadeAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* OverheadWidget;
@@ -206,6 +219,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> ElimMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage> ThrowGrenadeMontage;
 
 	void HideCameraIfCharacterClose();
 	

@@ -9,6 +9,7 @@
 #include "Components/CheckBox.h"
 #include "SelectionBase.h"
 #include "Framerates.h"
+#include "Kismet/GameplayStatics.h"
 //#include "GameSettingCollection.h"
 //#include "GameSetting.h"
 //#include "Engine/LocalPlayer.h"

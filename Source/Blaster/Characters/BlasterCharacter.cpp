@@ -247,7 +247,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::ReloadButtonPressed);
 		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::DropWeaponPressed);
 		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::PauseMenuPressed);
-
+		EnhancedInputComponent->BindAction(ThrowGrenadeAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::ThrowGrenadeButtonPressed);
 		// TODO: Find Jump animation for unequipped pose (Current one lags)
 	}
 }
@@ -384,6 +384,14 @@ void ABlasterCharacter::PauseMenuPressed()
 			UE_LOG(LogTemp, Warning, TEXT("Paused NOT WORKING"));
 		}
 	*/
+}
+
+void ABlasterCharacter::ThrowGrenadeButtonPressed()
+{
+	if (CombatComponent)
+	{
+		CombatComponent->ThrowGrenade();
+	}
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)
@@ -695,6 +703,15 @@ void ABlasterCharacter::PlayElimMontage()
 	if (AnimInstance && ElimMontage)
 	{
 		AnimInstance->Montage_Play(ElimMontage);
+	}
+}
+
+void ABlasterCharacter::PlayThrowGrenadeMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ThrowGrenadeMontage)
+	{
+		AnimInstance->Montage_Play(ThrowGrenadeMontage);
 	}
 }
 

@@ -141,6 +141,7 @@ void UCombatComponent::OnRep_EquippedWeapon()
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 {
 	if (BlasterCharacter == nullptr || WeaponToEquip == nullptr) return;
+	if (CombatState != ECombatState::ECS_Unoccupied) return;
 	if (EquippedWeapon)
 	{
 		EquippedWeapon->Swapped();
@@ -440,7 +441,20 @@ void UCombatComponent::OnRep_CombatState()
 	case ECombatState::ECS_Reloading:
 		HandleReload();
 		break;
+	case ECombatState::ECS_Unoccupied:
+		if (bFireButtonPressed)
+		{
+			Fire();
+		}
+		break;
+	case ECombatState::ECS_ThrowingGrenade:
+		if (BlasterCharacter && !BlasterCharacter->IsLocallyControlled())
+		{
+			BlasterCharacter->PlayThrowGrenadeMontage();
+		}
+		break;
 	}
+
 }
 
 void UCombatComponent::InterpFOV(float DeltaTime)
@@ -561,13 +575,34 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 	}
 }
 
-
-
 void UCombatComponent::Reload()
 {
-	if (CarriedAmmo > 0 && CombatState != ECombatState::ECS_Reloading)
+	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied)
 	{
 		ServerReload();
+	}
+}
+
+void UCombatComponent::ThrowGrenade()
+{
+	if (CombatState != ECombatState::ECS_Unoccupied) return;
+	CombatState = ECombatState::ECS_ThrowingGrenade;
+	if (BlasterCharacter)
+	{
+		BlasterCharacter->PlayThrowGrenadeMontage();
+	}
+	if (BlasterCharacter && !BlasterCharacter->HasAuthority())
+	{
+		ServerThrowGrenade();	
+	}
+}
+
+void UCombatComponent::ServerThrowGrenade_Implementation()
+{
+	CombatState = ECombatState::ECS_ThrowingGrenade;
+	if (BlasterCharacter)
+	{
+		BlasterCharacter->PlayThrowGrenadeMontage();
 	}
 }
 
@@ -579,4 +614,9 @@ void UCombatComponent::FinishedReloading()
 		CombatState = ECombatState::ECS_Unoccupied;
 		UpdateAmmoValues();
 	}
+}
+
+void UCombatComponent::FinishedThrowingGrenade()
+{
+	CombatState = ECombatState::ECS_Unoccupied;
 }

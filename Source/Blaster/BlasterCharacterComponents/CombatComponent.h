@@ -37,13 +37,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FinishedReloading();
 
-
+	UFUNCTION(BlueprintCallable)
+	void FinishedThrowingGrenade();
 
 protected:
 
 	virtual void BeginPlay() override;
 	void SetAiming(bool bIsAiming);
-
+	
 	// RPCs can have params. RepNotifies cannot
 	UFUNCTION(Server, Reliable)
 	void ServerSetAiming(bool bIsAiming);
@@ -77,6 +78,11 @@ protected:
 	void HandleReload();
 
 	int32 AmountToReload();
+
+	void ThrowGrenade();
+
+	UFUNCTION(Server, Reliable)
+	void ServerThrowGrenade();
 
 private:
 
