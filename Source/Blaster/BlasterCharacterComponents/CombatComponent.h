@@ -31,6 +31,8 @@ public:
 
 	
 	void EquipWeapon(AWeapon* WeaponToEquip);
+
+	
 	void DropCurrentWeapon();
 	void Reload();
 	
@@ -84,6 +86,13 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerThrowGrenade();
 
+	void SwapEquippedWeapon();
+	void AttachActorToCharacterSocket(AActor* ActorToAttach);
+	void AttachActorToRightHand(AActor* ActorToAttach);
+	void AttachActorToLeftHand(AActor* ActorToAttach);
+	void UpdateCarriedAmmo();
+	void PlayEquipWeaponSound();
+	void ReloadEmpyWeapon();
 private:
 
 	TObjectPtr<ABlasterCharacter> BlasterCharacter;
