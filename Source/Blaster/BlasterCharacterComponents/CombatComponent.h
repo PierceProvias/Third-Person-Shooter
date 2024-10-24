@@ -46,6 +46,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LaunchGrenade();
 
+	UFUNCTION(Server, Reliable)
+	void ServerLaunchGrenade(const FVector_NetQuantize& Target);
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -212,6 +215,9 @@ private:
 
 	void UpdateAmmoValues();
 	void UpdateWeapon2DTextures();
+
+	UPROPERTY(EditAnywhere)
+	float GrenadeSpawnDifferential = 1.f;
 
 public:	
 
