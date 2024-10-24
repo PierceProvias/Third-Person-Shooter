@@ -239,6 +239,11 @@ bool AWeapon::IsEmpty()
 	return Ammo <= 0;
 }
 
+bool AWeapon::IsFull()
+{
+	return Ammo == MagCapacity;
+}
+
 
 void AWeapon::ShowPickupWidget(bool bShowWidget)
 {

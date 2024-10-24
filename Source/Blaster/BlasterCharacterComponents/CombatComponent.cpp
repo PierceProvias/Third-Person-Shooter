@@ -161,6 +161,14 @@ void UCombatComponent::ReloadEmpyWeapon()
 	}
 }
 
+void UCombatComponent::ShowAttachedGrenade(bool bShowGrenade)
+{
+	if (BlasterCharacter && BlasterCharacter->GetAttachedGrenade())
+	{
+		BlasterCharacter->GetAttachedGrenade()->SetVisibility(bShowGrenade);
+	}
+}
+
 void UCombatComponent::PlayEquipWeaponSound()
 {
 	if (BlasterCharacter && EquippedWeapon && EquippedWeapon->EquipSound)
@@ -434,6 +442,7 @@ void UCombatComponent::OnRep_CombatState()
 		{
 			BlasterCharacter->PlayThrowGrenadeMontage();
 			AttachActorToLeftHand(EquippedWeapon);
+			ShowAttachedGrenade(true);	// Not locally controlled
 		}
 		break;
 	}
@@ -556,7 +565,7 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 
 void UCombatComponent::Reload()
 {
-	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied && EquippedWeapon && (EquippedWeapon->GetAmmo() < EquippedWeapon->GetMagCapacity()))
+	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied && EquippedWeapon && !EquippedWeapon->IsFull())
 	{
 		ServerReload();
 	}
@@ -570,6 +579,7 @@ void UCombatComponent::ThrowGrenade()
 	{
 		BlasterCharacter->PlayThrowGrenadeMontage();
 		AttachActorToLeftHand(EquippedWeapon);
+		ShowAttachedGrenade(true);
 	}
 	if (BlasterCharacter && !BlasterCharacter->HasAuthority())
 	{
@@ -627,6 +637,7 @@ void UCombatComponent::ServerThrowGrenade_Implementation()
 	{
 		BlasterCharacter->PlayThrowGrenadeMontage();
 		AttachActorToLeftHand(EquippedWeapon);
+		ShowAttachedGrenade(true);
 	}
 }
 
@@ -644,4 +655,9 @@ void UCombatComponent::FinishedThrowingGrenade()
 {
 	CombatState = ECombatState::ECS_Unoccupied;
 	AttachActorToRightHand(EquippedWeapon);
+}
+
+void UCombatComponent::LaunchGrenade()
+{
+	ShowAttachedGrenade(false);
 }

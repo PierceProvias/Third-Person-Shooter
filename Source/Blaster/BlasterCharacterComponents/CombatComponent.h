@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FinishedThrowingGrenade();
 
+	UFUNCTION(BlueprintCallable)
+	void LaunchGrenade();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -93,6 +96,7 @@ protected:
 	void UpdateCarriedAmmo();
 	void PlayEquipWeaponSound();
 	void ReloadEmpyWeapon();
+	void ShowAttachedGrenade(bool bShowGrenade);
 private:
 
 	TObjectPtr<ABlasterCharacter> BlasterCharacter;
