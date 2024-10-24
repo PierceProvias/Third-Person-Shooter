@@ -235,11 +235,9 @@ private:
 	float TimeSinceLastMovementReplication;
 	float CalculateSpeed();
 
-
-	//
-	// Player health
-	// Done here because instead of in the player state because of faster replication
-	//
+	/*
+	* Player health (Implementated in the character class instead of the player state due to faster replication)
+	*/
 	
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	float MaxHealth = 100.f;
@@ -262,9 +260,9 @@ private:
 	// Callback function for ElimTimer
 	void ElimTimerFinished();
 
-	//
-	// Dissolve Effect
-	//
+	/*
+	* Dissolve Effect
+	*/
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UTimelineComponent> DissolveTimeLine;
@@ -288,9 +286,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Elim")
 	TObjectPtr<UMaterialInstance>  DissolveMaterialInstance;
 
-	//
-	// Elim Bot (must be spawned locally)
-	//
+	/*
+	* Elim Bot (must be spawned locally)
+	*/
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UParticleSystem> ElimBotEffect;
@@ -308,7 +306,8 @@ private:
 
 	bool bInputsSet = false;
 
-
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UStaticMeshComponent> AttachedGrenade;
 public:
 
 	void SetOverlappingWeapon(AWeapon* Weapon);

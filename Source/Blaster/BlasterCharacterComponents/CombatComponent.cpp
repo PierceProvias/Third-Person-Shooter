@@ -413,7 +413,7 @@ void UCombatComponent::UpdateWeapon2DTextures()
 			BlasterController->SetHUDCarriedWeaponTexture(EquippedWeaponTexture2D);
 			UE_LOG(LogTemp, Warning, TEXT("Texture: %s"), *EquippedWeaponTexture2D->GetName());
 		}
-	}
+	} 
 }
 
 void UCombatComponent::OnRep_CombatState()
@@ -556,7 +556,7 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 
 void UCombatComponent::Reload()
 {
-	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied)
+	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied && EquippedWeapon && (EquippedWeapon->GetAmmo() < EquippedWeapon->GetMagCapacity()))
 	{
 		ServerReload();
 	}
