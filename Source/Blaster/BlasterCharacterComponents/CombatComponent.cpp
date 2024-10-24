@@ -17,6 +17,7 @@
 #include "../PlayerController/BlasterPlayerController.h"
 #include "../Weapons/Weapon.h"
 #include "../Characters/BlasterCharacter.h"
+#include "../Weapons/Projectile.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -573,7 +574,7 @@ void UCombatComponent::Reload()
 
 void UCombatComponent::ThrowGrenade()
 {
-	if (CombatState != ECombatState::ECS_Unoccupied) return;
+	if (CombatState != ECombatState::ECS_Unoccupied || EquippedWeapon == nullptr) return;
 	CombatState = ECombatState::ECS_ThrowingGrenade;
 	if (BlasterCharacter)
 	{
@@ -660,4 +661,21 @@ void UCombatComponent::FinishedThrowingGrenade()
 void UCombatComponent::LaunchGrenade()
 {
 	ShowAttachedGrenade(false);
+	if (BlasterCharacter && BlasterCharacter->HasAuthority() && GrenadeClass && BlasterCharacter->GetAttachedGrenade())
+	{
+		const FVector StartingLocation = BlasterCharacter->GetAttachedGrenade()->GetComponentLocation();
+		FVector ToTarget = HitTarget - StartingLocation;
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = BlasterCharacter;
+		SpawnParams.Instigator = BlasterCharacter;
+		if (UWorld* World = GetWorld())
+		{
+			World->SpawnActor<AProjectile>(
+				GrenadeClass,
+				StartingLocation,
+				ToTarget.Rotation(),
+				SpawnParams
+			);
+		}
+	}
 }

@@ -16,6 +16,7 @@ class AWeapon;
 class ABlasterPlayerController;
 class ABlasterHUD;
 class UTexture2D;
+class AProjectile;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BLASTER_API UCombatComponent : public UActorComponent
@@ -88,6 +89,9 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerThrowGrenade();
+
+	UPROPERTY(EditAnywhere, Category = "Projectile Class")
+	TSubclassOf<AProjectile> GrenadeClass;
 
 	void SwapEquippedWeapon();
 	void AttachActorToCharacterSocket(AActor* ActorToAttach);
