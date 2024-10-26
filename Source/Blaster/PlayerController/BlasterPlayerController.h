@@ -24,6 +24,8 @@ public:
 	void SetHUDScore(float Score);
 	void SetHUDDeaths(int32 Deaths);
 	void SetHUDWeaponAmmo(int32 Ammo);
+	void SetHUDPrimaryGrenade(int32 Grenades);
+	void SetHUDSecondaryGrenade(int32 Grenades);
 	void SetHUDCarriedAmmo(int32 Ammo);
 	void SetHUDCarriedWeaponTexture(UTexture2D* CurrentWeaponTexture);
 	void SetHUDMatchCountdown(float CountdownTime);
@@ -46,7 +48,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
-
+	void PollInit();
 	/*
 	* Sync time between client and server
 	*/
@@ -99,4 +101,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundBase> WarmupCountdownSoundEnd;
+
+	int32 HUDGrenades;
 };

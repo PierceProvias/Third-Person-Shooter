@@ -45,10 +45,10 @@ public:
 	virtual void Fire(const FVector& HitTarget);
 	void Swapped();
 	void Dropped();
-
-	//
-	// Automatic Fire
-	// 
+	
+	/*
+	* Automatic fire
+	*/
 	
 	// Determines the rate of fire
 	UPROPERTY(EditAnywhere, Category = "Combat")
@@ -64,6 +64,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundCue> EquipSound;
 
+	
 	/*
 	* Enable or disable custom depth
 	*/
@@ -111,16 +112,9 @@ private:
 
 	UFUNCTION()
 	void OnRep_WeaponState();
-
 	
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UWidgetComponent> PickupWidget;
-	
-
-	/*
-		UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
-		TObjectPtr<UPickupWidget> PickupWidget;
-	*/
 
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	TObjectPtr<UAnimationAsset> FireAnimation;

@@ -3,7 +3,6 @@
 
 #include "CombatComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
-#include "Components/SphereComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -12,7 +11,6 @@
 #include "TimerManager.h"
 #include "Sound/SoundCue.h"
 #include "EnhancedInputSubsystems.h"
-#include "GameFramework/InputSettings.h"
 
 #include "../PlayerController/BlasterPlayerController.h"
 #include "../Weapons/Weapon.h"
@@ -67,9 +65,9 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
-	//DOREPLIFETIME(UCombatComponent, CurrentWeapon);
 	DOREPLIFETIME(UCombatComponent, bAiming);
 	DOREPLIFETIME(UCombatComponent, CombatState);
+	DOREPLIFETIME(UCombatComponent, GrenadeCount);
 	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 }
 void UCombatComponent::SetAiming(bool bIsAiming)
@@ -145,7 +143,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	UpdateWeapon2DTextures();
 	UpdateCarriedAmmo();
 	PlayEquipWeaponSound();
-	ReloadEmpyWeapon();
+	ReloadEmptyWeapon();
 
 	// Disable orient to movement so we can strafe
 	// NOTE: This will only be done on the server therefore we need to use a RepNotify
@@ -154,7 +152,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 }
 
-void UCombatComponent::ReloadEmpyWeapon()
+void UCombatComponent::ReloadEmptyWeapon()
 {
 	if (EquippedWeapon && EquippedWeapon->IsEmpty())
 	{
@@ -425,6 +423,20 @@ void UCombatComponent::UpdateWeapon2DTextures()
 	} 
 }
 
+void UCombatComponent::OnRep_GrenadeCount()
+{
+	UpdateHUDGrenadeCount();
+}
+
+void UCombatComponent::UpdateHUDGrenadeCount()
+{
+	BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
+	if (BlasterController)
+	{
+		BlasterController->SetHUDPrimaryGrenade(GrenadeCount);
+	}
+}
+
 void UCombatComponent::OnRep_CombatState()
 {
 	switch (CombatState)
@@ -468,7 +480,6 @@ void UCombatComponent::InterpFOV(float DeltaTime)
 
 void UCombatComponent::FireTimerStart()
 {
-	
 	if (EquippedWeapon == nullptr || BlasterCharacter == nullptr) return;
 	BlasterCharacter->GetWorldTimerManager().SetTimer(
 		FireTimer,
@@ -476,7 +487,7 @@ void UCombatComponent::FireTimerStart()
 		&UCombatComponent::FireTimerFinished,
 		EquippedWeapon->FireDelay 
 	);
-	ReloadEmpyWeapon();
+	ReloadEmptyWeapon();
 }
 
 void UCombatComponent::FireTimerFinished()
@@ -574,6 +585,7 @@ void UCombatComponent::Reload()
 
 void UCombatComponent::ThrowGrenade()
 {
+	if(GrenadeCount == 0) return;
 	if (CombatState != ECombatState::ECS_Unoccupied || EquippedWeapon == nullptr) return;
 	CombatState = ECombatState::ECS_ThrowingGrenade;
 	if (BlasterCharacter)
@@ -585,6 +597,11 @@ void UCombatComponent::ThrowGrenade()
 	if (BlasterCharacter && !BlasterCharacter->HasAuthority())
 	{
 		ServerThrowGrenade();	
+	}
+	if (BlasterCharacter && BlasterController->HasAuthority())
+	{
+		GrenadeCount = FMath::Clamp(GrenadeCount - 1, 0, MaxGrenades);
+		UpdateHUDGrenadeCount();
 	}
 }
 
@@ -633,6 +650,7 @@ void UCombatComponent::UpdateCarriedAmmo()
 
 void UCombatComponent::ServerThrowGrenade_Implementation()
 {
+	if(GrenadeCount == 0) return;
 	CombatState = ECombatState::ECS_ThrowingGrenade;
 	if (BlasterCharacter)
 	{
@@ -640,6 +658,8 @@ void UCombatComponent::ServerThrowGrenade_Implementation()
 		AttachActorToLeftHand(EquippedWeapon);
 		ShowAttachedGrenade(true);
 	}
+	GrenadeCount = FMath::Clamp(GrenadeCount - 1, 0, MaxGrenades);
+	UpdateHUDGrenadeCount();
 }
 
 void UCombatComponent::FinishedReloading()

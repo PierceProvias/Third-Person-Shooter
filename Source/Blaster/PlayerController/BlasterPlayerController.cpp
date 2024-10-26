@@ -16,7 +16,6 @@
 #include "../HUD/Announcement.h"
 #include "../GameStates/BlasterGameState.h"
 #include "../PlayerState/BlasterPlayerState.h"
-#include "../BlasterCharacterComponents/CombatComponent.h"
 #include "../Weapons/Weapon.h"
 
 #define RENDER_OPACITY_FULL 1.0f
@@ -74,6 +73,11 @@ void ABlasterPlayerController::SetHUDTime()
 		}
 	}
 	CountdownInt = SecondsLeft;
+}
+
+void ABlasterPlayerController::PollInit()
+{
+
 }
 
 void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
@@ -305,6 +309,40 @@ void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
 		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmountText->SetText(FText::FromString(AmmoText));
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmountText->SetRenderOpacity(RENDER_OPACITY_FULL);
+	}
+}
+
+void ABlasterPlayerController::SetHUDPrimaryGrenade(int32 Grenades)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	bool bHUDValid = BlasterHUD &&
+		BlasterHUD->CharacterOverlay &&
+		BlasterHUD->CharacterOverlay->PrimaryGrenadeCountText;
+
+	if (bHUDValid)
+	{
+		FString GrenadesText = FString::Printf(TEXT("%d"), Grenades);
+		BlasterHUD->CharacterOverlay->PrimaryGrenadeCountText->SetText(FText::FromString(GrenadesText));
+		BlasterHUD->CharacterOverlay->PrimaryGrenadeCountText->SetRenderOpacity(RENDER_OPACITY_FULL);
+	}
+	else
+	{
+		HUDGrenades = Grenades;
+	}
+}
+
+void ABlasterPlayerController::SetHUDSecondaryGrenade(int32 Grenades)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	bool bHUDValid = BlasterHUD &&
+		BlasterHUD->CharacterOverlay &&
+		BlasterHUD->CharacterOverlay->SecondaryGrenadeCountText;
+
+	if (bHUDValid)
+	{
+		FString GrenadesText = FString::Printf(TEXT("%d"), Grenades);
+		BlasterHUD->CharacterOverlay->SecondaryGrenadeCountText->SetText(FText::FromString(GrenadesText));
+		BlasterHUD->CharacterOverlay->SecondaryGrenadeCountText->SetRenderOpacity(RENDER_OPACITY_FULL);
 	}
 }
 

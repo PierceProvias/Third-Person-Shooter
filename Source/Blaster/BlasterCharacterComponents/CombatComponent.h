@@ -11,7 +11,6 @@
 
 #include "CombatComponent.generated.h"
 
-
 class AWeapon;
 class ABlasterPlayerController;
 class ABlasterHUD;
@@ -29,10 +28,8 @@ public:
 	friend class ABlasterCharacter;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 	
 	void EquipWeapon(AWeapon* WeaponToEquip);
-
 	
 	void DropCurrentWeapon();
 	void Reload();
@@ -97,12 +94,12 @@ protected:
 	TSubclassOf<AProjectile> GrenadeClass;
 
 	void SwapEquippedWeapon();
-	void AttachActorToCharacterSocket(AActor* ActorToAttach);
+	//void AttachActorToCharacterSocket(AActor* ActorToAttach);
 	void AttachActorToRightHand(AActor* ActorToAttach);
 	void AttachActorToLeftHand(AActor* ActorToAttach);
 	void UpdateCarriedAmmo();
 	void PlayEquipWeaponSound();
-	void ReloadEmpyWeapon();
+	void ReloadEmptyWeapon();
 	void ShowAttachedGrenade(bool bShowGrenade);
 private:
 
@@ -125,9 +122,9 @@ private:
 
 	bool bFireButtonPressed;
 
-	//
-	// HUD and Crosshairs
-	//
+	/*
+	 * HUD and crosshairs
+	 */
 	
 	FHUDPackage HUDPackage;
 
@@ -139,9 +136,9 @@ private:
 
 	FVector HitTarget;
 
-	//
-	// Aiming and FOV
-	//
+	/*
+	 * Aiming and FOV
+	 */
 
 	// Field of view when not aiming; set to the camera's base FOV in BeginPlay
 	float DefaultFOV;
@@ -219,6 +216,15 @@ private:
 	UPROPERTY(EditAnywhere)
 	float GrenadeSpawnDifferential = 1.f;
 
-public:	
 
+	UPROPERTY(ReplicatedUsing = OnRep_GrenadeCount)
+	int32 GrenadeCount = 4;
+
+	UFUNCTION()
+	void OnRep_GrenadeCount();
+	
+	UPROPERTY(EditAnywhere)
+	int32 MaxGrenades = 4;
+
+	void UpdateHUDGrenadeCount();
 };

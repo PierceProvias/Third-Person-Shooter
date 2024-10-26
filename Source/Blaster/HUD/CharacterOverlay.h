@@ -41,4 +41,11 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UImage> WeaponImage;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> PrimaryGrenadeCountText;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> SecondaryGrenadeCountText;
+	
 };
