@@ -433,7 +433,7 @@ void UCombatComponent::UpdateHUDGrenadeCount()
 	BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
 	if (BlasterController)
 	{
-		BlasterController->SetHUDPrimaryGrenade(GrenadeCount);
+		BlasterController->SetHUDPrimaryGrenades(GrenadeCount);
 	}
 }
 

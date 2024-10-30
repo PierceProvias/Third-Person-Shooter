@@ -19,7 +19,7 @@
 #include "../Weapons/Weapon.h"
 
 #define RENDER_OPACITY_FULL 1.0f
-
+#define RENDER_OPACITY_EMPTY 0.f
 void ABlasterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -34,6 +34,7 @@ void ABlasterPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	SetHUDTime();
 	CheckTimeSync(DeltaTime);
+	PollInit();
 }
 
 void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -77,7 +78,25 @@ void ABlasterPlayerController::SetHUDTime()
 
 void ABlasterPlayerController::PollInit()
 {
-
+	if(CharacterOverlay == nullptr)
+	{
+		if(BlasterHUD && BlasterHUD->CharacterOverlay)
+		{
+			if(CharacterOverlay)
+			{
+				if(bInitializeHealth)					SetHUDHealth(HUDHealth, HUDMaxHealth);
+				if(bInitializeCarriedAmmo)				SetHUDCarriedAmmo(HUDCarriedAmmo);
+				if(bInitializeWeaponAmmo)				SetHUDWeaponAmmo(HUDWeaponAmmo);
+				
+				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
+				if(BlasterCharacter && BlasterCharacter->GetCombatComponent())
+				{
+					if(bInitializePrimaryGrenades)		SetHUDPrimaryGrenades(HUDPrimaryGrenades);
+					if(bInitializeSecondaryGrenades)	SetHUDSecondaryGrenades(HUDSecondaryGrenades);
+				}
+			}
+		}
+	}
 }
 
 void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
@@ -216,7 +235,6 @@ void ABlasterPlayerController::HandleCooldown()
 	}
 }
 
-
 void ABlasterPlayerController::HandleMatchHasStarted()
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
@@ -256,6 +274,12 @@ void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 		BlasterHUD->CharacterOverlay->HealthBar->SetPercent(HealthPercent);
 		FString HealthText = FString::Printf(TEXT("%d/%d"), FMath::CeilToInt(Health), FMath::CeilToInt(MaxHealth));
 		BlasterHUD->CharacterOverlay->HealthText->SetText(FText::FromString(HealthText));
+	}
+	else
+	{
+		bInitializeHealth = true;
+		HUDHealth = Health;
+		HUDMaxHealth = MaxHealth;
 	}
 }
 
@@ -310,9 +334,14 @@ void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmountText->SetText(FText::FromString(AmmoText));
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmountText->SetRenderOpacity(RENDER_OPACITY_FULL);
 	}
+	else
+	{
+		bInitializeWeaponAmmo = true;
+		HUDWeaponAmmo = Ammo;
+	}
 }
 
-void ABlasterPlayerController::SetHUDPrimaryGrenade(int32 Grenades)
+void ABlasterPlayerController::SetHUDPrimaryGrenades(int32 Grenades)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	bool bHUDValid = BlasterHUD &&
@@ -327,11 +356,12 @@ void ABlasterPlayerController::SetHUDPrimaryGrenade(int32 Grenades)
 	}
 	else
 	{
-		HUDGrenades = Grenades;
+		bInitializePrimaryGrenades = true;
+		HUDPrimaryGrenades = Grenades;
 	}
 }
 
-void ABlasterPlayerController::SetHUDSecondaryGrenade(int32 Grenades)
+void ABlasterPlayerController::SetHUDSecondaryGrenades(int32 Grenades)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	bool bHUDValid = BlasterHUD &&
@@ -343,6 +373,11 @@ void ABlasterPlayerController::SetHUDSecondaryGrenade(int32 Grenades)
 		FString GrenadesText = FString::Printf(TEXT("%d"), Grenades);
 		BlasterHUD->CharacterOverlay->SecondaryGrenadeCountText->SetText(FText::FromString(GrenadesText));
 		BlasterHUD->CharacterOverlay->SecondaryGrenadeCountText->SetRenderOpacity(RENDER_OPACITY_FULL);
+	}
+	else
+	{
+		bInitializeSecondaryGrenades = true;
+		HUDSecondaryGrenades = Grenades;
 	}
 }
 
@@ -358,6 +393,11 @@ void ABlasterPlayerController::SetHUDCarriedAmmo(int32 Ammo)
 		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->CarriedAmmoAmountText->SetText(FText::FromString(AmmoText));
 		BlasterHUD->CharacterOverlay->CarriedAmmoAmountText->SetRenderOpacity(RENDER_OPACITY_FULL);
+	}
+	else
+	{
+		bInitializeCarriedAmmo = true;
+		HUDCarriedAmmo = Ammo;
 	}
 }
 

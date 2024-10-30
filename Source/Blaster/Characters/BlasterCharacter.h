@@ -325,7 +325,7 @@ public:
 	FORCEINLINE UInputMappingContext* GetCharacterInputMappingContext() const { return CharacterMappingContext; }
 	FORCEINLINE UInputAction* GetFireAction() const { return FireAction; }
 	FORCEINLINE UStaticMeshComponent* GetAttachedGrenade() const { return AttachedGrenade; }
-
+	FORCEINLINE UCombatComponent* GetCombatComponent() const {return CombatComponent;}
 	ECombatState GetCombatState() const;
 
 	AWeapon* GetEquippedWeapon();

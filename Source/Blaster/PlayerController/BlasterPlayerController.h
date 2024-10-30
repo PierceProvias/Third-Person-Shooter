@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class UCharacterOverlay;
 class ABlasterHUD;
 class ABlasterGameMode;
 class UInputMappingContext;
@@ -24,8 +25,8 @@ public:
 	void SetHUDScore(float Score);
 	void SetHUDDeaths(int32 Deaths);
 	void SetHUDWeaponAmmo(int32 Ammo);
-	void SetHUDPrimaryGrenade(int32 Grenades);
-	void SetHUDSecondaryGrenade(int32 Grenades);
+	void SetHUDPrimaryGrenades(int32 Grenades);
+	void SetHUDSecondaryGrenades(int32 Grenades);
 	void SetHUDCarriedAmmo(int32 Ammo);
 	void SetHUDCarriedWeaponTexture(UTexture2D* CurrentWeaponTexture);
 	void SetHUDMatchCountdown(float CountdownTime);
@@ -81,6 +82,7 @@ protected:
 
 private:
 	TObjectPtr<ABlasterHUD> BlasterHUD;
+	TObjectPtr<UCharacterOverlay> CharacterOverlay;
 	float LevelStartingTime = 0.f;
 	float WarmupTime = 0.f;
 	float MatchTime = 0.f;	// Player controller should be getting the match time from the game mode
@@ -102,5 +104,18 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundBase> WarmupCountdownSoundEnd;
 
-	int32 HUDGrenades;
+	float HUDHealth;
+	float HUDMaxHealth;
+	bool bInitializeHealth = false;
+	
+	
+	int32 HUDPrimaryGrenades;
+	bool bInitializePrimaryGrenades = false;
+	int32 HUDSecondaryGrenades;
+	bool bInitializeSecondaryGrenades = false;
+	float HUDCarriedAmmo;
+	bool bInitializeCarriedAmmo = false;
+	float HUDWeaponAmmo;
+	bool bInitializeWeaponAmmo = false;
+	
 };
