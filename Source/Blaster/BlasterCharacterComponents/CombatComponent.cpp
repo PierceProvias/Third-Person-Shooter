@@ -67,7 +67,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
 	DOREPLIFETIME(UCombatComponent, bAiming);
 	DOREPLIFETIME(UCombatComponent, CombatState);
-	DOREPLIFETIME(UCombatComponent, GrenadeCount);
+	DOREPLIFETIME_CONDITION(UCombatComponent, GrenadeCount, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 }
 void UCombatComponent::SetAiming(bool bIsAiming)

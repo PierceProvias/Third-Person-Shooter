@@ -740,6 +740,7 @@ void ABlasterCharacter::PlayHitReactMontage()
 
 void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
 {
+	if(bElimmed) return;
 	// Since this is a replicated variable and sent to all clients, we do not need a MultiHit RPC. Variable replication is less expensive
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 	PlayHitReactMontage();
