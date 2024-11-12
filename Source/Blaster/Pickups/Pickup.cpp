@@ -44,7 +44,12 @@ void APickup::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 void APickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if(PickupMesh)
+	{
+		RunningTime += DeltaTime;
+		AddActorWorldOffset(FVector(0.f, 0.f, TransformedSin()));
+		AddActorWorldRotation(FRotator(0.f, 1.f, 0.f));
+	}
 }
 
 void APickup::Destroyed()
@@ -58,5 +63,10 @@ void APickup::Destroyed()
 			PickupSound,
 			GetActorLocation());
 	}
+}
+
+float APickup::TransformedSin()
+{
+	return FMath::Sin(TimeConstant * RunningTime) * Amplitude;
 }
 

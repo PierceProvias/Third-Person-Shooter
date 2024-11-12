@@ -18,6 +18,9 @@ public:
 	APickup();
 	virtual void Tick(float DeltaTime) override;
 	virtual void Destroyed() override;
+
+	UFUNCTION(BlueprintCallable)
+	float TransformedSin();
 protected:
 	
 	virtual void BeginPlay() override;
@@ -32,6 +35,17 @@ protected:
 		const FHitResult& SweepResult
 	);
 
+	UPROPERTY(EditAnywhere)
+	float BaseTurnRate = 45.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sinusoids")
+	float Amplitude = 5.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sinusoids")
+	float TimeConstant = 5.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sinusoids")
+	float RunningTime;
 private:
 
 	UPROPERTY(EditAnywhere)
