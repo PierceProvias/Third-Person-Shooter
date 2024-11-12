@@ -11,6 +11,7 @@
 
 #include "BlasterCharacter.generated.h"
 
+class UBuffComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -182,6 +183,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCombatComponent> CombatComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UBuffComponent> BuffComponent;
 	
 	// Remote Procedure Calls (RPC) allow for clients to send information to the server
 	// A RPC will be called from the client and executed on the server (AKA a server RPC)

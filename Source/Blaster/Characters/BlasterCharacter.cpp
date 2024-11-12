@@ -15,6 +15,7 @@
 
 #include "../Weapons/Weapon.h"
 #include "../BlasterCharacterComponents/CombatComponent.h"
+#include "../BlasterCharacterComponents/BuffComponent.h"
 #include "../Characters/BlasterAnimInstance.h"
 #include "../Blaster.h"
 #include "../PlayerController/BlasterPlayerController.h"
@@ -55,10 +56,14 @@ ABlasterCharacter::ABlasterCharacter()
 	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Overhead Widget"));
 	OverheadWidget->SetupAttachment(RootComponent);
 
-	// Combat
+	// Combat component
 	CombatComponent = CreateDefaultSubobject<UCombatComponent>(TEXT("Combat Component"));
 	CombatComponent->SetIsReplicated(true); // No need to register in Props array (components never do)
 
+	// Buff component
+	BuffComponent = CreateDefaultSubobject<UBuffComponent>(TEXT("Buff Component"));
+	BuffComponent->SetIsReplicated(true); // No need to register in Props array (components never do)
+	
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
@@ -647,6 +652,10 @@ void ABlasterCharacter::PostInitializeComponents()
 	if (CombatComponent)
 	{
 		CombatComponent->BlasterCharacter = this;
+	}
+	if(BuffComponent)
+	{
+		BuffComponent->BlasterCharacter = this;
 	}
 }
 
