@@ -177,7 +177,7 @@ private:
 
 	TMap<EWeaponType, int32> CarriedAmmoMap;	// TMap isn't replicated!
 
-	UPROPERTY(EditAnywhere = Category = "Starting Ammo")
+	UPROPERTY(EditAnywhere, Category = "Starting Ammo")
 	int32 MaxCarriedAmmo = 500;
 	/*
 	* Starting ammo for each weapon type

@@ -10,12 +10,12 @@ void AAmmoPickup::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 {
 	Super::OnSphereOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-	if(ABlasterCharacter* Blaster = Cast<ABlasterCharacter>(OtherActor))
+	if(ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(OtherActor))
 	{
-		if(UCombatComponent* CombatComponent = Cast<UCombatComponent>(OtherComp))
+		if(UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
 		{
 			CombatComponent->PickupAmmo(WeaponType, AmmoAmount);
 		}
 	}
-	Destroy();
+	Destroy(); 
 }
