@@ -47,7 +47,7 @@ void APickup::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 void APickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if(PickupMesh)
+	if(PickupMesh && bShouldTransform)
 	{
 		RunningTime += DeltaTime;
 		AddActorWorldOffset(FVector(0.f, 0.f, TransformedSin()));

@@ -24,7 +24,7 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
-
+	bool bShouldTransform = true;
 	UFUNCTION()
 	virtual void OnSphereOverlap(
 		UPrimitiveComponent* OverlappedComponent,
@@ -59,5 +59,5 @@ private:
 	
 public:	
 	
-
+	FORCEINLINE USphereComponent* GetOverlapSphere() const { return OverlapSphere; }
 };
