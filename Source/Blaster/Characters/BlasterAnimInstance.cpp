@@ -92,8 +92,6 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	bUseFABRIK			= BlasterCharacter->GetCombatState() == ECombatState::ECS_Unoccupied;
 	bUseAimOffsets		= BlasterCharacter->GetCombatState() == ECombatState::ECS_Unoccupied;
 	bTransformRightHand = BlasterCharacter->GetCombatState() != ECombatState::ECS_Unoccupied;
-
-	
 }
 
 void UBlasterAnimInstance::Weapon_Crosshairs_DebugLines(bool TurnOn)
@@ -105,6 +103,4 @@ void UBlasterAnimInstance::Weapon_Crosshairs_DebugLines(bool TurnOn)
 		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), MuzzleTipTransform.GetLocation() + MuzzleX * 1000.f, FColor::Red);
 		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Orange);
 	}
-	else
-		return;
 }
