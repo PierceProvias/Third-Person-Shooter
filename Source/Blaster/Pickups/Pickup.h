@@ -8,6 +8,9 @@
 
 class USphereComponent;
 class USoundCue;
+class UNiagaraComponent;
+class UNiagaraSystem;
+
 UCLASS()
 class BLASTER_API APickup : public AActor
 {
@@ -57,7 +60,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	TObjectPtr<UStaticMeshComponent> PickupMesh;
 	
+	UPROPERTY(VisibleAnywhere, Category = "Niagara")
+	TObjectPtr<UNiagaraComponent> PickupEffectComponent;
+    	
+	UPROPERTY(EditAnywhere, Category = "Niagara")
+	TObjectPtr<UNiagaraSystem> PickupEffect;
+	
 public:	
 	
 	FORCEINLINE USphereComponent* GetOverlapSphere() const { return OverlapSphere; }
+	FORCEINLINE UNiagaraComponent* GetPickupEffectComponent() const { return PickupEffectComponent; }
+	FORCEINLINE UNiagaraSystem* GetPickupEffect() const { return PickupEffect; }
 };

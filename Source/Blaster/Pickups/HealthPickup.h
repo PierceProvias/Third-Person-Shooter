@@ -34,9 +34,5 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Health")
 	float HealingTime = 5.f;	// Health will increase gradually
 
-	UPROPERTY(VisibleAnywhere, Category = "Niagara")
-	TObjectPtr<UNiagaraComponent> PickupEffectComponent;
 	
-	UPROPERTY(EditAnywhere, Category = "Niagara")
-	TObjectPtr<UNiagaraSystem> PickupEffect;
 };

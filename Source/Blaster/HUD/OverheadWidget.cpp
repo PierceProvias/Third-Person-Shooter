@@ -51,7 +51,5 @@ void UOverheadWidget::ShowPlayerName(APawn* InPawn)
 		FString PlayerName = PlayerState->GetPlayerName();
 		SetDisplayText(PlayerName);
 	}
-	
-
 }
 

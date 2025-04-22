@@ -6,6 +6,8 @@
 #include "../Characters/BlasterCharacter.h"
 #include "../PlayerState/BlasterPlayerState.h" 
 #include "../GameStates/BlasterGameState.h"
+#include "GameFramework/PlayerController.h"
+#include "Camera/CameraComponent.h"
 
 namespace MatchState
 {
@@ -71,6 +73,7 @@ void ABlasterGameMode::Tick(float DeltaTime)
 void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
 {
 	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
+	
 	ABlasterPlayerState* VictimPlayerState = VictimController? Cast<ABlasterPlayerState>(VictimController->PlayerState) : nullptr;
 	ABlasterGameState* BlasterGameState = GetGameState<ABlasterGameState>();
 
@@ -85,6 +88,15 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABl
 	}
 	if (ElimmedCharacter)
 	{
+		// TODO: Make camera black and white when dead
+		if (!HasAuthority())
+		{
+			Server_SwitchToAttackerCamera(VictimController, AttackerController);
+		}
+		else
+		{
+			Client_SwitchToAttackerCamera(VictimController, AttackerController);
+		}
 		ElimmedCharacter->Elim();
 	}
 }
@@ -104,3 +116,26 @@ void ABlasterGameMode::RequestRespawn(ACharacter* ElimmedCharacter, AController*
 		RestartPlayerAtPlayerStart(ElimmedController, PlayerStarts[Selection]);
 	}
 }
+
+void ABlasterGameMode::Server_SwitchToAttackerCamera_Implementation(ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
+{
+	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
+	ABlasterPlayerState* VictimPlayerState = VictimController? Cast<ABlasterPlayerState>(VictimController->PlayerState) : nullptr;
+	
+	if ( AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
+	{
+		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), 1.0f);
+	}
+}
+
+void ABlasterGameMode::Client_SwitchToAttackerCamera_Implementation(ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
+{
+	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
+	ABlasterPlayerState* VictimPlayerState = VictimController? Cast<ABlasterPlayerState>(VictimController->PlayerState) : nullptr;
+	
+	if ( AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
+	{
+		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), 1.0f);
+	}
+}
+
