@@ -7,7 +7,8 @@
 #include "../PlayerState/BlasterPlayerState.h" 
 #include "../GameStates/BlasterGameState.h"
 #include "GameFramework/PlayerController.h"
-#include "Camera/CameraComponent.h"
+
+#define VICTIM_TARGET_BLEND 0.5f
 
 namespace MatchState
 {
@@ -124,7 +125,8 @@ void ABlasterGameMode::Server_SwitchToAttackerCamera_Implementation(ABlasterPlay
 	
 	if ( AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
 	{
-		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), 1.0f);
+		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), VICTIM_TARGET_BLEND);
+		VictimController->SetAttackerCam(AttackerController);
 	}
 }
 
@@ -135,7 +137,8 @@ void ABlasterGameMode::Client_SwitchToAttackerCamera_Implementation(ABlasterPlay
 	
 	if ( AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
 	{
-		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), 1.0f);
+		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), VICTIM_TARGET_BLEND);
+		VictimController->SetAttackerCam(AttackerController);
 	}
 }
 

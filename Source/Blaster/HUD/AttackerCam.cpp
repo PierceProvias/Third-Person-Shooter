@@ -5,17 +5,16 @@
 #include "Components/TextBlock.h"
 #include "GameFramework/PlayerState.h"
 
-void UAttackerCam::SetDisplayText(FString TextToDisplay)
+void UAttackerCam::SetDisplayText (FString TextToDisplay)
 {
-	if (DisplayText)
+	if (AttackerName.IsValid())
 	{
-		DisplayText->SetText(FText::FromString(TextToDisplay));
+		AttackerName.Get()->SetText(FText::FromString(TextToDisplay));
 	}
 }
 
 void UAttackerCam::ShowPlayerName(APawn* InPawn)
 {
-	
 	if (APlayerState* PlayerState = InPawn->GetPlayerState())
 	{
 		FString PlayerName = PlayerState->GetPlayerName();

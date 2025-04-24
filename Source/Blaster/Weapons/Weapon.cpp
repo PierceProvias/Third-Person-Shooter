@@ -182,10 +182,10 @@ void AWeapon::SpendRound()
 void AWeapon::SetHUDAmmo()
 {
 	BlasterOwnerCharacter = BlasterOwnerCharacter == nullptr ? Cast<ABlasterCharacter>(GetOwner()) : BlasterOwnerCharacter;
-	if (BlasterOwnerCharacter)
+	if (BlasterOwnerCharacter.IsValid())
 	{
 		BlasterOwnerController = BlasterOwnerController == nullptr ? Cast < ABlasterPlayerController>(BlasterOwnerCharacter->Controller) : BlasterOwnerController;
-		if (BlasterOwnerController)
+		if (BlasterOwnerController.IsValid())
 		{
 			BlasterOwnerController->SetHUDWeaponAmmo(Ammo);
 		}
@@ -258,7 +258,8 @@ void AWeapon::SetPickupWidgetWeaponInfo()
 {
 	if (PickupWidget && Weapon2DTexture)
 	{
-		if (PickupWidgetInstance)
+		bool bPickupWidgetIsValid = PickupWidgetInstance.IsValid() && PickupWidgetInstance->WeaponImage.IsValid() && PickupWidgetInstance->AmmoText.IsValid() && PickupWidgetInstance->WeaponName.IsValid();
+		if (bPickupWidgetIsValid)
 		{
 			PickupWidgetInstance->WeaponImage->SetBrushFromTexture(Weapon2DTexture);
 			FString AmmoText = FString::Printf(TEXT("%d"), Ammo);

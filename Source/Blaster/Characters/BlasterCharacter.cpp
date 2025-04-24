@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "UObject/WeakObjectPtrTemplates.h"
 
 #include "../Weapons/Weapon.h"
 #include "../BlasterCharacterComponents/CombatComponent.h"
@@ -313,7 +314,7 @@ void ABlasterCharacter::EquipButtonPressed()
 {
 	if (CombatComponent)
 	{
-		if (HasAuthority())
+		if (HasAuthority() && OverlappingWeapon)
 		{
 			CombatComponent->EquipWeapon(OverlappingWeapon);
 		}
@@ -506,7 +507,7 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 	
 	if (CombatComponent)
 	{
-		CombatComponent->EquipWeapon(OverlappingWeapon);
+		CombatComponent->EquipWeapon(OverlappingWeapon.Get());
 	}
 }
 

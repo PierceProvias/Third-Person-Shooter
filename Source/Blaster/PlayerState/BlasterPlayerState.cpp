@@ -21,10 +21,10 @@ void ABlasterPlayerState::OnRep_Score()
 	Super::OnRep_Score();
 
 	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
-	if (BlasterCharacter)
+	if (BlasterCharacter.IsValid())
 	{
 		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
-		if (BlasterController)
+		if (BlasterController.IsValid())
 		{
 			BlasterController->SetHUDScore(GetScore());
 		}
@@ -34,10 +34,10 @@ void ABlasterPlayerState::OnRep_Score()
 void ABlasterPlayerState::OnRep_Deaths()
 {
 	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
-	if (BlasterCharacter)
+	if (BlasterCharacter.IsValid())
 	{
 		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
-		if (BlasterController)
+		if (BlasterController.IsValid())
 		{
 			BlasterController->SetHUDDeaths(Deaths);
 		}
@@ -49,10 +49,10 @@ void ABlasterPlayerState::AddToScore(float ScoreAmount)
 {
 	SetScore(GetScore() + ScoreAmount);
 	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
-	if (BlasterCharacter)
+	if (BlasterCharacter.IsValid())
 	{
 		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
-		if (BlasterController)
+		if (BlasterController.IsValid())
 		{
 			BlasterController->SetHUDScore(GetScore());
 		}
@@ -63,10 +63,10 @@ void ABlasterPlayerState::AddToDeaths(int32 DeathsAmount)
 {
 	Deaths += DeathsAmount;
 	BlasterCharacter = BlasterCharacter == nullptr ? Cast<ABlasterCharacter>(GetPawn()) : BlasterCharacter;
-	if (BlasterCharacter)
+	if (BlasterCharacter.IsValid())
 	{
 		BlasterController = BlasterController == nullptr ? Cast<ABlasterPlayerController>(BlasterCharacter->Controller) : BlasterController;
-		if (BlasterController)
+		if (BlasterController.IsValid())
 		{
 			BlasterController->SetHUDDeaths(Deaths);
 		}

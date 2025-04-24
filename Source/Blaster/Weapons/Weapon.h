@@ -128,8 +128,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Ammo")
 	int32 MagCapacity;
 
-	TObjectPtr<ABlasterCharacter> BlasterOwnerCharacter;
-	TObjectPtr<ABlasterPlayerController> BlasterOwnerController;
+	TWeakObjectPtr<ABlasterCharacter> BlasterOwnerCharacter;
+	TWeakObjectPtr<ABlasterPlayerController> BlasterOwnerController;
 
 	UFUNCTION()
 	void OnRep_Ammo();
@@ -171,7 +171,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Icon")
 	TObjectPtr<UMapIconComponent> WeaponMapIcon;
 
-	TObjectPtr<UPickupWidget> PickupWidgetInstance;
+	TWeakObjectPtr<UPickupWidget> PickupWidgetInstance;
 public:	
 	
 	void SetWeaponState(EWeaponState State);

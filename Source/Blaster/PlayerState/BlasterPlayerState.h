@@ -30,8 +30,8 @@ public:
 	
 private:
 
-	TObjectPtr<ABlasterCharacter> BlasterCharacter;
-	TObjectPtr<ABlasterPlayerController> BlasterController;
+	TWeakObjectPtr<ABlasterCharacter> BlasterCharacter;
+	TWeakObjectPtr<ABlasterPlayerController> BlasterController;
 	
 	UPROPERTY(ReplicatedUsing = OnRep_Deaths)
 	int32 Deaths;

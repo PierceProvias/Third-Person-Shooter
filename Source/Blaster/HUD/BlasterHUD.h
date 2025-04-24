@@ -9,6 +9,7 @@
 class UTexture2D;
 class UCharacterOverlay;
 class UAnnouncement;
+class UAttackerCam;
 
 USTRUCT(BlueprintType)
 struct FHUDPackage
@@ -39,16 +40,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	TSubclassOf<UUserWidget> CharacterOverlayClass;
 
-	TObjectPtr<UCharacterOverlay> CharacterOverlay;
-
-
 	UPROPERTY(EditAnywhere, Category = "Annoucements")
 	TSubclassOf<UUserWidget> AnnouncementClass;
-
-	TObjectPtr<UAnnouncement> Annoucement;
-
+	
+	UPROPERTY(EditAnywhere, Category = "Annoucements")
+    TSubclassOf<UUserWidget> AttackerCamClass;
+    	
+	TObjectPtr<UCharacterOverlay> CharacterOverlay;
+	TWeakObjectPtr<UAnnouncement> Announcement;
+	TObjectPtr<UAttackerCam> AttackerCam;
+	
 	void AddCharacterOverlay();
 	void AddAnnouncement();
+	void AddAttackerCam();
 protected:
 
 	virtual void BeginPlay() override;

@@ -10,7 +10,6 @@ class UProgressBar;
 class UTextBlock;
 class UImage;
 
-
 UCLASS()
 class BLASTER_API UCharacterOverlay : public UUserWidget
 {

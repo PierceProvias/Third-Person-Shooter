@@ -5,6 +5,7 @@
 #include "GameFramework/PlayerController.h"
 #include "CharacterOverlay.h"
 #include "Announcement.h"
+#include "AttackerCam.h"
 
 
 void ABlasterHUD::BeginPlay()
@@ -12,7 +13,9 @@ void ABlasterHUD::BeginPlay()
 	Super::BeginPlay();
 
 	AddCharacterOverlay();
+	AddAttackerCam();
 	CharacterOverlay->SetVisibility(ESlateVisibility::Hidden);
+	AttackerCam->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ABlasterHUD::DrawHUD()
@@ -54,7 +57,6 @@ void ABlasterHUD::DrawHUD()
 	}
 }
 
-
 void ABlasterHUD::AddCharacterOverlay()
 {	
 	APlayerController* PlayerController = GetOwningPlayerController();
@@ -68,10 +70,20 @@ void ABlasterHUD::AddCharacterOverlay()
 void ABlasterHUD::AddAnnouncement()
 {
 	APlayerController* PlayerController = GetOwningPlayerController();
-	if (PlayerController && AnnouncementClass && Annoucement == nullptr)
+	if (PlayerController && AnnouncementClass && !Announcement.IsValid())
 	{
-		Annoucement = CreateWidget<UAnnouncement>(PlayerController, AnnouncementClass);
-		Annoucement->AddToViewport();
+		Announcement = CreateWidget<UAnnouncement>(PlayerController, AnnouncementClass);
+		Announcement->AddToViewport();
+	}
+}
+
+void ABlasterHUD::AddAttackerCam()
+{
+	APlayerController* PlayerController = GetOwningPlayerController();
+	if (PlayerController && AttackerCamClass && AttackerCam == nullptr)
+	{
+		AttackerCam = CreateWidget<UAttackerCam>(PlayerController, AttackerCamClass);
+		AttackerCam->AddToViewport();
 	}
 }
 

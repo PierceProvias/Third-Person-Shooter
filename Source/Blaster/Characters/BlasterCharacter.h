@@ -38,7 +38,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Must be overidded in any class that we choose to replicate variables
+	// Must be overrided in any class that we choose to replicate variables
 	// This is where we register variables to be replicated
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
@@ -112,7 +112,7 @@ protected:
 	
 	
 
-	// Binded to OnTakeAnyDamage delegate (needs UFUNCTION macro)
+	// Bound to OnTakeAnyDamage delegate (needs UFUNCTION macro)
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
 	
@@ -240,7 +240,7 @@ private:
 	float CalculateSpeed();
 
 	/*
-	* Player health (Implementated in the character class instead of the player state due to faster replication)
+	* Player health (Implemented in the character class instead of the player state due to faster replication)
 	*/
 	
 	UPROPERTY(EditAnywhere, Category = "Player Stats")

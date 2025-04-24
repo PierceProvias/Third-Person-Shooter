@@ -17,6 +17,7 @@
 #include "../GameStates/BlasterGameState.h"
 #include "../PlayerState/BlasterPlayerState.h"
 #include "../Weapons/Weapon.h"
+#include "../HUD/AttackerCam.h"
 
 #define RENDER_OPACITY_FULL 1.0f
 #define RENDER_OPACITY_EMPTY 0.f
@@ -56,7 +57,7 @@ void ABlasterPlayerController::SetHUDTime()
 	if (HasAuthority())
 	{
 		GameMode = GameMode == nullptr ? Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this)) : GameMode;
-		if (GameMode)
+		if (GameMode.IsValid())
 		{
 			SecondsLeft = FMath::CeilToInt(GameMode->GetCountdownTime() + LevelStartingTime);
 		}
@@ -80,9 +81,9 @@ void ABlasterPlayerController::PollInit()
 {
 	if(CharacterOverlay == nullptr)
 	{
-		if(BlasterHUD && BlasterHUD->CharacterOverlay)
+		if(BlasterHUD.IsValid() && BlasterHUD->CharacterOverlay)
 		{
-			if(CharacterOverlay)
+			if(CharacterOverlay.IsValid())
 			{
 				if(bInitializeHealth)					SetHUDHealth(HUDHealth, HUDMaxHealth);
 				if(bInitializeCarriedAmmo)				SetHUDCarriedAmmo(HUDCarriedAmmo);
@@ -97,6 +98,22 @@ void ABlasterPlayerController::PollInit()
 			}
 		}
 	}
+	if (AttackerCam == nullptr)
+	{
+		if (BlasterHUD.IsValid() && BlasterHUD->AttackerCam)
+		{
+			if (AttackerCam.IsValid())
+			{
+				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
+				ABlasterPlayerController* BlasterPlayerController = Cast<ABlasterPlayerController>(GetPawn());
+				if (BlasterCharacter && BlasterPlayerController && BlasterCharacter->IsElimmed())
+				{
+					SetAttackerCam(BlasterPlayerController);
+				}
+			}
+		}
+	}
+	
 }
 
 void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
@@ -119,7 +136,7 @@ void ABlasterPlayerController::ClientJoinMidGame_Implementation(FName StateOfMat
 	MatchState			= StateOfMatch;
 	
 	OnMatchStateSet(MatchState);
-	if (BlasterHUD && MatchState == MatchState::WaitingToStart)
+	if (BlasterHUD.IsValid() && MatchState == MatchState::WaitingToStart)
 	{
 		BlasterHUD->AddAnnouncement();
 	}
@@ -136,7 +153,7 @@ void ABlasterPlayerController::ServerCheckMatchState_Implementation()
 		MatchState			= BlasterGameMode->GetMatchState();
 		
 		ClientJoinMidGame(MatchState, WarmupTime, MatchTime, CooldownTime, LevelStartingTime);
-		if (BlasterHUD && MatchState == MatchState::WaitingToStart)
+		if (BlasterHUD.IsValid() && MatchState == MatchState::WaitingToStart)
 		{
 			BlasterHUD->AddAnnouncement();
 		}
@@ -150,9 +167,9 @@ void ABlasterPlayerController::OnRep_MatchState()
 	
 	if (MatchState == MatchState::WaitingToStart)
 	{
-		if (BlasterHUD && BlasterHUD->Annoucement)
+		if (BlasterHUD && BlasterHUD->Announcement)
 		{
-			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Visible);
+			BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
 	*/
@@ -183,19 +200,20 @@ void ABlasterPlayerController::OnMatchStateSet(FName State)
 
 void ABlasterPlayerController::HandleCooldown()
 {
-	if (BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD)
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	if (BlasterHUD.IsValid())
 	{
 		BlasterHUD->CharacterOverlay->RemoveFromParent();
 
-		bool bHUDValid = BlasterHUD->Annoucement && 
-			BlasterHUD->Annoucement->AnnouncementText && 
-			BlasterHUD->Annoucement->InfoText;
+		bool bHUDValid = BlasterHUD->Announcement.IsValid() && 
+			BlasterHUD->Announcement->AnnouncementText.IsValid() && 
+			BlasterHUD->Announcement->InfoText.IsValid();
 
 		if (bHUDValid)
 		{
-			BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Visible);
+			BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
 			FString AnnouncementText("New Match Starts In: ");
-			BlasterHUD->Annoucement->AnnouncementText->SetText(FText::FromString(AnnouncementText));
+			BlasterHUD->Announcement->AnnouncementText->SetText(FText::FromString(AnnouncementText));
 			ABlasterGameState* BlasterGameState = Cast<ABlasterGameState>(UGameplayStatics::GetGameState(this));
 			ABlasterPlayerState* BlasterPlayerState = GetPlayerState<ABlasterPlayerState>();
 
@@ -223,7 +241,7 @@ void ABlasterPlayerController::HandleCooldown()
 						InfoTextString.Append(FString::Printf(TEXT("%s\n"), *TiedPlayer->GetPlayerName()));
 					}
 				}
-				BlasterHUD->Annoucement->InfoText->SetText(FText::FromString(InfoTextString));
+				BlasterHUD->Announcement->InfoText->SetText(FText::FromString(InfoTextString));
 			}
 
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
@@ -239,10 +257,10 @@ void ABlasterPlayerController::HandleMatchHasStarted()
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 
-	if (BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->Annoucement)
+	if (BlasterHUD.IsValid() && BlasterHUD->CharacterOverlay && BlasterHUD->Announcement.IsValid())
 	{
 		BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Visible);
-		BlasterHUD->Annoucement->SetVisibility(ESlateVisibility::Hidden);
+		BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Hidden);
 	}	
 }
 
@@ -263,7 +281,7 @@ void ABlasterPlayerController::ClientReportServerTime_Implementation(float TimeO
 void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->HealthBar &&
 		BlasterHUD->CharacterOverlay->HealthText;
@@ -296,7 +314,7 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 void ABlasterPlayerController::SetHUDScore(float Score)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->ScoreAmountText;
 
@@ -310,8 +328,8 @@ void ABlasterPlayerController::SetHUDScore(float Score)
 void ABlasterPlayerController::SetHUDDeaths(int32 Deaths)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
-		BlasterHUD->CharacterOverlay &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
+		BlasterHUD->CharacterOverlay&&
 		BlasterHUD->CharacterOverlay->DeathsAmountText;
 
 	if (bHUDValid)
@@ -324,7 +342,7 @@ void ABlasterPlayerController::SetHUDDeaths(int32 Deaths)
 void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmountText;
 
@@ -344,7 +362,7 @@ void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
 void ABlasterPlayerController::SetHUDPrimaryGrenades(int32 Grenades)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->PrimaryGrenadeCountText;
 
@@ -364,7 +382,7 @@ void ABlasterPlayerController::SetHUDPrimaryGrenades(int32 Grenades)
 void ABlasterPlayerController::SetHUDSecondaryGrenades(int32 Grenades)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->SecondaryGrenadeCountText;
 
@@ -384,7 +402,7 @@ void ABlasterPlayerController::SetHUDSecondaryGrenades(int32 Grenades)
 void ABlasterPlayerController::SetHUDCarriedAmmo(int32 Ammo)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->CarriedAmmoAmountText;
 
@@ -405,7 +423,7 @@ void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWea
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 
-	bool bHUDValid = BlasterHUD &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->WeaponImage;
 	
@@ -423,7 +441,7 @@ void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWea
 void ABlasterPlayerController::SetHUDMatchCountdown(float CountdownTime)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
+	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->CharacterOverlay->MatchCountdownText;
 
@@ -456,37 +474,37 @@ void ABlasterPlayerController::SetHUDMatchCountdown(float CountdownTime)
 void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	bool bHUDValid = BlasterHUD &&
-		BlasterHUD->Annoucement &&
-		BlasterHUD->Annoucement->WarmupTimerText;
+	bool bHUDValid = BlasterHUD.IsValid() &&
+		BlasterHUD->Announcement.IsValid() &&
+		BlasterHUD->Announcement->WarmupTimerText.IsValid();
 
 	if (bHUDValid)
 	{
 		if (CountdownTime < 0.f)
 		{
-			BlasterHUD->Annoucement->WarmupTimerText->SetText(FText());
+			BlasterHUD->Announcement->WarmupTimerText->SetText(FText());
 			return;
 		}
 		int32 Minutes = FMath::FloorToInt(CountdownTime / 60.f);
 		int32 Seconds = CountdownTime - Minutes * 60;
 
 		FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
-		BlasterHUD->Annoucement->WarmupTimerText->SetText(FText::FromString(CountdownText));
+		BlasterHUD->Announcement->WarmupTimerText->SetText(FText::FromString(CountdownText));
 		if (Minutes < 1 && Seconds == 10)
 		{
 			UGameplayStatics::PlaySound2D(this, WarmupCountdownSound);
-			BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
+			BlasterHUD->Announcement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
 		}
 		if (CountdownTime <= 10.f && CountdownTime > 1.f)
 		{
 			UGameplayStatics::PlaySound2D(this, WarmupCountdownSound);
 			if (Seconds % 2 == 0)
 			{
-				BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
+				BlasterHUD->Announcement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
 			}
 			else
 			{
-				BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+				BlasterHUD->Announcement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
 			}
 		} 
 		else if (CountdownTime <= 1.f)
@@ -494,12 +512,36 @@ void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 			UGameplayStatics::PlaySound2D(this, WarmupCountdownSoundEnd);
 			if (Seconds % 2 == 0)
 			{
-				BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
+				BlasterHUD->Announcement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 0, 0, 1));
 			}
 			else
 			{
-				BlasterHUD->Annoucement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+				BlasterHUD->Announcement->WarmupTimerText->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
 			}
+		}
+	}
+}
+
+void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* AttackerController)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	bool bHUDValid = BlasterHUD.IsValid() &&
+		BlasterHUD->AttackerCam &&
+		BlasterHUD->AttackerCam->AttackerProfileImage.IsValid() &&
+		BlasterHUD->AttackerCam->AttackerName.IsValid();
+	UE_LOG(LogTemp, Warning, TEXT("SetAttackerCam bHUDValid is False"));
+	
+	if (bHUDValid)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SetAttackerCam bHUDValid is True"));
+		if (ABlasterPlayerState* BlasterPlayerState = Cast<ABlasterPlayerState>(AttackerController))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("BlasterPlayerState is True"));
+			FString GetPlayerName = BlasterPlayerState->GetPlayerName();
+			FString PlayerName = FString::Printf(TEXT("%s"), *GetPlayerName);
+			BlasterHUD->AttackerCam->SetDisplayText(PlayerName);
+			BlasterHUD->AttackerCam->AttackerName.Get()->SetText(FText::FromString(PlayerName));
+			BlasterHUD->AttackerCam.Get()->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
 }

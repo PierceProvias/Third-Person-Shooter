@@ -16,11 +16,11 @@ class BLASTER_API UAnnouncement : public UUserWidget
 public:
 	
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> WarmupTimerText;
+	TWeakObjectPtr<UTextBlock> WarmupTimerText;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> AnnouncementText;
+	TWeakObjectPtr<UTextBlock> AnnouncementText;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> InfoText;
+	TWeakObjectPtr<UTextBlock> InfoText;
 };

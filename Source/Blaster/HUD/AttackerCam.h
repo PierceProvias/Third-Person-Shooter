@@ -16,13 +16,10 @@ class BLASTER_API UAttackerCam : public UUserWidget
 public:
 	
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UImage> AttackerProfileImage;
+	TWeakObjectPtr<UImage> AttackerProfileImage;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> AttackerName;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> DisplayText;
+	TWeakObjectPtr<UTextBlock> AttackerName;
 
 	void SetDisplayText(FString TextToDisplay);
 	

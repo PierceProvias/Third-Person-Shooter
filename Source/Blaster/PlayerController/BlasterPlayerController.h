@@ -6,11 +6,13 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class UAttackerCam;
 class UCharacterOverlay;
 class ABlasterHUD;
 class ABlasterGameMode;
 class UInputMappingContext;
 class USoundBase;
+class ABlasterPlayerController;
 
 UCLASS()
 class BLASTER_API ABlasterPlayerController : public APlayerController
@@ -20,8 +22,8 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void OnPossess(APawn* InPawn) override;
 	void SetHUDHealth(float Health, float MaxHealth);
-	void OnPossess(APawn* InPawn) override;
 	void SetHUDScore(float Score);
 	void SetHUDDeaths(int32 Deaths);
 	void SetHUDWeaponAmmo(int32 Ammo);
@@ -31,6 +33,7 @@ public:
 	void SetHUDCarriedWeaponTexture(UTexture2D* CurrentWeaponTexture);
 	void SetHUDMatchCountdown(float CountdownTime);
 	void SetHUDAnnouncementCountdown(float CountdownTime);
+	void SetAttackerCam(ABlasterPlayerController* AttackerController);
 
 	// Synced with server world clock
 	virtual float GetServerTime();
@@ -81,8 +84,11 @@ protected:
 	void ClientJoinMidGame(FName StateOfMatch, float Warmup_Time, float Match_Time, float Cooldown_Time, float StartingTime);
 
 private:
-	TObjectPtr<ABlasterHUD> BlasterHUD;
-	TObjectPtr<UCharacterOverlay> CharacterOverlay;
+	TWeakObjectPtr<ABlasterHUD> BlasterHUD;
+	TWeakObjectPtr<UCharacterOverlay> CharacterOverlay;
+	TWeakObjectPtr<UAttackerCam> AttackerCam ;
+	TWeakObjectPtr<ABlasterGameMode> GameMode;
+
 	float LevelStartingTime = 0.f;
 	float WarmupTime = 0.f;
 	float MatchTime = 0.f;	// Player controller should be getting the match time from the game mode
@@ -90,7 +96,6 @@ private:
 
 	uint32 CountdownInt = 0;
 
-	TObjectPtr<ABlasterGameMode> GameMode;
 	
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
 	FName MatchState;
@@ -104,18 +109,17 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundBase> WarmupCountdownSoundEnd;
 
+	int32 HUDPrimaryGrenades;
+	int32 HUDSecondaryGrenades;
 	float HUDHealth;
 	float HUDMaxHealth;
-	bool bInitializeHealth = false;
-	
-	
-	int32 HUDPrimaryGrenades;
-	bool bInitializePrimaryGrenades = false;
-	int32 HUDSecondaryGrenades;
-	bool bInitializeSecondaryGrenades = false;
-	float HUDCarriedAmmo;
-	bool bInitializeCarriedAmmo = false;
 	float HUDWeaponAmmo;
+	float HUDCarriedAmmo;
+
+	bool bInitializeHealth = false;
 	bool bInitializeWeaponAmmo = false;
+	bool bInitializeCarriedAmmo = false;
+	bool bInitializePrimaryGrenades = false;
+	bool bInitializeSecondaryGrenades = false;
 	
 };

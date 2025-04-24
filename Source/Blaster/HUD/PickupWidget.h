@@ -17,11 +17,11 @@ class BLASTER_API UPickupWidget : public UUserWidget
 public:
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UImage> WeaponImage;
+	TWeakObjectPtr<UImage> WeaponImage;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> AmmoText;
+	TWeakObjectPtr<UTextBlock> AmmoText;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> WeaponName;
+	TWeakObjectPtr<UTextBlock> WeaponName;
 };

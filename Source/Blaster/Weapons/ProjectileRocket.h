@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundCue> ProjectileLoop;
 
-	TObjectPtr<UAudioComponent> ProjectileLoopComponent;
+	TWeakObjectPtr<UAudioComponent> ProjectileLoopComponent;
 	
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundAttenuation> LoopingSoundAttenuation;
