@@ -70,6 +70,7 @@ public:
 	void ShowSniperScopeWidget(bool bShowScope);
 
 	void UpdateHUDHealth();
+	void UpdateHUDShield();
 
 protected:
 	
@@ -251,6 +252,19 @@ private:
 
 	UFUNCTION()
 	void OnRep_Health(float LastHealth);
+
+	/*
+	* Player shield (Implemented in the character class instead of the player state due to faster replication)
+	*/
+
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	float MaxShield = 100.f;
+
+	UPROPERTY(ReplicatedUsing = OnRep_Shield, VisibleAnywhere, Category = "Player Stats")
+	float Shield = 100.f;
+
+	UFUNCTION()
+	void OnRep_Shield(float LastShield);
 
 	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
 

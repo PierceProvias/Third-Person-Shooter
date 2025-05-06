@@ -80,7 +80,7 @@ void ABlasterHUD::AddAnnouncement()
 void ABlasterHUD::AddAttackerCam()
 {
 	APlayerController* PlayerController = GetOwningPlayerController();
-	if (PlayerController && AttackerCamClass && AttackerCam == nullptr)
+	if (PlayerController && AttackerCamClass && !AttackerCam.IsValid())
 	{
 		AttackerCam = CreateWidget<UAttackerCam>(PlayerController, AttackerCamClass);
 		AttackerCam->AddToViewport();

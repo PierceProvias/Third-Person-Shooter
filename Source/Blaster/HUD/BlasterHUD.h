@@ -48,7 +48,7 @@ public:
     	
 	TObjectPtr<UCharacterOverlay> CharacterOverlay;
 	TWeakObjectPtr<UAnnouncement> Announcement;
-	TObjectPtr<UAttackerCam> AttackerCam;
+	TWeakObjectPtr<UAttackerCam> AttackerCam;
 	
 	void AddCharacterOverlay();
 	void AddAnnouncement();

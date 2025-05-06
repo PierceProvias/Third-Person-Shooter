@@ -79,41 +79,26 @@ void ABlasterPlayerController::SetHUDTime()
 
 void ABlasterPlayerController::PollInit()
 {
-	if(CharacterOverlay == nullptr)
+	if (CharacterOverlay == nullptr)
 	{
-		if(BlasterHUD.IsValid() && BlasterHUD->CharacterOverlay)
+		if (BlasterHUD.IsValid() && BlasterHUD->CharacterOverlay)
 		{
 			if(CharacterOverlay.IsValid())
 			{
-				if(bInitializeHealth)					SetHUDHealth(HUDHealth, HUDMaxHealth);
-				if(bInitializeCarriedAmmo)				SetHUDCarriedAmmo(HUDCarriedAmmo);
-				if(bInitializeWeaponAmmo)				SetHUDWeaponAmmo(HUDWeaponAmmo);
+				if (bInitializeHealth)					SetHUDHealth(HUDHealth, HUDMaxHealth);
+				if (bInitializeShield)					SetHUDShield(HUDShield, HUDMaxShield);
+				if (bInitializeCarriedAmmo)				SetHUDCarriedAmmo(HUDCarriedAmmo);
+				if (bInitializeWeaponAmmo)				SetHUDWeaponAmmo(HUDWeaponAmmo);
 				
 				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
-				if(BlasterCharacter && BlasterCharacter->GetCombatComponent())
+				if (BlasterCharacter && BlasterCharacter->GetCombatComponent())
 				{
-					if(bInitializePrimaryGrenades)		SetHUDPrimaryGrenades(HUDPrimaryGrenades);
-					if(bInitializeSecondaryGrenades)	SetHUDSecondaryGrenades(HUDSecondaryGrenades);
+					if (bInitializePrimaryGrenades)		SetHUDPrimaryGrenades(HUDPrimaryGrenades);
+					if (bInitializeSecondaryGrenades)	SetHUDSecondaryGrenades(HUDSecondaryGrenades);
 				}
 			}
 		}
 	}
-	if (AttackerCam == nullptr)
-	{
-		if (BlasterHUD.IsValid() && BlasterHUD->AttackerCam)
-		{
-			if (AttackerCam.IsValid())
-			{
-				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
-				ABlasterPlayerController* BlasterPlayerController = Cast<ABlasterPlayerController>(GetPawn());
-				if (BlasterCharacter && BlasterPlayerController && BlasterCharacter->IsElimmed())
-				{
-					SetAttackerCam(BlasterPlayerController);
-				}
-			}
-		}
-	}
-	
 }
 
 void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
@@ -295,9 +280,33 @@ void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 	}
 	else
 	{
+		// Store values in case SetHUDHealth is called before the CharacterOverlay is set
 		bInitializeHealth = true;
 		HUDHealth = Health;
 		HUDMaxHealth = MaxHealth;
+	}
+}
+
+void ABlasterPlayerController::SetHUDShield(float Shield, float MaxShield)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	bool bHUDValid = BlasterHUD.IsValid() &&
+		BlasterHUD->CharacterOverlay &&
+		BlasterHUD->CharacterOverlay->ShieldBar &&
+		BlasterHUD->CharacterOverlay->ShieldText;
+
+	if (bHUDValid)
+	{
+		const float HealthPercent = Shield / MaxShield;
+		BlasterHUD->CharacterOverlay->HealthBar->SetPercent(HealthPercent);
+		FString HealthText = FString::Printf(TEXT("%d/%d"), FMath::CeilToInt(Shield), FMath::CeilToInt(MaxShield));
+		BlasterHUD->CharacterOverlay->HealthText->SetText(FText::FromString(HealthText));
+	}
+	else
+	{
+		bInitializeHealth = true;
+		HUDShield = Shield;
+		HUDMaxShield = MaxShield;
 	}
 }
 
@@ -429,12 +438,21 @@ void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWea
 	
 	if (bHUDValid)
 	{
-		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn()))
+		ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
+		if (BlasterCharacter)
 		{
 			CurrentWeaponTexture = BlasterCharacter->GetEquippedWeapon()->GetWeaponTexture2D();
 			BlasterHUD->CharacterOverlay->WeaponImage->SetBrushFromTexture(CurrentWeaponTexture);
 			BlasterHUD->CharacterOverlay->WeaponImage->SetRenderOpacity(RENDER_OPACITY_FULL);
-		}			
+		}
+		if (BlasterCharacter->IsElimmed())
+		{
+			// TODO: When player is dead, Character Overlay is destroyed until respawned
+			//BlasterHUD->CharacterOverlay->WeaponImage->SetRenderOpacity(RENDER_OPACITY_EMPTY);
+		    BlasterHUD->CharacterOverlay->RemoveFromParent();
+		}
+		
+		
 	}
 }
 
@@ -526,7 +544,7 @@ void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* Attacker
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	bool bHUDValid = BlasterHUD.IsValid() &&
-		BlasterHUD->AttackerCam &&
+		BlasterHUD->AttackerCam.IsValid() &&
 		BlasterHUD->AttackerCam->AttackerProfileImage.IsValid() &&
 		BlasterHUD->AttackerCam->AttackerName.IsValid();
 	UE_LOG(LogTemp, Warning, TEXT("SetAttackerCam bHUDValid is False"));

@@ -24,6 +24,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void OnPossess(APawn* InPawn) override;
 	void SetHUDHealth(float Health, float MaxHealth);
+	void SetHUDShield(float Shield, float MaxShield);
 	void SetHUDScore(float Score);
 	void SetHUDDeaths(int32 Deaths);
 	void SetHUDWeaponAmmo(int32 Ammo);
@@ -113,10 +114,13 @@ private:
 	int32 HUDSecondaryGrenades;
 	float HUDHealth;
 	float HUDMaxHealth;
+	float HUDShield;
+	float HUDMaxShield;
 	float HUDWeaponAmmo;
 	float HUDCarriedAmmo;
 
 	bool bInitializeHealth = false;
+	bool bInitializeShield = false;
 	bool bInitializeWeaponAmmo = false;
 	bool bInitializeCarriedAmmo = false;
 	bool bInitializePrimaryGrenades = false;
