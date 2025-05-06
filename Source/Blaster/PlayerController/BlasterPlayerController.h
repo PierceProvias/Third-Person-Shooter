@@ -91,9 +91,9 @@ private:
 	TWeakObjectPtr<ABlasterGameMode> GameMode;
 
 	float LevelStartingTime = 0.f;
-	float WarmupTime = 0.f;
-	float MatchTime = 0.f;	// Player controller should be getting the match time from the game mode
-	float CooldownTime = 0.f;
+	float WarmupTime		= 0.f;
+	float CooldownTime		= 0.f;
+	float MatchTime			= 0.f;	// Player controller should be getting the match time from the game mode
 
 	uint32 CountdownInt = 0;
 
@@ -110,8 +110,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundBase> WarmupCountdownSoundEnd;
 
-	int32 HUDPrimaryGrenades;
-	int32 HUDSecondaryGrenades;
 	float HUDHealth;
 	float HUDMaxHealth;
 	float HUDShield;
@@ -119,11 +117,18 @@ private:
 	float HUDWeaponAmmo;
 	float HUDCarriedAmmo;
 
-	bool bInitializeHealth = false;
-	bool bInitializeShield = false;
-	bool bInitializeWeaponAmmo = false;
-	bool bInitializeCarriedAmmo = false;
-	bool bInitializePrimaryGrenades = false;
-	bool bInitializeSecondaryGrenades = false;
+	int32 HUDScore				= 0;
+	int32 HUDDeaths				= 0;
+	int32 HUDPrimaryGrenades	= 0;
+	int32 HUDSecondaryGrenades	= 0;
+
+	bool bInitializeScore				= false;
+	bool bInitializeDeaths				= false;
+	bool bInitializeHealth				= false;
+	bool bInitializeShield				= false;
+	bool bInitializeWeaponAmmo			= false;
+	bool bInitializeCarriedAmmo			= false;
+	bool bInitializePrimaryGrenades		= false;
+	bool bInitializeSecondaryGrenades	= false;
 	
 };

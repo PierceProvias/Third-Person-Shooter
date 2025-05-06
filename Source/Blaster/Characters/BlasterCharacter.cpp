@@ -96,6 +96,8 @@ void ABlasterCharacter::BeginPlay()
 	}
 
 	UpdateHUDHealth();
+	UpdateHUDShield();
+
 	if (HasAuthority())
 	{
 		OnTakeAnyDamage.AddDynamic(this, &ABlasterCharacter::ReceiveDamage);
@@ -763,10 +765,33 @@ void ABlasterCharacter::PlayHitReactMontage()
 void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
 {
 	if(bElimmed) return;
+
+	float DamageToHealth = Damage;
+	if (Shield > 0.f)
+	{
+		if (Shield >= DamageToHealth)
+		{
+			Shield = FMath::Clamp(Shield - Damage, 0.f, MaxShield);
+			DamageToHealth = 0.f;
+			UE_LOG(LogTemp, Display, TEXT("HUD Health : %f"), Health);
+			UE_LOG(LogTemp, Display, TEXT("HUD Shield: %f"), Shield);
+		}
+		else
+		{
+			Shield = 0.f;
+			DamageToHealth = FMath::Clamp(DamageToHealth - Shield, 0.f, Damage);
+			UE_LOG(LogTemp, Display, TEXT("HUD Health : %f"), Health);
+			UE_LOG(LogTemp, Display, TEXT("HUD Shield: %f"), Shield);
+		}
+	}
+	
 	// Since this is a replicated variable and sent to all clients, we do not need a MultiHit RPC. Variable replication is less expensive
-	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
-	PlayHitReactMontage();
+
+	Health = FMath::Clamp(Health - DamageToHealth, 0.f, MaxHealth);
+	
 	UpdateHUDHealth();
+	UpdateHUDShield();
+	PlayHitReactMontage();
 
 	if (Health == 0.f)
 	{

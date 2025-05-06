@@ -339,8 +339,11 @@ public:
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	FORCEINLINE float GetHealth() const { return Health; }
-	FORCEINLINE void SetHealth(float Amount) {Health = Amount;} 
+	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+	FORCEINLINE float GetShield() const { return Shield; }
+	FORCEINLINE void SetShield(float Amount) {Shield = Amount;}
+	FORCEINLINE float GetMaxShield() const { return MaxShield; }
 	FORCEINLINE UInputMappingContext* GetCharacterInputMappingContext() const { return CharacterMappingContext; }
 	FORCEINLINE UInputAction* GetFireAction() const { return FireAction; }
 	FORCEINLINE UStaticMeshComponent* GetAttachedGrenade() const { return AttachedGrenade; }

@@ -85,7 +85,10 @@ void ABlasterPlayerController::PollInit()
 		{
 			if(CharacterOverlay.IsValid())
 			{
+				if (bInitializeScore)					SetHUDScore(HUDScore);
+				if (bInitializeDeaths)					SetHUDDeaths(HUDDeaths);
 				if (bInitializeHealth)					SetHUDHealth(HUDHealth, HUDMaxHealth);
+				UE_LOG(LogTemp, Warning	, TEXT("HUDShield = %f"), HUDHealth);
 				if (bInitializeShield)					SetHUDShield(HUDShield, HUDMaxShield);
 				if (bInitializeCarriedAmmo)				SetHUDCarriedAmmo(HUDCarriedAmmo);
 				if (bInitializeWeaponAmmo)				SetHUDWeaponAmmo(HUDWeaponAmmo);
@@ -297,14 +300,14 @@ void ABlasterPlayerController::SetHUDShield(float Shield, float MaxShield)
 
 	if (bHUDValid)
 	{
-		const float HealthPercent = Shield / MaxShield;
-		BlasterHUD->CharacterOverlay->HealthBar->SetPercent(HealthPercent);
-		FString HealthText = FString::Printf(TEXT("%d/%d"), FMath::CeilToInt(Shield), FMath::CeilToInt(MaxShield));
-		BlasterHUD->CharacterOverlay->HealthText->SetText(FText::FromString(HealthText));
+		const float ShieldPercent = Shield / MaxShield;
+		BlasterHUD->CharacterOverlay->ShieldBar->SetPercent(ShieldPercent);
+		FString ShieldText = FString::Printf(TEXT("%d/%d"), FMath::CeilToInt(Shield), FMath::CeilToInt(MaxShield));
+		BlasterHUD->CharacterOverlay->ShieldText->SetText(FText::FromString(ShieldText));
 	}
 	else
 	{
-		bInitializeHealth = true;
+		bInitializeShield = true;
 		HUDShield = Shield;
 		HUDMaxShield = MaxShield;
 	}
@@ -317,6 +320,7 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 	if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(InPawn))
 	{
 		SetHUDHealth(BlasterCharacter->GetHealth(), BlasterCharacter->GetMaxHealth());
+		SetHUDShield(BlasterCharacter->GetShield(), BlasterCharacter->GetMaxShield());
 	}
 }
 
@@ -332,6 +336,11 @@ void ABlasterPlayerController::SetHUDScore(float Score)
 		FString ScoreText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
 		BlasterHUD->CharacterOverlay->ScoreAmountText->SetText(FText::FromString(ScoreText));
 	}
+	else
+	{
+		bInitializeScore = true;
+		HUDScore = Score;
+	}
 }
 
 void ABlasterPlayerController::SetHUDDeaths(int32 Deaths)
@@ -345,6 +354,11 @@ void ABlasterPlayerController::SetHUDDeaths(int32 Deaths)
 	{
 		FString DeathsText = FString::Printf(TEXT("%d"), Deaths);
 		BlasterHUD->CharacterOverlay->DeathsAmountText->SetText(FText::FromString(DeathsText));
+	}
+	else
+	{
+		bInitializeDeaths = true;
+		HUDDeaths = Deaths;
 	}
 }
 
