@@ -816,6 +816,14 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 			if (BlasterPlayerController && AttackerController)
 			{
 				BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
+				
+				// TODO: Black/White Screen for elimmed character 
+				// if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(AttackerController))
+				// {
+				// 	FPostProcessSettings& PostProcessSettings = BlasterCharacter->GetCamera()->PostProcessSettings;
+				// 	PostProcessSettings.SceneColorTint = FLinearColor(1.f, 0.f, 0.f, 1.f);
+				// 	PostProcessSettings.bOverride_SceneColorTint = true;
+				// }
 			}
 			
 		}

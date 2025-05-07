@@ -3,6 +3,7 @@
 
 #include "AttackerCam.h"
 #include "Components/TextBlock.h"
+#include "Components/RadialSlider.h"
 #include "GameFramework/PlayerState.h"
 
 void UAttackerCam::SetDisplayText (FString TextToDisplay)

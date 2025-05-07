@@ -8,6 +8,7 @@
 
 class UTextBlock;
 class UImage;
+class URadialSlider;
 
 UCLASS()
 class BLASTER_API UAttackerCam : public UUserWidget
@@ -20,6 +21,12 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> AttackerName;
+
+	UPROPERTY(meta = (BindWidget))
+	TWeakObjectPtr<URadialSlider> RespawnProgressBar;
+
+	UPROPERTY(meta = (BindWidget))
+	TWeakObjectPtr<UTextBlock> RespawnTime;
 
 	void SetDisplayText(FString TextToDisplay);
 	

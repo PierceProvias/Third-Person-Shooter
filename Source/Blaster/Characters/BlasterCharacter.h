@@ -262,8 +262,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	float MaxShield = 100.f;
 
-	UPROPERTY(ReplicatedUsing = OnRep_Shield, VisibleAnywhere, Category = "Player Stats")
-	float Shield = 100.f;
+	UPROPERTY(ReplicatedUsing = OnRep_Shield, EditAnywhere, Category = "Player Stats")
+	float Shield = 0.f;
 
 	UFUNCTION()
 	void OnRep_Shield(float LastShield);
@@ -274,11 +274,12 @@ private:
 
 	FTimerHandle ElimTimer;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Player Stats")
 	float ElimDelay = 3.f;
 
 	// Callback function for ElimTimer
 	void ElimTimerFinished();
+	
 
 	/*
 	* Dissolve Effect
@@ -351,6 +352,8 @@ public:
 	FORCEINLINE UStaticMeshComponent* GetAttachedGrenade() const { return AttachedGrenade; }
 	FORCEINLINE UCombatComponent* GetCombatComponent() const {return CombatComponent;}
 	FORCEINLINE UBuffComponent* GetBuffComponent() const {return BuffComponent;}
+	FORCEINLINE float GetElimDelay() const { return ElimDelay; }
+	FORCEINLINE FTimerHandle GetElimTimer() const { return ElimTimer; }
 	ECombatState GetCombatState() const;
 
 	AWeapon* GetEquippedWeapon();

@@ -13,6 +13,7 @@ class ABlasterGameMode;
 class UInputMappingContext;
 class USoundBase;
 class ABlasterPlayerController;
+class ABlasterCharacter;
 
 UCLASS()
 class BLASTER_API ABlasterPlayerController : public APlayerController
@@ -33,8 +34,11 @@ public:
 	void SetHUDCarriedAmmo(int32 Ammo);
 	void SetHUDCarriedWeaponTexture(UTexture2D* CurrentWeaponTexture);
 	void SetHUDMatchCountdown(float CountdownTime);
+	void ResetCharacterOverlay();
 	void SetHUDAnnouncementCountdown(float CountdownTime);
+	
 	void SetAttackerCam(ABlasterPlayerController* AttackerController);
+	void SetHUDRespawmTimer(ABlasterCharacter* BlasterCharacter, float RespawmTime);
 
 	// Synced with server world clock
 	virtual float GetServerTime();
@@ -46,7 +50,6 @@ public:
 
 	UFUNCTION()
 	void OnRep_MatchState();
-	
 	void HandleMatchHasStarted();
 	void HandleCooldown();
 
@@ -97,6 +100,10 @@ private:
 
 	uint32 CountdownInt = 0;
 
+	FTimerHandle RespawnTimer;
+
+	void RespawnTimerFinished();
+	
 	
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
 	FName MatchState;
@@ -130,5 +137,6 @@ private:
 	bool bInitializeCarriedAmmo			= false;
 	bool bInitializePrimaryGrenades		= false;
 	bool bInitializeSecondaryGrenades	= false;
+	bool bInitializeAttackerCam			= false;
 	
 };

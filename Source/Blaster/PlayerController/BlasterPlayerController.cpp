@@ -18,6 +18,7 @@
 #include "../PlayerState/BlasterPlayerState.h"
 #include "../Weapons/Weapon.h"
 #include "../HUD/AttackerCam.h"
+#include "Components/RadialSlider.h"
 
 #define RENDER_OPACITY_FULL 1.0f
 #define RENDER_OPACITY_EMPTY 0.f
@@ -99,6 +100,18 @@ void ABlasterPlayerController::PollInit()
 					if (bInitializeSecondaryGrenades)	SetHUDSecondaryGrenades(HUDSecondaryGrenades);
 				}
 			}
+			if (BlasterHUD->Announcement.IsValid())
+			{
+				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
+				ABlasterPlayerController* BlasterPlayerController = Cast<ABlasterPlayerController>(GetPawn());
+				if (BlasterCharacter)
+				{
+					if (BlasterCharacter->IsElimmed())
+					{
+						if (bInitializeAttackerCam && BlasterPlayerController)	SetAttackerCam(BlasterPlayerController); 
+					}
+				}
+			}
 		}
 	}
 }
@@ -111,6 +124,17 @@ void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
 		double CurrentTime = GetWorld()->GetTimeSeconds();
 		ServerRequestServerTime(CurrentTime);
 		TimeSyncRunningTime = 0.f;
+	}
+}
+
+void ABlasterPlayerController::RespawnTimerFinished()
+{
+	if (ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>())
+	{
+		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(this->GetPawn()))
+		{
+			BlasterGameMode->RequestRespawn(BlasterCharacter, this);
+		}
 	}
 }
 
@@ -458,14 +482,7 @@ void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWea
 			BlasterHUD->CharacterOverlay->WeaponImage->SetBrushFromTexture(CurrentWeaponTexture);
 			BlasterHUD->CharacterOverlay->WeaponImage->SetRenderOpacity(RENDER_OPACITY_FULL);
 		}
-		if (BlasterCharacter->IsElimmed())
-		{
-			// TODO: When player is dead, Character Overlay is destroyed until respawned
-			//BlasterHUD->CharacterOverlay->WeaponImage->SetRenderOpacity(RENDER_OPACITY_EMPTY);
-		    BlasterHUD->CharacterOverlay->RemoveFromParent();
-		}
-		
-		
+		// TODO: When player respawns no weapon texture should be shown
 	}
 }
 
@@ -499,6 +516,21 @@ void ABlasterPlayerController::SetHUDMatchCountdown(float CountdownTime)
 				BlasterHUD->CharacterOverlay->MatchCountdownText->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
 			}
 		}
+	}
+}
+
+void ABlasterPlayerController::ResetCharacterOverlay()
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	bool bHUDValid = BlasterHUD.IsValid() &&
+		BlasterHUD->AttackerCam.IsValid() &&
+		BlasterHUD->CharacterOverlay &&
+		BlasterHUD->AttackerCam.IsValid() &&
+		BlasterHUD->AttackerCam.IsValid();
+	if (bHUDValid)
+	{
+		BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Visible);
+		BlasterHUD->AttackerCam->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
@@ -558,23 +590,48 @@ void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* Attacker
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->AttackerCam.IsValid() &&
+		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->AttackerCam->AttackerProfileImage.IsValid() &&
 		BlasterHUD->AttackerCam->AttackerName.IsValid();
-	UE_LOG(LogTemp, Warning, TEXT("SetAttackerCam bHUDValid is False"));
 	
 	if (bHUDValid)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SetAttackerCam bHUDValid is True"));
-		if (ABlasterPlayerState* BlasterPlayerState = Cast<ABlasterPlayerState>(AttackerController))
+		BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Collapsed);
+		BlasterHUD->AttackerCam->SetVisibility(ESlateVisibility::Visible);
+		BlasterHUD->AttackerCam->ShowPlayerName(AttackerController->GetPawn());
+		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(AttackerController->GetPawn()))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("BlasterPlayerState is True"));
-			FString GetPlayerName = BlasterPlayerState->GetPlayerName();
-			FString PlayerName = FString::Printf(TEXT("%s"), *GetPlayerName);
-			BlasterHUD->AttackerCam->SetDisplayText(PlayerName);
-			BlasterHUD->AttackerCam->AttackerName.Get()->SetText(FText::FromString(PlayerName));
-			BlasterHUD->AttackerCam.Get()->SetVisibility(ESlateVisibility::Visible);
-			UE_LOG(LogTemp, Error, TEXT("%s"), *PlayerName);
+			UE_LOG(LogTemp, Warning, TEXT("SetATtackerCam"));
+			SetHUDRespawmTimer(BlasterCharacter, BlasterCharacter->GetElimDelay());
 		}
+	}
+	else
+	{
+		bInitializeAttackerCam = true;
+	}
+}
+
+void ABlasterPlayerController::SetHUDRespawmTimer(ABlasterCharacter* BlasterCharacter, float RespawmTime)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	bool bHUDValid = BlasterHUD.IsValid() &&
+		BlasterHUD->AttackerCam.IsValid() &&
+		BlasterHUD->AttackerCam->RespawnProgressBar.IsValid() &&
+		BlasterHUD->AttackerCam->RespawnTime.IsValid();
+	
+	if (bHUDValid)
+	{
+		float RespawnDelay = BlasterCharacter->GetElimDelay();
+		BlasterHUD->AttackerCam->RespawnProgressBar->SetValue(RespawnDelay);
+		//BlasterHUD->AttackerCam->RespawnProgressBar->S
+		//BlasterHUD->AttackerCam->RespawnProgressBar->ValueDelegate -= {[RespawmTime](float DeltaTime){}};
+		//UE_LOG(LogTemp, Warning, TEXT("Respawn Timer is: %f, SeverTime: %f"), RespawnTimer, GetServerTime());
+		GetWorldTimerManager().SetTimer(
+			RespawnTimer,
+			this,
+			&ABlasterPlayerController::RespawnTimerFinished,
+			RespawnDelay
+			);
 	}
 }
 

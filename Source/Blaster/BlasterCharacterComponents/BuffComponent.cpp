@@ -18,6 +18,13 @@ void UBuffComponent::Heal(float HealAmount, float HealTime)
 	AmountToHeal += HealAmount;
 }
 
+void UBuffComponent::ReplenishShield(float ShieldAmount, float ReplenishTime)
+{
+	bReplenishing = true;
+	ReplenishingRate = ShieldAmount / ReplenishTime;
+	ShieldReplenishAmount += ShieldAmount;
+}
+
 void UBuffComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -40,9 +47,26 @@ void UBuffComponent::HealRampUp(float DeltaTime)
 	}
 }
 
+void UBuffComponent::ShieldRampUp(float DeltaTime)
+{
+	if(!bReplenishing || BlasterCharacter == nullptr || BlasterCharacter->IsElimmed()) return;
+
+	const float ShieldThisFrame = ReplenishingRate * DeltaTime;
+	BlasterCharacter->SetShield(FMath::Clamp((BlasterCharacter->GetShield() + ShieldThisFrame), 0, BlasterCharacter->GetMaxShield()));
+	BlasterCharacter->UpdateHUDShield();
+	ShieldReplenishAmount -= ShieldThisFrame;
+
+	if(ShieldReplenishAmount <= 0.f || BlasterCharacter->GetShield() >= BlasterCharacter->GetMaxShield())
+	{
+		bReplenishing = false;
+		ShieldReplenishAmount = 0.f;
+	}
+}
+
 void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	HealRampUp(DeltaTime);
+	ShieldRampUp(DeltaTime);
 }
 
