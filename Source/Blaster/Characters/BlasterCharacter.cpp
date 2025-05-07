@@ -13,6 +13,7 @@
 #include "Sound/SoundCue.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "UObject/WeakObjectPtrTemplates.h"
+#include "Camera/CameraShakeBase.h"
 
 #include "../Weapons/Weapon.h"
 #include "../BlasterCharacterComponents/CombatComponent.h"
@@ -24,6 +25,7 @@
 #include "../PlayerState/BlasterPlayerState.h"
 #include "../Weapons/WeaponTypes.h"
 #include "PauseMenu.h"
+#include "Blaster/Cameras/DamageCamera.h"
 
 
 ABlasterCharacter::ABlasterCharacter()
@@ -793,13 +795,29 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 	UpdateHUDShield();
 	PlayHitReactMontage();
 
+	if (Health != 0.f)
+	{
+		BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+		if (BlasterPlayerController)
+		{
+			if (TSubclassOf<UDamageCamera> DamageCameraClass = UDamageCamera::StaticClass())
+			{
+				BlasterPlayerController->ClientStartCameraShake(DamageCameraClass);
+			}
+		}
+	}
+	
 	if (Health == 0.f)
 	{
 		if (ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>())
 		{
 			BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
 			ABlasterPlayerController* AttackerController = Cast<ABlasterPlayerController>(InstigatorController);
-			BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
+			if (BlasterPlayerController && AttackerController)
+			{
+				BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
+			}
+			
 		}
 	}
 }

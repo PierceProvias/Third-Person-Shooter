@@ -11,6 +11,7 @@
 
 #include "BlasterCharacter.generated.h"
 
+class UDamageCamera;
 class UBuffComponent;
 class USpringArmComponent;
 class UCameraComponent;
@@ -42,10 +43,11 @@ public:
 	// This is where we register variables to be replicated
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
-	
 	// Used to construct components
 	virtual void PostInitializeComponents() override;
 
+	//TSubclassOf<UDamageCamera> DamageCamera;
+	
 	/*
 	* Play animation montages
 	*/

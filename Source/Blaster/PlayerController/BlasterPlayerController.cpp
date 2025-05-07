@@ -88,7 +88,6 @@ void ABlasterPlayerController::PollInit()
 				if (bInitializeScore)					SetHUDScore(HUDScore);
 				if (bInitializeDeaths)					SetHUDDeaths(HUDDeaths);
 				if (bInitializeHealth)					SetHUDHealth(HUDHealth, HUDMaxHealth);
-				UE_LOG(LogTemp, Warning	, TEXT("HUDShield = %f"), HUDHealth);
 				if (bInitializeShield)					SetHUDShield(HUDShield, HUDMaxShield);
 				if (bInitializeCarriedAmmo)				SetHUDCarriedAmmo(HUDCarriedAmmo);
 				if (bInitializeWeaponAmmo)				SetHUDWeaponAmmo(HUDWeaponAmmo);
@@ -574,6 +573,7 @@ void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* Attacker
 			BlasterHUD->AttackerCam->SetDisplayText(PlayerName);
 			BlasterHUD->AttackerCam->AttackerName.Get()->SetText(FText::FromString(PlayerName));
 			BlasterHUD->AttackerCam.Get()->SetVisibility(ESlateVisibility::Visible);
+			UE_LOG(LogTemp, Error, TEXT("%s"), *PlayerName);
 		}
 	}
 }
