@@ -2,6 +2,8 @@
 
 
 #include "AttackerCam.h"
+
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/RadialSlider.h"
 #include "GameFramework/PlayerState.h"
@@ -21,4 +23,26 @@ void UAttackerCam::ShowPlayerName(APawn* InPawn)
 		FString PlayerName = PlayerState->GetPlayerName();
 		SetDisplayText(PlayerName);
 	}
+}
+
+void UAttackerCam::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	
+	
+}
+
+void UAttackerCam::NativePreConstruct()
+{
+	Super::NativePreConstruct();
+
+	RadialProgressBarInstance = UMaterialInstanceDynamic::Create(
+		RadialProgressBarMaterial,
+	this
+		);
+
+	RespawnProgressBarImage->SetBrushFromMaterial(RadialProgressBarInstance);
+	RadialProgressBarInstance->SetScalarParameterValue(TEXT("Percent"), GetPercent());
+	
 }

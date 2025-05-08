@@ -8,19 +8,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c64b2a5-f495-4c70-966c-c2533f8b30a1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/ShieldPickup.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/ShieldPickup.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/PickupSpawnPoint.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/PickupSpawnPoint.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Blaster/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Blaster/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/WBP_AttackerCam.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/WBP_AttackerCam.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/WBP_CharacterOverlay.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/WBP_CharacterOverlay.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Pickups/BuffPickups/BP_HealthBuff.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Pickups/BuffPickups/BP_HealthBuff.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Pickups/BuffPickups/BP_ShieldBuff.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Pickups/BuffPickups/BP_ShieldBuff.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/StartMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/StartMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/sA_PickupSet_1/Fx/NiagaraSystems/NS_Pickup_4.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/sA_PickupSet_1/Fx/NiagaraSystems/NS_Pickup_4.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Blaster/Blaster.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Blaster.Build.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Blaster/BlasterCharacterComponents/BuffComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/BlasterCharacterComponents/BuffComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Blaster/BlasterCharacterComponents/BuffComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/BlasterCharacterComponents/BuffComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Blaster/Characters/BlasterCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Characters/BlasterCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Blaster/Characters/BlasterCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Characters/BlasterCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Blaster/GameModes/BlasterGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/GameModes/BlasterGameMode.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/HUD/AttackerCam.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/HUD/AttackerCam.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/HUD/AttackerCam.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/HUD/AttackerCam.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/PlayerController/BlasterPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/PlayerController/BlasterPlayerController.cpp" afterDir="false" />
@@ -38,6 +32,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Plugins/Marketplace/Developer/RiderLink/Source/RD/thirdparty/spdlog/include/spdlog/details/backtracer.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Developer/AssetTools/Private/AssetRenameManager.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Developer/AutomationController/Private/AutomationReport.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -200,7 +200,8 @@
       <workItem from="1746577743591" duration="4452000" />
       <workItem from="1746624428600" duration="1188000" />
       <workItem from="1746630358558" duration="13953000" />
-      <workItem from="1746647860762" duration="1280000" />
+      <workItem from="1746647860762" duration="7340000" />
+      <workItem from="1746708517792" duration="11563000" />
     </task>
     <servers />
   </component>

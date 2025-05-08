@@ -100,8 +100,9 @@ private:
 
 	uint32 CountdownInt = 0;
 
-	FTimerHandle RespawnTimer;
+	FTimerHandle RespawnTimerHandle;
 
+	UFUNCTION()
 	void RespawnTimerFinished();
 	
 	

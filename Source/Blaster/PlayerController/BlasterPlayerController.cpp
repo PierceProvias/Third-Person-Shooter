@@ -133,6 +133,7 @@ void ABlasterPlayerController::RespawnTimerFinished()
 	{
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(this->GetPawn()))
 		{
+			UE_LOG(LogTemp, Warning, TEXT("RespawnTimerFinished"));
 			BlasterGameMode->RequestRespawn(BlasterCharacter, this);
 		}
 	}
@@ -601,8 +602,7 @@ void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* Attacker
 		BlasterHUD->AttackerCam->ShowPlayerName(AttackerController->GetPawn());
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(AttackerController->GetPawn()))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("SetATtackerCam"));
-			SetHUDRespawmTimer(BlasterCharacter, BlasterCharacter->GetElimDelay());
+			SetHUDRespawmTimer(BlasterCharacter, BlasterCharacter->GetElimDelay() - GetWorld()->GetDeltaSeconds());
 		}
 	}
 	else
@@ -616,22 +616,25 @@ void ABlasterPlayerController::SetHUDRespawmTimer(ABlasterCharacter* BlasterChar
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	bool bHUDValid = BlasterHUD.IsValid() &&
 		BlasterHUD->AttackerCam.IsValid() &&
-		BlasterHUD->AttackerCam->RespawnProgressBar.IsValid() &&
+		BlasterHUD->AttackerCam->RadialProgressBarInstance &&
 		BlasterHUD->AttackerCam->RespawnTime.IsValid();
 	
 	if (bHUDValid)
 	{
-		float RespawnDelay = BlasterCharacter->GetElimDelay();
-		BlasterHUD->AttackerCam->RespawnProgressBar->SetValue(RespawnDelay);
-		//BlasterHUD->AttackerCam->RespawnProgressBar->S
-		//BlasterHUD->AttackerCam->RespawnProgressBar->ValueDelegate -= {[RespawmTime](float DeltaTime){}};
-		//UE_LOG(LogTemp, Warning, TEXT("Respawn Timer is: %f, SeverTime: %f"), RespawnTimer, GetServerTime());
+		//float RespawnTimeRemaining = GetWorldTimerManager().GetTimerRemaining(RespawnTimerHandle);
+		//UE_LOG(LogTemp, Warning, TEXT("Elim Time Remaining: %f"), RespawnTimeRemaining);
+		BlasterHUD->AttackerCam->RadialProgressBarInstance->SetScalarParameterValue(TEXT("Percent"), BlasterCharacter->GetElimDelay() - GetWorld()->GetTimeSeconds());
+		
+		// BlasterHUD->AttackerCam->RespawnProgressBar->Value = RespawmTime;
+		// BlasterHUD->AttackerCam->RespawnProgressBar->ValueDelegate -= {[RespawmTime](float DeltaTime){}};
+		// UE_LOG(LogTemp, Warning, TEXT("Respawn Timer is: %f, SeverTime: %f"), RespawnTimer, GetServerTime());
 		GetWorldTimerManager().SetTimer(
-			RespawnTimer,
-			this,
-			&ABlasterPlayerController::RespawnTimerFinished,
-			RespawnDelay
-			);
+		 	RespawnTimerHandle,
+		 	this,
+		 	&ABlasterPlayerController::RespawnTimerFinished, 
+		 	BlasterCharacter->GetElimDelay(),
+		 	false
+		 	);
 	}
 }
 

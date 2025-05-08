@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "AttackerCam.generated.h"
 
+
 class UTextBlock;
 class UImage;
 class URadialSlider;
@@ -21,9 +22,18 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> AttackerName;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UMaterial> RadialProgressBarMaterial;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UMaterialInstanceDynamic> RadialProgressBarInstance;
 
 	UPROPERTY(meta = (BindWidget))
-	TWeakObjectPtr<URadialSlider> RespawnProgressBar;
+	TWeakObjectPtr<UImage> RespawnProgressBarImage;
+
+	UPROPERTY(EditAnywhere)
+	float Percent = 0.0f;
 
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> RespawnTime;
@@ -32,4 +42,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void ShowPlayerName(APawn* InPawn);
+
+	FORCEINLINE void SetPercent(float PercentIn) {Percent = PercentIn;}
+	FORCEINLINE float GetPercent() {return Percent;}
+
+protected:
+	virtual void NativeConstruct() override;
+	virtual void NativePreConstruct() override;
 };
