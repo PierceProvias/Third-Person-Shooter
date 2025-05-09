@@ -2,11 +2,50 @@
 
 
 #include "AttackerCam.h"
-
-#include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/RadialSlider.h"
 #include "GameFramework/PlayerState.h"
+
+
+void UAttackerCam::UpdateSliderValue()
+{
+	if (RespawnProgressBar.IsValid())
+	{
+		float CurrentTime = GetWorld()->GetTimeSeconds();
+		float ElapsedTime = CurrentTime - SlideStartTime;
+
+		if (ElapsedTime <= SlideDuration)
+		{
+			float Alpha = FMath::Clamp(ElapsedTime / SlideDuration, 0.0f, 1.0f);
+			float NewValue = FMath::Lerp(StartValue, EndValue, Alpha);
+			RespawnProgressBar->SetValue(NewValue);
+		}
+		else
+		{
+			RespawnProgressBar->SetValue(StartValue);
+			GetWorld()->GetTimerManager().ClearTimer(SlideTimerHandle);
+		}
+	}
+}
+
+void UAttackerCam::StartSliderAnimation(float TargetValue)
+{
+	if (RespawnProgressBar.IsValid())
+	{
+		StartValue = RespawnProgressBar->GetValue();
+		EndValue = TargetValue;
+		SlideStartTime = GetWorld()->GetTimeSeconds();
+
+		GetWorld()->GetTimerManager().SetTimer(
+			SlideTimerHandle,
+			this,
+			&UAttackerCam::UpdateSliderValue,
+			GetWorld()->GetDeltaSeconds(),
+			true
+		);
+		RespawnProgressBar->SetStepSize(1.f);
+	}
+}
 
 void UAttackerCam::SetDisplayText (FString TextToDisplay)
 {
@@ -23,26 +62,4 @@ void UAttackerCam::ShowPlayerName(APawn* InPawn)
 		FString PlayerName = PlayerState->GetPlayerName();
 		SetDisplayText(PlayerName);
 	}
-}
-
-void UAttackerCam::NativeConstruct()
-{
-	Super::NativeConstruct();
-
-	
-	
-}
-
-void UAttackerCam::NativePreConstruct()
-{
-	Super::NativePreConstruct();
-
-	// RadialProgressBarInstance = UMaterialInstanceDynamic::Create(
-	// 	RadialProgressBarMaterial,
-	// this
-	// 	);
-	//
-	// RespawnProgressBarImage->SetBrushFromMaterial(RadialProgressBarInstance);
-	//RadialProgressBarInstance->SetScalarParameterValue(TEXT("Percent"), GetPercent());
-	
 }

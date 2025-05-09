@@ -25,27 +25,27 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> AttackerName;
-	
-	// UPROPERTY(EditDefaultsOnly)
-	// TObjectPtr<UMaterial> RadialProgressBarMaterial;
-	//
-	// UPROPERTY(EditDefaultsOnly)
-	// TObjectPtr<UMaterialInstanceDynamic> RadialProgressBarInstance;
-	//
-	// UPROPERTY(meta = (BindWidget))
-	// TWeakObjectPtr<UImage> RespawnProgressBarImage;
-	
+
 
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> RespawnTime;
 
+	UFUNCTION()
+	void UpdateSliderValue();
+
+	UFUNCTION(BlueprintCallable)
+	void StartSliderAnimation(float TargetValue);
+	
 	void SetDisplayText(FString TextToDisplay);
 	
 	UFUNCTION(BlueprintCallable)
 	void ShowPlayerName(APawn* InPawn);
-
-
+	
 protected:
-	virtual void NativeConstruct() override;
-	virtual void NativePreConstruct() override;
+	FTimerHandle SlideTimerHandle;
+	float SlideDuration = 3.0f;
+	float SlideStartTime;
+	float StartValue;
+	float EndValue;
+	
 };

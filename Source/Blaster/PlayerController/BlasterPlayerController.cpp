@@ -8,6 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputSubsystems.h"
+#include "OnlineSubsystemTypes.h"
 
 #include "../HUD/BlasterHUD.h"
 #include "../HUD/CharacterOverlay.h"
@@ -20,6 +21,7 @@
 #include "../HUD/AttackerCam.h"
 #include "Components/RadialSlider.h"
 #include "Compression/lz4.h"
+#include "Math/UnitConversion.h"
 
 #define RENDER_OPACITY_FULL 1.0f
 #define RENDER_OPACITY_EMPTY 0.f
@@ -604,7 +606,8 @@ void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* Attacker
 		BlasterHUD->AttackerCam.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->AttackerCam->AttackerProfileImage.IsValid() &&
-		BlasterHUD->AttackerCam->AttackerName.IsValid();
+		BlasterHUD->AttackerCam->AttackerName.IsValid() &&
+		BlasterHUD->AttackerCam->RespawnTime.IsValid();
 	
 	if (bHUDValid)
 	{
@@ -613,7 +616,7 @@ void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* Attacker
 		BlasterHUD->AttackerCam->ShowPlayerName(AttackerController->GetPawn());
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(AttackerController->GetPawn()))
 		{
-			//SetHUDRespawmTimer(BlasterCharacter, BlasterCharacter->GetElimDelay() - GetWorld()->GetDeltaSeconds());
+			SetHUDRespawmTimer(BlasterCharacter, BlasterCharacter->GetElimDelay());
 		}
 	}
 	else
@@ -631,7 +634,13 @@ void ABlasterPlayerController::SetHUDRespawmTimer(ABlasterCharacter* BlasterChar
 		BlasterHUD->AttackerCam->RespawnTime.IsValid();
 	if (bHUDValid)
 	{
-		//BlasterHUD->AttackerCam->RespawnProgressBar->ValueDelegate.BindUFunction(this, )
+		if (BlasterCharacter->GetElimDelay() < 0.f)
+		{
+			BlasterHUD->AttackerCam->RespawnTime->SetText(FText());
+		}
+		FString RespawnTimeText = FString::Printf(TEXT("%d"), (uint32)BlasterCharacter->GetElimDelay());
+		BlasterHUD->AttackerCam->RespawnTime->SetText(FText::FromString(RespawnTimeText));
+		BlasterHUD->AttackerCam->StartSliderAnimation(BlasterCharacter->GetElimDelay());
 	}
 }
 
