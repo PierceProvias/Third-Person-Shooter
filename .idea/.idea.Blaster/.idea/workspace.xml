@@ -8,15 +8,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c64b2a5-f495-4c70-966c-c2533f8b30a1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/PickupSpawnPoint.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/PickupSpawnPoint.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Blaster/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Blaster/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/WBP_AttackerCam.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/WBP_AttackerCam.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Pickups/BuffPickups/BP_HealthBuff.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Pickups/BuffPickups/BP_HealthBuff.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Pickups/BuffPickups/BP_ShieldBuff.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Pickups/BuffPickups/BP_ShieldBuff.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/StartMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/StartMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/HUD/AttackerCam.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/HUD/AttackerCam.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/HUD/AttackerCam.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/HUD/AttackerCam.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Blaster/Pickups/Pickup.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/Pickup.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Blaster/Pickups/Pickup.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/Pickup.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Blaster/Pickups/PickupSpawnPoint.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/PickupSpawnPoint.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Blaster/Pickups/PickupSpawnPoint.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Pickups/PickupSpawnPoint.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/PlayerController/BlasterPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/PlayerController/BlasterPlayerController.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/PlayerController/BlasterPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/PlayerController/BlasterPlayerController.h" afterDir="false" />
     </list>
@@ -32,12 +32,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Plugins/Marketplace/Developer/RiderLink/Source/RD/thirdparty/spdlog/include/spdlog/details/backtracer.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Developer/AssetTools/Private/AssetRenameManager.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Developer/AutomationController/Private/AutomationReport.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -52,6 +46,7 @@
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AIModule/Private/BehaviorTree/BlackboardComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AdvancedWidgets/Private/Components/RadialSlider.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AdvancedWidgets/Private/Slate/SRadialSlider.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AdvancedWidgets/Public/Components/RadialSlider.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Core/Private/Containers/BackgroundableTicker.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Core/Public/Containers/BackgroundableTicker.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Core/Public/Misc/Char.h" root0="FORCE_HIGHLIGHTING" />
@@ -70,6 +65,7 @@
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Engine/Classes/Engine/ReplicatedState.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Engine/Classes/Engine/Scene.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Engine/Classes/Engine/SubsurfaceProfile.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Engine/Classes/Engine/TextureRenderTarget2D.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Engine/Classes/Engine/TimecodeProvider.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Engine/Classes/Engine/World.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Engine/Classes/GameFramework/Character.h" root0="FORCE_HIGHLIGHTING" />
@@ -201,7 +197,8 @@
       <workItem from="1746624428600" duration="1188000" />
       <workItem from="1746630358558" duration="13953000" />
       <workItem from="1746647860762" duration="7340000" />
-      <workItem from="1746708517792" duration="11563000" />
+      <workItem from="1746708517792" duration="12842000" />
+      <workItem from="1746730578771" duration="3513000" />
     </task>
     <servers />
   </component>

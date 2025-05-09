@@ -101,9 +101,10 @@ private:
 	uint32 CountdownInt = 0;
 
 	FTimerHandle RespawnTimerHandle;
+	void RespawnTimerFinished();
 
 	UFUNCTION()
-	void RespawnTimerFinished();
+	void StartRespawnTimer(ABlasterCharacter* DestroyedCharacter);
 	
 	
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)

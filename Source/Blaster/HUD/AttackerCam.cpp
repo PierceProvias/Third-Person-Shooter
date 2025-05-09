@@ -37,12 +37,12 @@ void UAttackerCam::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 
-	RadialProgressBarInstance = UMaterialInstanceDynamic::Create(
-		RadialProgressBarMaterial,
-	this
-		);
-
-	RespawnProgressBarImage->SetBrushFromMaterial(RadialProgressBarInstance);
-	RadialProgressBarInstance->SetScalarParameterValue(TEXT("Percent"), GetPercent());
+	// RadialProgressBarInstance = UMaterialInstanceDynamic::Create(
+	// 	RadialProgressBarMaterial,
+	// this
+	// 	);
+	//
+	// RespawnProgressBarImage->SetBrushFromMaterial(RadialProgressBarInstance);
+	//RadialProgressBarInstance->SetScalarParameterValue(TEXT("Percent"), GetPercent());
 	
 }

@@ -40,7 +40,7 @@ void APickupSpawnPoint::SpawnPickupTimerFinished()
 	}
 }
 
-void APickupSpawnPoint::StartSpawnPickupTimer(AActor* DestoryedActor)
+void APickupSpawnPoint::StartSpawnPickupTimer(AActor* DestroyedActor)
 {
 	const float SpawnTime = FMath::RandRange(SpawnPickupTimeMin, SpawnPickupTimeMax);
 	GetWorldTimerManager().SetTimer(

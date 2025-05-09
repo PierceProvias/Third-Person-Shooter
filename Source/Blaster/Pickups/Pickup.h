@@ -65,7 +65,10 @@ private:
     	
 	UPROPERTY(EditAnywhere, Category = "Niagara")
 	TObjectPtr<UNiagaraSystem> PickupEffect;
-	
+
+	FTimerHandle BindOverlapTimerHandle;
+	float BindOverlapTime = 0.25f;
+	void BindOverlapTimerFinished();
 public:	
 	
 	FORCEINLINE USphereComponent* GetOverlapSphere() const { return OverlapSphere; }

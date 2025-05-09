@@ -21,19 +21,20 @@ public:
 	TWeakObjectPtr<UImage> AttackerProfileImage;
 
 	UPROPERTY(meta = (BindWidget))
-	TWeakObjectPtr<UTextBlock> AttackerName;
-	
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UMaterial> RadialProgressBarMaterial;
-
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UMaterialInstanceDynamic> RadialProgressBarInstance;
+	TWeakObjectPtr<URadialSlider> RespawnProgressBar;
 
 	UPROPERTY(meta = (BindWidget))
-	TWeakObjectPtr<UImage> RespawnProgressBarImage;
-
-	UPROPERTY(EditAnywhere)
-	float Percent = 0.0f;
+	TWeakObjectPtr<UTextBlock> AttackerName;
+	
+	// UPROPERTY(EditDefaultsOnly)
+	// TObjectPtr<UMaterial> RadialProgressBarMaterial;
+	//
+	// UPROPERTY(EditDefaultsOnly)
+	// TObjectPtr<UMaterialInstanceDynamic> RadialProgressBarInstance;
+	//
+	// UPROPERTY(meta = (BindWidget))
+	// TWeakObjectPtr<UImage> RespawnProgressBarImage;
+	
 
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> RespawnTime;
@@ -43,8 +44,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ShowPlayerName(APawn* InPawn);
 
-	FORCEINLINE void SetPercent(float PercentIn) {Percent = PercentIn;}
-	FORCEINLINE float GetPercent() {return Percent;}
 
 protected:
 	virtual void NativeConstruct() override;

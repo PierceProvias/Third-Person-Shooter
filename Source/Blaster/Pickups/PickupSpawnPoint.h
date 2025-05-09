@@ -7,6 +7,7 @@
 #include "PickupSpawnPoint.generated.h"
 
 class APickup;
+
 UCLASS()
 class BLASTER_API APickupSpawnPoint : public AActor
 {
@@ -28,7 +29,7 @@ protected:
 	void SpawnPickup();
 	void SpawnPickupTimerFinished();
 	UFUNCTION()
-	void StartSpawnPickupTimer(AActor* DestoryedActor);
+	void StartSpawnPickupTimer(AActor* DestroyedActor);
 
 private:
 	FTimerHandle SpawnPickupTimer;
