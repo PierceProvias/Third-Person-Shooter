@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include <optional>
 #include "BlasterPlayerController.generated.h"
 
 class UAttackerCam;
@@ -37,8 +38,8 @@ public:
 	void ResetCharacterOverlay();
 	void SetHUDAnnouncementCountdown(float CountdownTime);
 	
-	void SetAttackerCam(ABlasterPlayerController* AttackerController);
-	void SetHUDRespawmTimer(ABlasterCharacter* BlasterCharacter, float RespawmTime);
+	void SetAttackerCam(const ABlasterPlayerController* AttackerController);
+	void SetHUDRespawmTimer(ABlasterCharacter* ElimmedBlasterCharacter, float RespawmTime);
 
 	// Synced with server world clock
 	virtual float GetServerTime();
@@ -101,11 +102,6 @@ private:
 	uint32 CountdownInt = 0;
 
 	FTimerHandle RespawnTimerHandle;
-	void RespawnTimerFinished();
-
-	UFUNCTION()
-	void StartRespawnTimer(ABlasterCharacter* DestroyedCharacter);
-	
 	
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
 	FName MatchState;
@@ -140,5 +136,6 @@ private:
 	bool bInitializePrimaryGrenades		= false;
 	bool bInitializeSecondaryGrenades	= false;
 	bool bInitializeAttackerCam			= false;
+	bool bInitializeRespawnTimer		= false;
 	
 };

@@ -28,6 +28,22 @@ void UAttackerCam::UpdateSliderValue()
 	}
 }
 
+void UAttackerCam::UpdateRespawnText()
+{
+	if (RespawnTime.IsValid())
+	{
+		float CurrentTime = GetWorld()->GetTimeSeconds();
+		float ElapsedTime = CurrentTime -1.f - RespawnStartTime;
+		if (ElapsedTime <= RespawnDuration)
+		{
+			float Alpha = FMath::Clamp(ElapsedTime / RespawnDuration, 0.f, 1.0f);
+			float NewValue = FMath::Lerp(EndValue, StartValue, Alpha);
+			FString RespawTimeText = FString::Printf(TEXT("%d"), (uint32)NewValue);
+			RespawnTime->SetText(FText::FromString(RespawTimeText));
+		}
+	}
+}
+
 void UAttackerCam::StartSliderAnimation(float TargetValue)
 {
 	if (RespawnProgressBar.IsValid())
@@ -44,6 +60,23 @@ void UAttackerCam::StartSliderAnimation(float TargetValue)
 			true
 		);
 		RespawnProgressBar->SetStepSize(1.f);
+	}
+}
+
+void UAttackerCam::StartRespawnText(float TargetValue)
+{
+	if (RespawnProgressBar.IsValid())
+	{
+		StartValue = RespawnProgressBar->GetValue();
+		EndValue = TargetValue;
+		RespawnStartTime = GetWorld()->GetTimeSeconds();
+
+		GetWorld()->GetTimerManager().SetTimer(
+			RespawnTimerHandle,
+			this,
+			&UAttackerCam::UpdateRespawnText,
+			GetWorld()->GetDeltaSeconds(),
+			true);
 	}
 }
 

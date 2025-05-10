@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputSubsystems.h"
 #include "OnlineSubsystemTypes.h"
+//#include <optional>
 
 #include "../HUD/BlasterHUD.h"
 #include "../HUD/CharacterOverlay.h"
@@ -107,11 +108,11 @@ void ABlasterPlayerController::PollInit()
 			{
 				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
 				ABlasterPlayerController* BlasterPlayerController = Cast<ABlasterPlayerController>(GetPawn());
-				if (BlasterCharacter)
+				if (BlasterCharacter && BlasterHUD->AttackerCam.IsValid())
 				{
 					if (BlasterCharacter->IsElimmed())
 					{
-						if (bInitializeAttackerCam && BlasterPlayerController)	SetAttackerCam(BlasterPlayerController); 
+						if (bInitializeAttackerCam && BlasterPlayerController)	SetAttackerCam(BlasterPlayerController);
 					}
 				}
 			}
@@ -128,28 +129,6 @@ void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
 		ServerRequestServerTime(CurrentTime);
 		TimeSyncRunningTime = 0.f;
 	}
-}
-
-void ABlasterPlayerController::RespawnTimerFinished()
-{
-	if (ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>())
-	{
-		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(this->GetPawn()))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("RespawnTimerFinished"));
-			BlasterGameMode->RequestRespawn(BlasterCharacter, this);
-		}
-	}
-}
-
-void ABlasterPlayerController::StartRespawnTimer(ABlasterCharacter* DestroyedCharacter)
-{
-	GetWorldTimerManager().SetTimer(
-		RespawnTimerHandle,
-		this,
-		&ABlasterPlayerController::RespawnTimerFinished,
-			DestroyedCharacter->GetElimDelay()
-		);
 }
 
 void ABlasterPlayerController::ClientJoinMidGame_Implementation(FName StateOfMatch, float Warmup_Time, float Match_Time, float Cooldown_Time, float StartingTime)
@@ -599,7 +578,7 @@ void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 	}
 }
 
-void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* AttackerController)
+void ABlasterPlayerController::SetAttackerCam(const ABlasterPlayerController* AttackerController)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	bool bHUDValid = BlasterHUD.IsValid() &&
@@ -625,7 +604,7 @@ void ABlasterPlayerController::SetAttackerCam(ABlasterPlayerController* Attacker
 	}
 }
 
-void ABlasterPlayerController::SetHUDRespawmTimer(ABlasterCharacter* BlasterCharacter, float RespawmTime)
+void ABlasterPlayerController::SetHUDRespawmTimer(ABlasterCharacter* ElimmedBlasterCharacter, float RespawnTime)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	bool bHUDValid = BlasterHUD.IsValid() &&
@@ -634,13 +613,15 @@ void ABlasterPlayerController::SetHUDRespawmTimer(ABlasterCharacter* BlasterChar
 		BlasterHUD->AttackerCam->RespawnTime.IsValid();
 	if (bHUDValid)
 	{
-		if (BlasterCharacter->GetElimDelay() < 0.f)
-		{
-			BlasterHUD->AttackerCam->RespawnTime->SetText(FText());
-		}
-		FString RespawnTimeText = FString::Printf(TEXT("%d"), (uint32)BlasterCharacter->GetElimDelay());
-		BlasterHUD->AttackerCam->RespawnTime->SetText(FText::FromString(RespawnTimeText));
-		BlasterHUD->AttackerCam->StartSliderAnimation(BlasterCharacter->GetElimDelay());
+		BlasterHUD->AttackerCam->StartRespawnText(RespawnTime);
+
+		UE_LOG(LogTemp, Warning, TEXT("Respawn Time is: %d"), (uint32)RespawnTime);
+		BlasterHUD->AttackerCam->StartSliderAnimation(ElimmedBlasterCharacter->GetElimDelay());
+	}
+	else
+	{
+		bInitializeAttackerCam = true;
+		RespawnTime = ElimmedBlasterCharacter->GetElimDelay();
 	}
 }
 

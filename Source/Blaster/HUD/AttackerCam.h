@@ -30,11 +30,17 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> RespawnTime;
 
+	UFUNCTION(BlueprintCallable)
+	void StartSliderAnimation(float TargetValue);
+
+	UFUNCTION(BlueprintCallable)
+	void StartRespawnText(float RespawnTimeText);
+
 	UFUNCTION()
 	void UpdateSliderValue();
 
-	UFUNCTION(BlueprintCallable)
-	void StartSliderAnimation(float TargetValue);
+	UFUNCTION()
+	void UpdateRespawnText();
 	
 	void SetDisplayText(FString TextToDisplay);
 	
@@ -43,8 +49,12 @@ public:
 	
 protected:
 	FTimerHandle SlideTimerHandle;
+	FTimerHandle RespawnTimerHandle;
 	float SlideDuration = 3.0f;
+	float RespawnDuration = 3.0f;
 	float SlideStartTime;
+	float RespawnStartTime;
+
 	float StartValue;
 	float EndValue;
 	
