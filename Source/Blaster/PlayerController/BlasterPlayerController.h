@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include <optional>
 #include "BlasterPlayerController.generated.h"
 
 class UAttackerCam;
@@ -61,7 +60,6 @@ protected:
 	/*
 	* Sync time between client and server
 	*/
-
 	// Requests the current server time, passing in the client's time when the request was sent
 	UFUNCTION(Server, Reliable)
 	void ServerRequestServerTime(float TimeOfClientRequest);
@@ -79,7 +77,7 @@ protected:
 
 	void CheckTimeSync(float DeltaTime);
 
-	// Server RPC to initialize the player controller in the right match state
+	// Server RPC to initialize the player con`troller in the right match state
 	UFUNCTION(Server, Reliable)
 	void ServerCheckMatchState();
 

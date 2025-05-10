@@ -775,15 +775,11 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 		{
 			Shield = FMath::Clamp(Shield - Damage, 0.f, MaxShield);
 			DamageToHealth = 0.f;
-			UE_LOG(LogTemp, Display, TEXT("HUD Health : %f"), Health);
-			UE_LOG(LogTemp, Display, TEXT("HUD Shield: %f"), Shield);
 		}
 		else
 		{
 			Shield = 0.f;
 			DamageToHealth = FMath::Clamp(DamageToHealth - Shield, 0.f, Damage);
-			UE_LOG(LogTemp, Display, TEXT("HUD Health : %f"), Health);
-			UE_LOG(LogTemp, Display, TEXT("HUD Shield: %f"), Shield);
 		}
 	}
 	
@@ -818,14 +814,7 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 				BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
 				
 				// TODO: Black/White Screen for elimmed character 
-				// if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(AttackerController))
-				// {
-				// 	FPostProcessSettings& PostProcessSettings = BlasterCharacter->GetCamera()->PostProcessSettings;
-				// 	PostProcessSettings.SceneColorTint = FLinearColor(1.f, 0.f, 0.f, 1.f);
-				// 	PostProcessSettings.bOverride_SceneColorTint = true;
-				// }
 			}
-			
 		}
 	}
 }

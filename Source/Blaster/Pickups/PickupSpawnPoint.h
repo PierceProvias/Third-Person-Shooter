@@ -32,6 +32,7 @@ protected:
 	void StartSpawnPickupTimer(AActor* DestroyedActor);
 
 private:
+	
 	FTimerHandle SpawnPickupTimer;
 
 	UPROPERTY(EditAnywhere, Category = "SpawnPickups")

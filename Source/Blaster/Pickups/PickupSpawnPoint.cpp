@@ -2,7 +2,6 @@
 
 
 #include "PickupSpawnPoint.h"
-
 #include "Pickup.h"
 
 

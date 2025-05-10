@@ -89,16 +89,24 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABl
 	}
 	if (ElimmedCharacter)
 	{
-		// TODO: Make camera black and white when dead
-		if (!HasAuthority())
+		ElimmedCharacter->Elim();
+		if (HasAuthority())
 		{
-			Server_SwitchToAttackerCamera(VictimController, AttackerController);
+			Client_SwitchToAttackerCamera(VictimController, AttackerController);
+			// Server
+			UE_LOG(LogTemp, Warning, TEXT("HandleElimination: Server calling Client_SwitchToAttackerCamera. VictimPlayerState: %s, AttackerPlayerState: %s"),
+				   VictimPlayerState ? *VictimPlayerState->GetName() : TEXT("nullptr"),
+				   AttackerPlayerState ? *AttackerPlayerState->GetName() : TEXT("nullptr"));
+
+			// Client
+			UE_LOG(LogTemp, Warning, TEXT("Client_SwitchToAttackerCamera_Implementation: Called on client. VictimPlayerState: %s, AttackerPlayerState: %s"),
+				   VictimPlayerState ? *VictimPlayerState->GetName() : TEXT("nullptr"),
+				   AttackerPlayerState ? *AttackerPlayerState->GetName() : TEXT("nullptr"));
 		}
 		else
 		{
-			Client_SwitchToAttackerCamera(VictimController, AttackerController);
+			Server_SwitchToAttackerCamera(VictimController, AttackerController);
 		}
-		ElimmedCharacter->Elim();
 	}
 }
 
@@ -127,7 +135,7 @@ void ABlasterGameMode::Server_SwitchToAttackerCamera_Implementation(ABlasterPlay
 	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
 	ABlasterPlayerState* VictimPlayerState = VictimController? Cast<ABlasterPlayerState>(VictimController->PlayerState) : nullptr;
 	
-	if ( AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
+	if (AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
 	{
 		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), VICTIM_TARGET_BLEND);
 		VictimController->SetAttackerCam(AttackerController);
@@ -139,7 +147,7 @@ void ABlasterGameMode::Client_SwitchToAttackerCamera_Implementation(ABlasterPlay
 	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
 	ABlasterPlayerState* VictimPlayerState = VictimController? Cast<ABlasterPlayerState>(VictimController->PlayerState) : nullptr;
 	
-	if ( AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
+	if (AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
 	{
 		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), VICTIM_TARGET_BLEND);
 		VictimController->SetAttackerCam(AttackerController);

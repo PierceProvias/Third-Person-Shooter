@@ -8,8 +8,6 @@
 #include "Net/UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputSubsystems.h"
-#include "OnlineSubsystemTypes.h"
-//#include <optional>
 
 #include "../HUD/BlasterHUD.h"
 #include "../HUD/CharacterOverlay.h"
@@ -20,9 +18,6 @@
 #include "../PlayerState/BlasterPlayerState.h"
 #include "../Weapons/Weapon.h"
 #include "../HUD/AttackerCam.h"
-#include "Components/RadialSlider.h"
-#include "Compression/lz4.h"
-#include "Math/UnitConversion.h"
 
 #define RENDER_OPACITY_FULL 1.0f
 #define RENDER_OPACITY_EMPTY 0.f
@@ -150,10 +145,10 @@ void ABlasterPlayerController::ServerCheckMatchState_Implementation()
 {
 	if (ABlasterGameMode* BlasterGameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this)))
 	{
-		WarmupTime			= BlasterGameMode->WarmupTime;
-		MatchTime			= BlasterGameMode->MatchTime;
-		CooldownTime		= BlasterGameMode->CooldownTime;
-		LevelStartingTime	= BlasterGameMode->LevelStartingTime;
+		WarmupTime			= BlasterGameMode->GetWarmupTime();
+		MatchTime			= BlasterGameMode->GetMatchTime();
+		CooldownTime		= BlasterGameMode->GetCooldownTime();
+		LevelStartingTime	= BlasterGameMode->GetLevelStartingTime();
 		MatchState			= BlasterGameMode->GetMatchState();
 		
 		ClientJoinMidGame(MatchState, WarmupTime, MatchTime, CooldownTime, LevelStartingTime);
@@ -337,6 +332,7 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 	{
 		SetHUDHealth(BlasterCharacter->GetHealth(), BlasterCharacter->GetMaxHealth());
 		SetHUDShield(BlasterCharacter->GetShield(), BlasterCharacter->GetMaxShield());
+		ABlasterPlayerController* BlasterPlayerController = Cast<ABlasterPlayerController>(InPawn);
 	}
 }
 
@@ -585,10 +581,9 @@ void ABlasterPlayerController::SetAttackerCam(const ABlasterPlayerController* At
 		BlasterHUD->AttackerCam.IsValid() &&
 		BlasterHUD->CharacterOverlay &&
 		BlasterHUD->AttackerCam->AttackerProfileImage.IsValid() &&
-		BlasterHUD->AttackerCam->AttackerName.IsValid() &&
-		BlasterHUD->AttackerCam->RespawnTime.IsValid();
+		BlasterHUD->AttackerCam->AttackerName.IsValid();
 	
-	if (bHUDValid)
+	if (bHUDValid && IsLocalController())
 	{
 		BlasterHUD->CharacterOverlay->SetVisibility(ESlateVisibility::Collapsed);
 		BlasterHUD->AttackerCam->SetVisibility(ESlateVisibility::Visible);
@@ -614,14 +609,7 @@ void ABlasterPlayerController::SetHUDRespawmTimer(ABlasterCharacter* ElimmedBlas
 	if (bHUDValid)
 	{
 		BlasterHUD->AttackerCam->StartRespawnText(RespawnTime);
-
-		UE_LOG(LogTemp, Warning, TEXT("Respawn Time is: %d"), (uint32)RespawnTime);
 		BlasterHUD->AttackerCam->StartSliderAnimation(ElimmedBlasterCharacter->GetElimDelay());
-	}
-	else
-	{
-		bInitializeAttackerCam = true;
-		RespawnTime = ElimmedBlasterCharacter->GetElimDelay();
 	}
 }
 
@@ -640,5 +628,3 @@ void ABlasterPlayerController::ReceivedPlayer()
 		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
 	}
 }
-
-
