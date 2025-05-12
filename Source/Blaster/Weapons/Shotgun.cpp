@@ -5,7 +5,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Engine/SkeletalMeshSocket.h"
-#include "Particles/ParticleSystemComponent.h"
 
 #include "../Characters/BlasterCharacter.h"
 

@@ -40,6 +40,11 @@
 			"Name": "MinimapPlugin",
 			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/ad08325742e24fb0836391bca25c72bb"
+		},
+		{
+			"Name": "ElectronicNodes",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/5cb2a394d0c04e73891762be4cbd7216"
 		}
 	]
 }
