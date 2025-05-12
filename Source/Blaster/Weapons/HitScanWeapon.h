@@ -59,6 +59,4 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
 	bool bUseScatter = false;
 
-	
-
 };

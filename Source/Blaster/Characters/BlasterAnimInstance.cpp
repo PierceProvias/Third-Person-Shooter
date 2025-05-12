@@ -68,8 +68,9 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 		// TODO: Align weapon to crosshairs
 		// hand_r is a reference (transform is relative to hand_r)
+		FName EffectorTarget = BlasterCharacter->GetEffectorTargetName();
 		BlasterCharacter->GetMesh()->TransformToBoneSpace(
-			FName("hand_r"),
+			EffectorTarget,
 			LeftHandTransform.GetLocation(),
 			FRotator::ZeroRotator,
 			OutPosition,
@@ -81,13 +82,14 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		if (BlasterCharacter->IsLocallyControlled())
 		{
 			bIsLocallyControlled = true;
-			FTransform RightHandTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("hand_r"), ERelativeTransformSpace::RTS_World);
+			FTransform RightHandTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(EffectorTarget, ERelativeTransformSpace::RTS_World);
 			RightHandRotation = UKismetMathLibrary::FindLookAtRotation(
 				RightHandTransform.GetLocation(), 
 				RightHandTransform.GetLocation() + (RightHandTransform.GetLocation() - BlasterCharacter->GetHitTarget()));
 		}
 		Weapon_Crosshairs_DebugLines(ActivateDebugLines);
-	}
+		//SynchronizeMuzzleWithCrosshairs(LeftHandTransform.GetLocation(), OutPosition);
+	} 
 
 	bUseFABRIK			= BlasterCharacter->GetCombatState() == ECombatState::ECS_Unoccupied;
 	bUseAimOffsets		= BlasterCharacter->GetCombatState() == ECombatState::ECS_Unoccupied;
@@ -104,3 +106,28 @@ void UBlasterAnimInstance::Weapon_Crosshairs_DebugLines(bool TurnOn)
 		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Orange);
 	}
 }
+
+/*void UBlasterAnimInstance::SynchronizeMuzzleWithCrosshairs(FVector& TraceStart, const FVector& TraceEnd)
+{
+	FVector MuzzelForwardVector = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlash"), ERelativeTransformSpace::RTS_World).GetLocation().ForwardVector;
+	FVector CrosshairsForwardVector = BlasterCharacter->GetHitTarget().ForwardVector;
+
+	
+	//FVector MuzzelWorldLocation = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlash"), ERelativeTransformSpace::RTS_World));
+	FRotator MuzzleWorldRotation = FRotator();
+	EquippedWeapon->GetWeaponMesh()->GetSocketWorldLocationAndRotation(FName("MuzzleFlash"), TraceStart, MuzzleWorldRotation);
+
+	//TraceStart = MuzzleWorldLocation;
+	FVector EndPoint = MuzzelForwardVector * 33423432 + MuzzelForwardVector;
+
+	if (UWorld* World = GetWorld())
+	{
+		World->LineTraceSingleByChannel(
+			OutHit,
+			TraceStart,
+			TraceEnd,
+			ECollisionChannel::ECC_Visibility
+		);
+	}
+	
+}*/

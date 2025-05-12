@@ -329,33 +329,39 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> AttachedGrenade;
+
+	UPROPERTY(EditAnywhere, Category = "FABRIK")
+	FName EffectorTarget;
+	
 public:
 
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
 	bool IsAiming();
-
+	
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
-	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
-	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
-	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
-	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	FORCEINLINE float GetHealth() const { return Health; }
-	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
 	FORCEINLINE float GetShield() const { return Shield; }
-	FORCEINLINE void SetShield(float Amount) {Shield = Amount;}
 	FORCEINLINE float GetMaxShield() const { return MaxShield; }
+	FORCEINLINE float GetElimDelay() const { return ElimDelay; }
+	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 	FORCEINLINE UInputMappingContext* GetCharacterInputMappingContext() const { return CharacterMappingContext; }
 	FORCEINLINE UInputAction* GetFireAction() const { return FireAction; }
 	FORCEINLINE UStaticMeshComponent* GetAttachedGrenade() const { return AttachedGrenade; }
-	FORCEINLINE UCombatComponent* GetCombatComponent() const {return CombatComponent;}
+	FORCEINLINE UCombatComponent* GetCombatComponent() const {return CombatComponent;}	
 	FORCEINLINE UBuffComponent* GetBuffComponent() const {return BuffComponent;}
-	FORCEINLINE float GetElimDelay() const { return ElimDelay; }
+	FORCEINLINE FName GetEffectorTargetName() const { return EffectorTarget; }
 	FORCEINLINE FTimerHandle GetElimTimer() const { return ElimTimer; }
-	ECombatState GetCombatState() const;
+	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 
+	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
+	FORCEINLINE bool IsElimmed() const { return bElimmed; }
+	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
+	FORCEINLINE void SetShield(float Amount) {Shield = Amount;}
+
+	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon();
 	FVector GetHitTarget() const;
 

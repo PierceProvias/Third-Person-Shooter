@@ -131,6 +131,4 @@ void AHitScanWeapon::WeaponTraceHit(const FVector& TraceStart, const FVector& Hi
 			}
 		}
 	}
-
-
 }

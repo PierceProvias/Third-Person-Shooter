@@ -119,7 +119,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	TObjectPtr<UAnimationAsset> FireAnimation;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Ammo")
 	TSubclassOf<ACasing> CasingClass;
 
 	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo, Category = "Ammo")

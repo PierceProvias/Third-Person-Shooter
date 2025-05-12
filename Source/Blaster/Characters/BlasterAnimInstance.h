@@ -20,7 +20,6 @@ public:
 
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
-
 	void Weapon_Crosshairs_DebugLines(bool TurnOn);
 
 private:
@@ -101,4 +100,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
 	bool ActivateDebugLines = false;
 
+	// void SynchronizeMuzzleWithCrosshairs(FVector& TraceStart, const FVector& TraceEnd);
+
+	
 };
