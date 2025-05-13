@@ -24,8 +24,9 @@
 #include "../GameModes/BlasterGameMode.h"
 #include "../PlayerState/BlasterPlayerState.h"
 #include "../Weapons/WeaponTypes.h"
+#include "../Cameras/DamageCamera.h"
+#include "../HUD/KillConfirmed.h"
 #include "PauseMenu.h"
-#include "Blaster/Cameras/DamageCamera.h"
 
 
 ABlasterCharacter::ABlasterCharacter()
@@ -82,6 +83,9 @@ ABlasterCharacter::ABlasterCharacter()
 	AttachedGrenade = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Attached Grenade"));
 	AttachedGrenade->SetupAttachment(GetMesh(), FName("GrenadeSocket"));
 	AttachedGrenade->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	KillConfirmedWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Kill Confirmed Widget"));
+	KillConfirmedWidget->SetupAttachment(RootComponent);
 }
 
 void ABlasterCharacter::BeginPlay()
@@ -107,6 +111,12 @@ void ABlasterCharacter::BeginPlay()
 	if (AttachedGrenade)
 	{
 		AttachedGrenade->SetVisibility(false);
+	}
+	if (KillConfirmedWidget)
+	{
+		UUserWidget* WidgetInstance = KillConfirmedWidget->GetUserWidgetObject();
+		KillConfirmedWidgetInstance = KillConfirmedWidgetInstance == nullptr ? Cast<UKillConfirmed>(WidgetInstance) : KillConfirmedWidgetInstance;
+		ShowKillConfirmedWidget(false);
 	}
 }
 
@@ -140,12 +150,20 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	}
 	bElimmed = true;
 	PlayElimMontage();
+	ShowKillConfirmedWidget(true);
 
+	GetWorldTimerManager().SetTimer(
+		KillConfirmedTimer,
+		this, 
+		&ABlasterCharacter::KillConfirmedTimerFinished,
+		KillConfirmedAnnoucmentTime
+	);
+	
 	// Start dissolve effect when eliminated
 	if (DissolveMaterialInstance)
 	{
 		DynamicDissolveMaterialInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
-		GetMesh()->SetMaterial(0, DynamicDissolveMaterialInstance);
+		GetMesh()->SetMaterial(1, DynamicDissolveMaterialInstance);
 		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Dissolve"), 0.55f);
 		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Glow"), 200.f);
 
@@ -599,6 +617,11 @@ void ABlasterCharacter::ElimTimerFinished()
 	}
 }
 
+void ABlasterCharacter::KillConfirmedTimerFinished()
+{
+	ShowKillConfirmedWidget(false);
+}
+
 void ABlasterCharacter::UpdateDissolveMaterial(float DissolveValue)
 {
 	if (DynamicDissolveMaterialInstance)
@@ -643,6 +666,21 @@ bool ABlasterCharacter::IsAiming()
 	return (CombatComponent && CombatComponent->bAiming);
 }
 
+void ABlasterCharacter::ShowKillConfirmedWidget(bool bShowWidget)
+{
+	if (KillConfirmedWidget && KillConfirmedWidgetInstance)
+	{
+		KillConfirmedWidget->SetVisibility(bShowWidget);
+		//KillConfirmedWidgetInstance->PlayAnimation(KillConfirmedWidge->)
+		UWidgetAnimation* KillConfirmedAnimation = KillConfirmedWidgetInstance->KillConfirmedAnimation.Get();
+		if (KillConfirmedWidgetInstance->KillConfirmedAnimation.IsValid())
+		{
+			KillConfirmedWidgetInstance->PlayAnimation(KillConfirmedAnimation);
+			
+		}
+	}
+}
+
 ECombatState ABlasterCharacter::GetCombatState() const
 {
 	if (CombatComponent == nullptr) return ECombatState::ECS_MAX;
@@ -650,7 +688,7 @@ ECombatState ABlasterCharacter::GetCombatState() const
 }
 
 AWeapon* ABlasterCharacter::GetEquippedWeapon()
-{
+{	
 	if (CombatComponent == nullptr) return nullptr;
 	return CombatComponent->EquippedWeapon;
 }
@@ -811,8 +849,7 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 			ABlasterPlayerController* AttackerController = Cast<ABlasterPlayerController>(InstigatorController);
 			if (BlasterPlayerController && AttackerController)
 			{
-				BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
-				
+				BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);	
 				// TODO: Black/White Screen for elimmed character 
 			}
 		}

@@ -101,9 +101,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 
-	UPROPERTY(EditAnywhere, Category = WeaponProperties)
+	UPROPERTY(EditAnywhere, Category = "WeaponProperties")
 	TObjectPtr<UTexture2D> Weapon2DTexture;
-
+	
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<USphereComponent> AreaSphere;
 
@@ -172,6 +172,7 @@ private:
 	TObjectPtr<UMapIconComponent> WeaponMapIcon;
 
 	TWeakObjectPtr<UPickupWidget> PickupWidgetInstance;
+	
 public:	
 	
 	void SetWeaponState(EWeaponState State);

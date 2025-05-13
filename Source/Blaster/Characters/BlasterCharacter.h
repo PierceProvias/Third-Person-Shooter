@@ -11,6 +11,8 @@
 
 #include "BlasterCharacter.generated.h"
 
+class UWidgetAnimation;
+class UKillConfirmed;
 class UDamageCamera;
 class UBuffComponent;
 class USpringArmComponent;
@@ -104,17 +106,12 @@ protected:
 	
 	void AimOffset(float DeltaTime);
 	void CalculateAO_Pitch();
-
 	
-
 	// Simulates turning for proxies
 	// Allows for higher performance since we don't need to know the proxy's aim offsets
 	// Prevents rotation of root bone for simulated proxies
 	void SimProxiesTurn();
-
 	
-	
-
 	// Bound to OnTakeAnyDamage delegate (needs UFUNCTION macro)
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
@@ -123,8 +120,17 @@ protected:
 	// Poll for any relevant classes and init our HUD
 	void PollInit();
 
+	
+	UPROPERTY(EditAnywhere, Category = "Announcements")
+	TObjectPtr<UWidgetComponent> KillConfirmedWidget;
+
+	TObjectPtr<UMaterialInstanceDynamic> WidgetMaterialInstance;
+
 
 private:
+
+	UPROPERTY(EditAnywhere, Category = "Announcements")
+	TObjectPtr<UKillConfirmed> KillConfirmedWidgetInstance;
 
 	UPROPERTY(EditAnywhere, Category = "CameraBoom")
 	TObjectPtr<USpringArmComponent> CameraBoom;
@@ -214,19 +220,19 @@ private:
 	* Animation Montages
 	*/
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = "Montages")
 	TObjectPtr<UAnimMontage> FireWeaponMontage;
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = "Montages")
 	TObjectPtr<UAnimMontage> ReloadMontage;
 	
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = "Montages")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = "Montages")
 	TObjectPtr<UAnimMontage> ElimMontage;
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = "Montages")
 	TObjectPtr<UAnimMontage> ThrowGrenadeMontage;
 
 	void HideCameraIfCharacterClose();
@@ -273,24 +279,31 @@ private:
 	bool bElimmed = false;
 
 	FTimerHandle ElimTimer;
+	FTimerHandle KillConfirmedTimer;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Player Stats")
+	UPROPERTY(EditDefaultsOnly, Category = "Elim")
 	float ElimDelay = 3.f;
+
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Elim")
+	float KillConfirmedAnnoucmentTime = 1.f;
 
 	// Callback function for ElimTimer
 	void ElimTimerFinished();
+
+	void KillConfirmedTimerFinished();
 	
 
 	/*
 	* Dissolve Effect
 	*/
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Elim")
 	TObjectPtr<UTimelineComponent> DissolveTimeLine;
 
 	FOnTimelineFloat DissolveTrack;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Elim")
 	TObjectPtr<UCurveFloat> DissolveCurve;
 
 	// UTimelineComponent callback function
@@ -311,16 +324,16 @@ private:
 	* Elim Bot (must be spawned locally)
 	*/
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Elim")
 	TObjectPtr<UParticleSystem> ElimBotEffect;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Elim")
 	TObjectPtr<UParticleSystemComponent> ElimBotComponent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Elim")
 	TObjectPtr<USoundCue> ElimBotSound;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Elim")
 	float ElimBotHoverDistance = 200.f;
 
 	TObjectPtr<ABlasterPlayerState> BlasterPlayerState;
@@ -338,6 +351,8 @@ public:
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
 	bool IsAiming();
+
+	void ShowKillConfirmedWidget(bool bShowWidget);
 	
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
