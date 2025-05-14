@@ -105,6 +105,7 @@ void ABlasterCharacter::BeginPlay()
 	UpdateHUDShield();
 	SpawnDefaultWeapon();
 	UpdateHUDAmmo();
+	
 
 	if (HasAuthority())
 	{
@@ -890,6 +891,15 @@ void ABlasterCharacter::UpdateHUDAmmo()
 	}
 }
 
+void ABlasterCharacter::UpdateHUDWeaponTexture2D(AWeapon* Weapon)
+{
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	if (BlasterPlayerController && Weapon)
+	{
+		BlasterPlayerController->SetHUDCarriedWeaponTexture(Weapon->GetWeaponTexture2D());
+	}
+}
+
 void ABlasterCharacter::SetKillConfirmedSprite(AWeapon* Weapon)
 {
 	if (Weapon->GetKillConfirmedSprites().Num() > 0)
@@ -936,9 +946,9 @@ void ABlasterCharacter::SpawnDefaultWeapon()
 		if (CombatComponent)
 		{
 			CombatComponent->EquipWeapon(StartingWeapon);
+			UpdateHUDWeaponTexture2D(StartingWeapon);
 		}
 	}
-	
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

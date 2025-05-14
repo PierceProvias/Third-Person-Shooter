@@ -125,15 +125,19 @@ private:
 	int32 HUDPrimaryGrenades	= 0;
 	int32 HUDSecondaryGrenades	= 0;
 
+	TObjectPtr<UTexture2D> WeaponTexture;
+
 	bool bInitializeScore				= false;
 	bool bInitializeDeaths				= false;
 	bool bInitializeHealth				= false;
 	bool bInitializeShield				= false;
 	bool bInitializeWeaponAmmo			= false;
 	bool bInitializeCarriedAmmo			= false;
+	bool bInitializeWeaponTexture		= false;
 	bool bInitializePrimaryGrenades		= false;
 	bool bInitializeSecondaryGrenades	= false;
 	bool bInitializeAttackerCam			= false;
 	bool bInitializeRespawnTimer		= false;
+	
 	
 };

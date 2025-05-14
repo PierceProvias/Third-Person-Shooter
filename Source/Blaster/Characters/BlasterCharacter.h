@@ -76,6 +76,7 @@ public:
 	void UpdateHUDHealth();
 	void UpdateHUDShield();
 	void UpdateHUDAmmo();
+	void UpdateHUDWeaponTexture2D(AWeapon* Weapon);
 	void SetKillConfirmedSprite(AWeapon* Weapon);
 protected:
 	
@@ -362,7 +363,8 @@ public:
 	bool IsAiming();
 
 	void ShowKillConfirmedWidget(bool bShowWidget);
-	
+
+	FORCEINLINE auto GetDefaultWeaponClass() const {return DefaultWeaponClass;}
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 	FORCEINLINE float GetHealth() const { return Health; }

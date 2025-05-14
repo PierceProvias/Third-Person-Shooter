@@ -80,6 +80,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
 	DOREPLIFETIME(UCombatComponent, bAiming);
 	DOREPLIFETIME(UCombatComponent, CombatState);
+	
 	DOREPLIFETIME_CONDITION(UCombatComponent, GrenadeCount, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 }
@@ -431,7 +432,14 @@ void UCombatComponent::UpdateWeapon2DTextures()
 		if (EquippedWeapon && EquippedWeaponTexture2D)
 		{
 			BlasterController->SetHUDCarriedWeaponTexture(EquippedWeaponTexture2D);
-			UE_LOG(LogTemp, Warning, TEXT("Texture: %s"), *EquippedWeaponTexture2D->GetName());
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(
+					1,
+					2.f,
+					FColor::Cyan,
+					FString::Printf(TEXT("CurrentWeapon: %s"), *EquippedWeaponTexture2D->GetName()));
+			}
 		}
 	} 
 }

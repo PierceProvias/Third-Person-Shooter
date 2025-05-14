@@ -26,7 +26,6 @@ void ABlasterPlayerController::BeginPlay()
 	Super::BeginPlay();
 	ServerCheckMatchState();
 	BlasterHUD = Cast<ABlasterHUD>(GetHUD());
-	
 	ServerCheckMatchState();
 }
 
@@ -91,6 +90,7 @@ void ABlasterPlayerController::PollInit()
 				if (bInitializeShield)					SetHUDShield(HUDShield, HUDMaxShield);
 				if (bInitializeCarriedAmmo)				SetHUDCarriedAmmo(HUDCarriedAmmo);
 				if (bInitializeWeaponAmmo)				SetHUDWeaponAmmo(HUDWeaponAmmo);
+				if (bInitializeWeaponTexture)			SetHUDCarriedWeaponTexture(WeaponTexture);
 				
 				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
 				if (BlasterCharacter && BlasterCharacter->GetCombatComponent())
@@ -464,14 +464,17 @@ void ABlasterPlayerController::SetHUDCarriedWeaponTexture(UTexture2D* CurrentWea
 	
 	if (bHUDValid)
 	{
-		ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
-		if (BlasterCharacter)
+		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn()))
 		{
-			CurrentWeaponTexture = BlasterCharacter->GetEquippedWeapon()->GetWeaponTexture2D();
 			BlasterHUD->CharacterOverlay->WeaponImage->SetBrushFromTexture(CurrentWeaponTexture);
+			CurrentWeaponTexture = BlasterCharacter->GetEquippedWeapon()->GetWeaponTexture2D();
 			BlasterHUD->CharacterOverlay->WeaponImage->SetRenderOpacity(RENDER_OPACITY_FULL);
 		}
-		// TODO: When player respawns no weapon texture should be shown
+	}
+	else
+	{
+		bInitializeWeaponTexture = true;
+		WeaponTexture = CurrentWeaponTexture;
 	}
 }
 
