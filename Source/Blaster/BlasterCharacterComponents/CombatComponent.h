@@ -60,6 +60,12 @@ protected:
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 
+	void EquipPrimaryWeapon(AWeapon* WeaponToEquip);
+	void EquipSecondaryWeapon(AWeapon* WeaponToEquip);
+	
+	UFUNCTION()
+	void OnRep_SecondaryWeapon();
+
 	UFUNCTION()
 	void OnRep_DropCurrentWeapon();
 
@@ -96,13 +102,15 @@ protected:
 	TSubclassOf<AProjectile> GrenadeClass;
 
 	void SwapEquippedWeapon();
-	//void AttachActorToCharacterSocket(AActor* ActorToAttach);
+	//void ActorToCharacterSocket(AActor* ActorToAttach);
 	void AttachActorToRightHand(AActor* ActorToAttach);
 	void AttachActorToLeftHand(AActor* ActorToAttach);
+	void AttachActorToBack(AActor* ActorToAttach);
 	void UpdateCarriedAmmo();
-	void PlayEquipWeaponSound();
+	void PlayEquipWeaponSound(AWeapon* WeaponToEquip);
 	void ReloadEmptyWeapon();
 	void ShowAttachedGrenade(bool bShowGrenade);
+	
 private:
 
 	TObjectPtr<ABlasterCharacter> BlasterCharacter;
@@ -113,6 +121,9 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	TObjectPtr<AWeapon> EquippedWeapon;
 
+	UPROPERTY(ReplicatedUsing = OnRep_SecondaryWeapon)
+	TObjectPtr<AWeapon> SecondaryWeapon;
+	
 	UPROPERTY(Replicated)
 	bool bAiming;
 

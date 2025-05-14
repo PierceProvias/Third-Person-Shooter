@@ -10,7 +10,6 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Casing.h"
 #include "Engine/SkeletalMeshSocket.h"
-#include "MapIconComponent.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 
@@ -49,9 +48,7 @@ AWeapon::AWeapon()
 	
 	PickupWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Pickup Widget"));
 	PickupWidget->SetupAttachment(RootComponent);
-
-	WeaponMapIcon = CreateDefaultSubobject<UMapIconComponent>(TEXT("Weapon Map Icon"));
-	WeaponMapIcon->SetupAttachment(GetRootComponent());
+	
 }
 
 void AWeapon::EnableCustomDepth(bool bEnable)
@@ -106,7 +103,11 @@ void AWeapon::OnRep_Owner()
 	}
 	else
 	{
-		SetHUDAmmo();
+		BlasterOwnerCharacter = BlasterOwnerCharacter == nullptr ? Cast<ABlasterCharacter>(Owner) : BlasterOwnerCharacter;
+		if (BlasterOwnerCharacter.IsValid() && BlasterOwnerCharacter->GetEquippedWeapon() && BlasterOwnerCharacter->GetEquippedWeapon() == this)
+		{
+			SetHUDAmmo(); 
+		}
 	}
 }
 

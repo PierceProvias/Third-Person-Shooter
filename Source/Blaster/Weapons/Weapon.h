@@ -12,7 +12,6 @@ class UTexture2D;
 class ABlasterCharacter;
 class ABlasterPlayerController;
 class USoundCue;
-class UMapIconComponent;
 class USphereComponent;
 class UWidgetComponent;
 class UAnimationAsset;
@@ -174,10 +173,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float ZoomInterpSpeed = 20.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Icon")
-	TObjectPtr<UMapIconComponent> WeaponMapIcon;
-
+	
 	TWeakObjectPtr<UPickupWidget> PickupWidgetInstance;
 	
 public:	

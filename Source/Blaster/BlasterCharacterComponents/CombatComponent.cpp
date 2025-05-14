@@ -78,6 +78,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
+	DOREPLIFETIME(UCombatComponent, SecondaryWeapon);
 	DOREPLIFETIME(UCombatComponent, bAiming);
 	DOREPLIFETIME(UCombatComponent, CombatState);
 	
@@ -118,34 +119,22 @@ void UCombatComponent::OnRep_EquippedWeapon()
 		BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 		BlasterCharacter->bUseControllerRotationYaw = true;
 		UpdateWeapon2DTextures();
-		PlayEquipWeaponSound();
-	
-		/*
-		
-			TArray<FInputAxisKeyMapping> AxisMappings;
-			FName AxisName;
-			UInputSettings::GetInputSettings()->GetAxisMappingByName(AxisName, AxisMappings);
-			for (auto Axis : AxisMappings)
-			{
-				if (BlasterController->WasInputKeyJustPressed(Axis.Key))
-				{
-					return true;
-				}
-			}
-			return false;
-			if (BlasterCharacter->GetInputAxisValue(FName("DropWeaponAction")))
-			{
-				//OnRep_DropCurrentWeapon();
-			}
-		*/
+		PlayEquipWeaponSound(EquippedWeapon);
 	}
 }
 
-void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
+void UCombatComponent::OnRep_SecondaryWeapon()
 {
-	if (BlasterCharacter == nullptr || WeaponToEquip == nullptr) return;
-	if (CombatState != ECombatState::ECS_Unoccupied) return;
+	if (BlasterCharacter && SecondaryWeapon)
+	{
+		SecondaryWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+		AttachActorToBack(SecondaryWeapon);
+		PlayEquipWeaponSound(SecondaryWeapon);
+	}
+}
 
+void UCombatComponent::EquipPrimaryWeapon(AWeapon* WeaponToEquip)
+{
 	SwapEquippedWeapon();
 	EquippedWeapon = WeaponToEquip;
 	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
@@ -156,8 +145,33 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	EquippedWeapon->SetHUDAmmo();
 	UpdateWeapon2DTextures();
 	UpdateCarriedAmmo();
-	PlayEquipWeaponSound();
+	PlayEquipWeaponSound(WeaponToEquip);
 	ReloadEmptyWeapon();
+}
+
+void UCombatComponent::EquipSecondaryWeapon(AWeapon* WeaponToEquip)
+{
+	SecondaryWeapon = WeaponToEquip;
+	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+	AttachActorToBack(WeaponToEquip);
+	EquippedWeapon->SetOwner(BlasterCharacter);
+	PlayEquipWeaponSound(WeaponToEquip);
+}
+
+void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
+{
+	if (BlasterCharacter == nullptr || WeaponToEquip == nullptr) return;
+	if (CombatState != ECombatState::ECS_Unoccupied) return;
+	
+	if (EquippedWeapon != nullptr && SecondaryWeapon == nullptr)
+	{
+		EquipSecondaryWeapon(WeaponToEquip);
+	}
+	else
+	{
+		EquipPrimaryWeapon(WeaponToEquip);
+	}
+
 
 	// Disable orient to movement so we can strafe
 	// NOTE: This will only be done on the server therefore we need to use a RepNotify
@@ -182,13 +196,13 @@ void UCombatComponent::ShowAttachedGrenade(bool bShowGrenade)
 	}
 }
 
-void UCombatComponent::PlayEquipWeaponSound()
+void UCombatComponent::PlayEquipWeaponSound(AWeapon* WeaponToEquip)
 {
-	if (BlasterCharacter && EquippedWeapon && EquippedWeapon->EquipSound)
+	if (BlasterCharacter && WeaponToEquip && WeaponToEquip->EquipSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(
 			this,
-			EquippedWeapon->EquipSound,
+			WeaponToEquip->EquipSound,
 			BlasterCharacter->GetActorLocation()
 		);
 	}
@@ -637,8 +651,7 @@ void UCombatComponent::SwapEquippedWeapon()
 void UCombatComponent::AttachActorToRightHand(AActor* ActorToAttach)
 {
 	if (BlasterCharacter == nullptr || BlasterCharacter->GetMesh() == nullptr || ActorToAttach == nullptr) return;
-	const USkeletalMeshSocket* HandSocket = BlasterCharacter->GetMesh()->GetSocketByName(FName("RightHandSocket"));
-	if (HandSocket)
+	if (const USkeletalMeshSocket* HandSocket = BlasterCharacter->GetMesh()->GetSocketByName(FName("RightHandSocket")))
 	{
 		HandSocket->AttachActor(ActorToAttach, BlasterCharacter->GetMesh());
 	}
@@ -647,10 +660,18 @@ void UCombatComponent::AttachActorToRightHand(AActor* ActorToAttach)
 void UCombatComponent::AttachActorToLeftHand(AActor* ActorToAttach)
 {
 	if (BlasterCharacter == nullptr || BlasterCharacter->GetMesh() == nullptr || ActorToAttach == nullptr) return;
-	const USkeletalMeshSocket* HandSocket = BlasterCharacter->GetMesh()->GetSocketByName(FName("LeftHandSocket"));
-	if (HandSocket)
+	if (const USkeletalMeshSocket* HandSocket = BlasterCharacter->GetMesh()->GetSocketByName(FName("LeftHandSocket")))
 	{
 		HandSocket->AttachActor(ActorToAttach, BlasterCharacter->GetMesh());
+	}
+}
+
+void UCombatComponent::AttachActorToBack(AActor* ActorToAttach)
+{
+	if (BlasterCharacter == nullptr || BlasterCharacter->GetMesh() == nullptr || ActorToAttach == nullptr) return;
+	if (const USkeletalMeshSocket* BackSocket = BlasterCharacter->GetMesh()->GetSocketByName(FName("BackSocket")))
+	{
+		BackSocket->AttachActor(ActorToAttach, BlasterCharacter->GetMesh());
 	}
 }
 
