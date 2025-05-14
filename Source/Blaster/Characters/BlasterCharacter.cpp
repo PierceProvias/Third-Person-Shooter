@@ -27,6 +27,7 @@
 #include "../Cameras/DamageCamera.h"
 #include "../HUD/KillConfirmed.h"
 #include "PauseMenu.h"
+#include "Components/Image.h"
 
 
 ABlasterCharacter::ABlasterCharacter()
@@ -100,9 +101,10 @@ void ABlasterCharacter::BeginPlay()
 			bInputsSet = true;
 		}
 	}
-
 	UpdateHUDHealth();
 	UpdateHUDShield();
+	SpawnDefaultWeapon();
+	UpdateHUDAmmo();
 
 	if (HasAuthority())
 	{
@@ -131,7 +133,14 @@ void ABlasterCharacter::Elim()
 {
 	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
-		CombatComponent->EquippedWeapon->Swapped();		// TODO: Need to be dropped here (create function for dropping current weapon)
+		if (CombatComponent->EquippedWeapon->bDestroyWeapon)
+		{
+			CombatComponent->EquippedWeapon->Destroy();	
+		}
+		else
+		{
+			CombatComponent->EquippedWeapon->Swapped();		// TODO: Need to be dropped here (create function for dropping current weapon)
+		}
 	}
 	MulticastElim();
 	GetWorldTimerManager().SetTimer(
@@ -339,6 +348,7 @@ void ABlasterCharacter::EquipButtonPressed()
 		if (HasAuthority() && OverlappingWeapon)
 		{
 			CombatComponent->EquipWeapon(OverlappingWeapon);
+			// SetKillConfirmedSprite(OverlappingWeapon); Fix Bug!
 		}
 		else
 		{
@@ -671,12 +681,11 @@ void ABlasterCharacter::ShowKillConfirmedWidget(bool bShowWidget)
 	if (KillConfirmedWidget && KillConfirmedWidgetInstance)
 	{
 		KillConfirmedWidget->SetVisibility(bShowWidget);
-		//KillConfirmedWidgetInstance->PlayAnimation(KillConfirmedWidge->)
 		UWidgetAnimation* KillConfirmedAnimation = KillConfirmedWidgetInstance->KillConfirmedAnimation.Get();
-		if (KillConfirmedWidgetInstance->KillConfirmedAnimation.IsValid())
+		if (KillConfirmedWidgetInstance->KillConfirmedAnimation.IsValid() && KillConfirmedWidgetInstance->KillConfirmedImage.IsValid())
 		{
 			KillConfirmedWidgetInstance->PlayAnimation(KillConfirmedAnimation);
-			
+			KillConfirmedWidgetInstance->KillConfirmedImage->SetBrushFromTexture(KillConfirmedSprite);
 		}
 	}
 }
@@ -687,7 +696,7 @@ ECombatState ABlasterCharacter::GetCombatState() const
 	return CombatComponent->CombatState;
 }
 
-AWeapon* ABlasterCharacter::GetEquippedWeapon()
+AWeapon* ABlasterCharacter::GetEquippedWeapon() const
 {	
 	if (CombatComponent == nullptr) return nullptr;
 	return CombatComponent->EquippedWeapon;
@@ -722,8 +731,7 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 	if (AnimInstance && FireWeaponMontage)
 	{
 		AnimInstance->Montage_Play(FireWeaponMontage);
-		FName SectionName;
-		SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		FName SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
@@ -765,8 +773,6 @@ void ABlasterCharacter::PlayReloadMontage()
 			SectionName = FName("AssaultRifle");
 			break;
 		}
-
-
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
@@ -872,7 +878,37 @@ void ABlasterCharacter::UpdateHUDShield()
 	{
 		BlasterPlayerController->SetHUDShield(Shield, MaxShield);
 	}
-	
+}
+
+void ABlasterCharacter::UpdateHUDAmmo()
+{
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	if (BlasterPlayerController && CombatComponent && CombatComponent->EquippedWeapon)
+	{
+		BlasterPlayerController->SetHUDCarriedAmmo(CombatComponent->CarriedAmmo);
+		BlasterPlayerController->SetHUDWeaponAmmo(CombatComponent->EquippedWeapon->GetAmmo());
+	}
+}
+
+void ABlasterCharacter::SetKillConfirmedSprite(AWeapon* Weapon)
+{
+	if (Weapon->GetKillConfirmedSprites().Num() > 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("KillConfirmedSprites"));
+		for (const auto& texture : Weapon->GetKillConfirmedSprites())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("%p"), texture);
+		}
+		uint32 Selection = FMath::RandRange(0, Weapon->GetKillConfirmedSprites().Num() - 1);
+		if (Weapon->GetWeaponType() <= EWeaponType::EWT_GrenadeLauncher)
+		{
+			KillConfirmedSprite = Weapon->GetKillConfirmedSprites()[Selection];
+		}
+		else
+		{
+			KillConfirmedSprite = Weapon->GetKillConfirmedSprites()[Selection];	
+		}
+	}
 }
 
 void ABlasterCharacter::PollInit()
@@ -886,6 +922,23 @@ void ABlasterCharacter::PollInit()
 			BlasterPlayerState->AddToDeaths(0);
 		}
 	}
+}
+
+void ABlasterCharacter::SpawnDefaultWeapon()
+{
+	// GetGameMode returns NULL if not on server
+	ABlasterGameMode* BlasterGameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this));
+	UWorld* World = GetWorld();
+	if (BlasterGameMode && World && !bElimmed && DefaultWeaponClass)
+	{
+		AWeapon* StartingWeapon = World->SpawnActor<AWeapon>(DefaultWeaponClass);
+		StartingWeapon->bDestroyWeapon = true;
+		if (CombatComponent)
+		{
+			CombatComponent->EquipWeapon(StartingWeapon);
+		}
+	}
+	
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

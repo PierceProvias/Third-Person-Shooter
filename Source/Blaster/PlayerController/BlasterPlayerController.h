@@ -38,7 +38,7 @@ public:
 	void SetHUDAnnouncementCountdown(float CountdownTime);
 	
 	void SetAttackerCam(const ABlasterPlayerController* AttackerController);
-	void SetHUDRespawmTimer(ABlasterCharacter* ElimmedBlasterCharacter, float RespawmTime);
+	void SetHUDRespawmTimer(ABlasterCharacter* ElimmedBlasterCharacter, float RespawnTime);
 
 	// Synced with server world clock
 	virtual float GetServerTime();

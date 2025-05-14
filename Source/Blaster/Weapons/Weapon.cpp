@@ -255,19 +255,36 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 
 void AWeapon::SetPickupWidgetWeaponInfo()
 {
-	if (PickupWidget && Weapon2DTexture)
+	if (PickupWidget && WeaponTexture2D)
 	{
 		bool bPickupWidgetIsValid = PickupWidgetInstance.IsValid() && PickupWidgetInstance->WeaponImage.IsValid() && PickupWidgetInstance->AmmoText.IsValid() && PickupWidgetInstance->WeaponName.IsValid();
 		if (bPickupWidgetIsValid)
 		{
-			PickupWidgetInstance->WeaponImage->SetBrushFromTexture(Weapon2DTexture);
+			PickupWidgetInstance->WeaponImage->SetBrushFromTexture(WeaponTexture2D);
 			FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
-			FString WeaponName = Weapon2DTexture->GetName();
+			FString WeaponName = WeaponTexture2D->GetName(); 
 			PickupWidgetInstance->WeaponName->SetText(FText::FromString(WeaponName));
 			PickupWidgetInstance->AmmoText->SetText(FText::FromString(AmmoText));
 		}
 	}
 }
+
+/*void AWeapon::SetKillConfirmedSprite(AWeapon* Weapon)
+{
+	if (GetKillConfirmedSprites().Num() > 0)
+	{
+		uint32 Selection = FMath::RandRange(0, GetKillConfirmedSprites().Num() - 1);
+		if (Weapon->GetWeaponType() <= EWeaponType::EWT_GrenadeLauncher)
+		{
+			KillConfirmedSpriteToDisplay = KillConfirmedSprites[Selection];
+		}
+		else
+		{
+			KillConfirmedSpriteToDisplay = KillConfirmedSprites[Selection];	
+		}
+	}
+	
+}*/
 
 // Called on server 
 void AWeapon::Fire(const FVector& HitTarget)

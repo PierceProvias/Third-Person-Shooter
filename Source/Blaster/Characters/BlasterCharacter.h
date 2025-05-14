@@ -75,7 +75,8 @@ public:
 
 	void UpdateHUDHealth();
 	void UpdateHUDShield();
-
+	void UpdateHUDAmmo();
+	void SetKillConfirmedSprite(AWeapon* Weapon);
 protected:
 	
 	virtual void BeginPlay() override;
@@ -125,6 +126,8 @@ protected:
 	TObjectPtr<UWidgetComponent> KillConfirmedWidget;
 
 	TObjectPtr<UMaterialInstanceDynamic> WidgetMaterialInstance;
+
+	void SpawnDefaultWeapon();
 
 
 private:
@@ -283,7 +286,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Elim")
 	float ElimDelay = 3.f;
-
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Elim")
 	float KillConfirmedAnnoucmentTime = 1.f;
@@ -292,6 +294,9 @@ private:
 	void ElimTimerFinished();
 
 	void KillConfirmedTimerFinished();
+
+	UPROPERTY(VisibleAnywhere, Category = "WeaponProperties")
+	TObjectPtr<UTexture2D> KillConfirmedSprite;
 	
 
 	/*
@@ -345,7 +350,11 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "FABRIK")
 	FName EffectorTarget;
-	
+
+	// Default weapon
+
+	UPROPERTY(EditAnywhere, Category = "Default Weapon")
+	TSubclassOf<AWeapon> DefaultWeaponClass;
 public:
 
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -370,14 +379,15 @@ public:
 	FORCEINLINE FName GetEffectorTargetName() const { return EffectorTarget; }
 	FORCEINLINE FTimerHandle GetElimTimer() const { return ElimTimer; }
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
-
+	FORCEINLINE UTexture2D* GetKillConfirmedSprite() const {return KillConfirmedSprite; }
+	
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
 	FORCEINLINE void SetShield(float Amount) {Shield = Amount;}
 
 	ECombatState GetCombatState() const;
-	AWeapon* GetEquippedWeapon();
+	AWeapon* GetEquippedWeapon() const;
 	FVector GetHitTarget() const;
 
 };

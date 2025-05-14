@@ -42,6 +42,7 @@ public:
 	virtual void OnRep_Owner() override;
 	void ShowPickupWidget(bool bShowWidget);
 	void SetPickupWidgetWeaponInfo();
+	// void SetKillConfirmedSprite(AWeapon* Weapon);
 	virtual void Fire(const FVector& HitTarget);
 	void Swapped();
 	void Dropped();
@@ -70,9 +71,9 @@ public:
 	*/
 
 	void EnableCustomDepth(bool bEnable);
-
-protected:
+	bool bDestroyWeapon = false;
 	
+protected:
 	virtual void BeginPlay() override;
 
 	// We are only generating overlap events on the server
@@ -102,7 +103,13 @@ private:
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 
 	UPROPERTY(EditAnywhere, Category = "WeaponProperties")
-	TObjectPtr<UTexture2D> Weapon2DTexture;
+	TObjectPtr<UTexture2D> WeaponTexture2D;
+
+	UPROPERTY(VisibleAnywhere, Category = "WeaponProperties")
+	TObjectPtr<UTexture2D> KillConfirmedSprite;
+
+	UPROPERTY(EditAnywhere, Category = "WeaponProperties")
+	TArray<UTexture2D*> KillConfirmedSprites;	
 	
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<USphereComponent> AreaSphere;
@@ -182,12 +189,14 @@ public:
 	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; }
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 
-	FORCEINLINE UTexture2D* GetWeaponTexture2D() const { return Weapon2DTexture; }
+	FORCEINLINE UTexture2D* GetWeaponTexture2D() const { return WeaponTexture2D; }
+	FORCEINLINE UTexture2D* GetKillConfirmedSprite() const { return KillConfirmedSprite; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Center() const { return CrosshairsCenter; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Left() const { return CrosshairsLeft; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Right() const { return CrosshairsRight; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Top() const { return CrosshairsTop; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Bottom() const { return CrosshairsBottom; }
+	FORCEINLINE TArray<UTexture2D*> GetKillConfirmedSprites() const {return KillConfirmedSprites;};
 	
 	FORCEINLINE float GetZoomedFOV() const { return ZoomedFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }
