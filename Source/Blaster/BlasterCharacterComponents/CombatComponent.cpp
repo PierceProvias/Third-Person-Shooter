@@ -198,7 +198,7 @@ void UCombatComponent::SwitchWeapons()
 
 	// Secondary Weapon
 	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
-	AttachActorToRightHand(SecondaryWeapon);
+	AttachActorToBack(SecondaryWeapon);
 }
 
 void UCombatComponent::ReloadEmptyWeapon()
