@@ -27,6 +27,7 @@
 #include "../Cameras/DamageCamera.h"
 #include "../HUD/KillConfirmed.h"
 #include "PauseMenu.h"
+#include "Animation/WidgetAnimation.h"
 #include "Components/Image.h"
 
 
@@ -170,12 +171,20 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	);
 	
 	// Start dissolve effect when eliminated
-	if (DissolveMaterialInstance)
+	if (DissolveMaterialInstance && ToonShaderPostProcessInstance)
 	{
 		DynamicDissolveMaterialInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
+		
 		GetMesh()->SetMaterial(1, DynamicDissolveMaterialInstance);
+		
 		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Dissolve"), 0.55f);
 		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Glow"), 200.f);
+
+		// TODO: Turn off post-process effect for elimmed player while playing dissolve track
+		// DynamicToonShaderPostProcessInstance = UMaterialInstanceDynamic::Create(ToonShaderPostProcessInstance, this);
+		// DynamicToonShaderPostProcessInstance->SetScalarParameterValue(TEXT("MinThickness DO"), 0.f);
+		// DynamicToonShaderPostProcessInstance->SetScalarParameterValue(TEXT("MaxThickness DO"), 0.f);
+		// GetMesh()->SetMaterial(2, DynamicToonShaderPostProcessInstance);
 
 	}
 	StartDissolve();
@@ -285,6 +294,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
+
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::Jump);
@@ -528,6 +538,7 @@ void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 	if (OverlappingWeapon)
 	{
 		OverlappingWeapon->ShowPickupWidget(true);
+		OverlappingWeapon->PlayPickupWidgetAnimation();
 	}
 	if (LastWeapon)
 	{
@@ -537,10 +548,16 @@ void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 
 void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
-	
 	if (CombatComponent)
 	{
-		CombatComponent->EquipWeapon(OverlappingWeapon.Get());
+		if (OverlappingWeapon)
+		{
+			CombatComponent->EquipWeapon(OverlappingWeapon.Get());
+		}
+		else if (CombatComponent->ShouldSwitchWeapons())
+		{
+			CombatComponent->SwitchWeapons();
+		}
 	}
 }
 
@@ -663,6 +680,7 @@ void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 		if (OverlappingWeapon)
 		{
 			OverlappingWeapon->ShowPickupWidget(true);
+			OverlappingWeapon->PlayPickupWidgetAnimation();
 		}
 	}
 }

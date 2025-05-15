@@ -123,13 +123,10 @@ protected:
 	void PollInit();
 
 	
-	UPROPERTY(EditAnywhere, Category = "Announcements")
+	UPROPERTY(EditAnywhere, Category = "Widgets")
 	TObjectPtr<UWidgetComponent> KillConfirmedWidget;
-
-	TObjectPtr<UMaterialInstanceDynamic> WidgetMaterialInstance;
-
+	
 	void SpawnDefaultWeapon();
-
 
 private:
 
@@ -326,6 +323,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Elim")
 	TObjectPtr<UMaterialInstance>  DissolveMaterialInstance;
 
+	// Dynamic instance that we can change at runtime
+	UPROPERTY(VisibleAnywhere, Category = "Elim")
+	TObjectPtr<UMaterialInstanceDynamic> DynamicToonShaderPostProcessInstance;
+
+	// Material instance set on the Blueprint, used with the dynamic material instance
+	UPROPERTY(EditAnywhere, Category = "Elim")
+	TObjectPtr<UMaterialInstance>  ToonShaderPostProcessInstance;
+
+	
 	/*
 	* Elim Bot (must be spawned locally)
 	*/
@@ -361,7 +367,6 @@ public:
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
 	bool IsAiming();
-
 	void ShowKillConfirmedWidget(bool bShowWidget);
 
 	FORCEINLINE auto GetDefaultWeaponClass() const {return DefaultWeaponClass;}

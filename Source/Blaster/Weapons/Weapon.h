@@ -20,12 +20,13 @@ class UPickupWidget;
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
 {
-	EWS_Initial			UMETA(DisplayName = "Initial State"),
-	EWS_Equipped		UMETA(DisplayName = "Equipped"),
-	EWS_Swapped			UMETA(DisplayName = "Swapped"),
-	EWS_Dropped			UMETA(DisplayName = "Dropped"),
+	EWS_Initial					UMETA(DisplayName = "Initial State"),
+	EWS_Equipped				UMETA(DisplayName = "Equipped"),
+	EWS_EquippedSecondary		UMETA(DisplayName = "Equipped Secondary"),
+	EWS_Swapped					UMETA(DisplayName = "Swapped"),
+	EWS_Dropped					UMETA(DisplayName = "Dropped"),
 
-	EWS_MAX				UMETA(DisplayName = "DefaultMAX")  // Used to check number of enums 
+	EWS_MAX						UMETA(DisplayName = "DefaultMAX")  
 };
 
 UCLASS()
@@ -40,7 +41,8 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void OnRep_Owner() override;
 	void ShowPickupWidget(bool bShowWidget);
-	void SetPickupWidgetWeaponInfo();
+	void SetPickupWidgetWeaponInfo(bool bSetInfo);
+	void PlayPickupWidgetAnimation();
 	// void SetKillConfirmedSprite(AWeapon* Weapon);
 	virtual void Fire(const FVector& HitTarget);
 	void Swapped();
@@ -74,6 +76,10 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+	virtual void OnWeaponStateSet();
+	virtual void OnEquipped();
+	virtual void OnEquippedSecondary();
+	virtual void OnSwapped();
 
 	// We are only generating overlap events on the server
 	UFUNCTION()

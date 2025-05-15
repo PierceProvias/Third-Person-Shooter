@@ -24,4 +24,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> WeaponName;
+
+	UPROPERTY(Transient ,meta = (BindWidgetAnim))
+	TWeakObjectPtr<UWidgetAnimation> PickupWidgetAnimation;
 };

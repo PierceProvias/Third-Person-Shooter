@@ -120,6 +120,8 @@ void UCombatComponent::OnRep_EquippedWeapon()
 		BlasterCharacter->bUseControllerRotationYaw = true;
 		UpdateWeapon2DTextures();
 		PlayEquipWeaponSound(EquippedWeapon);
+		EquippedWeapon->EnableCustomDepth(false);
+		EquippedWeapon->SetHUDAmmo();
 	}
 }
 
@@ -127,7 +129,7 @@ void UCombatComponent::OnRep_SecondaryWeapon()
 {
 	if (BlasterCharacter && SecondaryWeapon)
 	{
-		SecondaryWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+		SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
 		AttachActorToBack(SecondaryWeapon);
 		PlayEquipWeaponSound(SecondaryWeapon);
 	}
@@ -147,14 +149,16 @@ void UCombatComponent::EquipPrimaryWeapon(AWeapon* WeaponToEquip)
 	UpdateCarriedAmmo();
 	PlayEquipWeaponSound(WeaponToEquip);
 	ReloadEmptyWeapon();
+	
 }
 
 void UCombatComponent::EquipSecondaryWeapon(AWeapon* WeaponToEquip)
 {
+	if (WeaponToEquip == nullptr) return;
 	SecondaryWeapon = WeaponToEquip;
-	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
 	AttachActorToBack(WeaponToEquip);
-	EquippedWeapon->SetOwner(BlasterCharacter);
+	SecondaryWeapon->SetOwner(BlasterCharacter);
 	PlayEquipWeaponSound(WeaponToEquip);
 }
 
@@ -171,13 +175,30 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	{
 		EquipPrimaryWeapon(WeaponToEquip);
 	}
-
-
+	
 	// Disable orient to movement so we can strafe
 	// NOTE: This will only be done on the server therefore we need to use a RepNotify
 	BlasterCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 	BlasterCharacter->bUseControllerRotationYaw = true;
 
+}
+
+void UCombatComponent::SwitchWeapons()
+{
+	AWeapon* TempWeapon = EquippedWeapon;
+	EquippedWeapon = SecondaryWeapon;
+	SecondaryWeapon = TempWeapon;
+
+	// Primary Weapon
+	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+	AttachActorToRightHand(EquippedWeapon);
+	EquippedWeapon->SetHUDAmmo();
+	UpdateCarriedAmmo();
+	PlayEquipWeaponSound(EquippedWeapon);
+
+	// Secondary Weapon
+	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
+	AttachActorToRightHand(SecondaryWeapon);
 }
 
 void UCombatComponent::ReloadEmptyWeapon()
@@ -470,6 +491,11 @@ void UCombatComponent::UpdateHUDGrenadeCount()
 	{
 		BlasterController->SetHUDPrimaryGrenades(GrenadeCount);
 	}
+}
+
+bool UCombatComponent::ShouldSwitchWeapons()
+{
+	return (EquippedWeapon != nullptr && SecondaryWeapon != nullptr);
 }
 
 void UCombatComponent::OnRep_CombatState()

@@ -577,6 +577,7 @@ void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 	}
 }
 
+// Must have be a repnotify (OnRep_SetAttackerCam)
 void ABlasterPlayerController::SetAttackerCam(const ABlasterPlayerController* AttackerController)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
