@@ -38,6 +38,7 @@ public:
 	void SetHUDAnnouncementCountdown(float CountdownTime);
 	
 	void SetAttackerCam(const ABlasterPlayerController* AttackerController);
+	
 	void SetHUDRespawmTimer(ABlasterCharacter* ElimmedBlasterCharacter, float RespawnTime);
 
 	// Synced with server world clock
@@ -89,7 +90,7 @@ protected:
 private:
 	TWeakObjectPtr<ABlasterHUD> BlasterHUD;
 	TWeakObjectPtr<UCharacterOverlay> CharacterOverlay;
-	TWeakObjectPtr<UAttackerCam> AttackerCam ;
+	TWeakObjectPtr<UAttackerCam> AttackerCam;
 	TWeakObjectPtr<ABlasterGameMode> GameMode;
 
 	float LevelStartingTime = 0.f;

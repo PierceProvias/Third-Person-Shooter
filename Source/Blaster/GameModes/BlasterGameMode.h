@@ -23,12 +23,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 	virtual void RequestRespawn(ACharacter* ElimmedCharacter, AController* ElimmedController);
-	
-	UFUNCTION(Client, Reliable)
-	void Client_SwitchToAttackerCamera(ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
-
-	UFUNCTION(Server, Reliable)
-	void Server_SwitchToAttackerCamera(ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
+	void SwitchToAttackerCamera(ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 
 protected:
 	virtual void BeginPlay() override;

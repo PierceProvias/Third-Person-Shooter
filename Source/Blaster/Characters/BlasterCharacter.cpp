@@ -133,15 +133,15 @@ void ABlasterCharacter::OnRep_ReplicatedMovement()
 
 void ABlasterCharacter::Elim()
 {
-	if (CombatComponent && CombatComponent->EquippedWeapon)
+	if (CombatComponent)
 	{
-		if (CombatComponent->EquippedWeapon->bDestroyWeapon)
+		if (CombatComponent->EquippedWeapon)
 		{
-			CombatComponent->EquippedWeapon->Destroy();	
+			DropOrDestroyWeapon(CombatComponent->EquippedWeapon);
 		}
-		else
+		if (CombatComponent->SecondaryWeapon)
 		{
-			CombatComponent->EquippedWeapon->Swapped();		// TODO: Need to be dropped here (create function for dropping current weapon)
+			DropOrDestroyWeapon(CombatComponent->SecondaryWeapon);
 		}
 	}
 	MulticastElim();
@@ -171,7 +171,7 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	);
 	
 	// Start dissolve effect when eliminated
-	if (DissolveMaterialInstance && ToonShaderPostProcessInstance)
+	if (DissolveMaterialInstance)
 	{
 		DynamicDissolveMaterialInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
 		
@@ -422,6 +422,19 @@ void ABlasterCharacter::DropWeaponPressed()
 	// TODO: Detach weapon mesh from right hand socket 
 	// TODO: Probably best to move this to the combat component
 	
+}
+
+void ABlasterCharacter::DropOrDestroyWeapon(AWeapon* Weapon)
+{
+	if (Weapon == nullptr) return;
+	if (Weapon->bDestroyWeapon)
+	{
+		Weapon->Destroy();	
+	}
+	else
+	{
+		Weapon->Swapped(); 
+	}
 }
 
 void ABlasterCharacter::PauseMenuPressed()

@@ -33,9 +33,9 @@ void ABlasterGameMode::OnMatchStateSet()
 
 	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
 	{
-		if (ABlasterPlayerController* BlasterPlayer = Cast<ABlasterPlayerController>(*It))
+		if (ABlasterPlayerController* BlasterPlayerController = Cast<ABlasterPlayerController>(*It))
 		{
-			BlasterPlayer->OnMatchStateSet(MatchState);
+			BlasterPlayerController->OnMatchStateSet(MatchState);
 		}
 	}
 }
@@ -92,7 +92,7 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABl
 		ElimmedCharacter->Elim();
 		if (HasAuthority())
 		{
-			Client_SwitchToAttackerCamera(VictimController, AttackerController);
+			SwitchToAttackerCamera(VictimController, AttackerController);
 			// Server
 			UE_LOG(LogTemp, Warning, TEXT("HandleElimination: Server calling Client_SwitchToAttackerCamera. VictimPlayerState: %s, AttackerPlayerState: %s"),
 				   VictimPlayerState ? *VictimPlayerState->GetName() : TEXT("nullptr"),
@@ -102,10 +102,6 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABl
 			UE_LOG(LogTemp, Warning, TEXT("Client_SwitchToAttackerCamera_Implementation: Called on client. VictimPlayerState: %s, AttackerPlayerState: %s"),
 				   VictimPlayerState ? *VictimPlayerState->GetName() : TEXT("nullptr"),
 				   AttackerPlayerState ? *AttackerPlayerState->GetName() : TEXT("nullptr"));
-		}
-		else
-		{
-			Server_SwitchToAttackerCamera(VictimController, AttackerController);
 		}
 	}
 }
@@ -130,19 +126,7 @@ void ABlasterGameMode::RequestRespawn(ACharacter* ElimmedCharacter, AController*
 	}
 }
 
-void ABlasterGameMode::Server_SwitchToAttackerCamera_Implementation(ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
-{
-	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
-	ABlasterPlayerState* VictimPlayerState = VictimController? Cast<ABlasterPlayerState>(VictimController->PlayerState) : nullptr;
-	
-	if (AttackerController && AttackerPlayerState && VictimController && VictimPlayerState)
-	{
-		VictimController->SetViewTargetWithBlend(AttackerPlayerState->GetPawn(), VICTIM_TARGET_BLEND);
-		VictimController->SetAttackerCam(AttackerController);
-	}
-}
-
-void ABlasterGameMode::Client_SwitchToAttackerCamera_Implementation(ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
+void ABlasterGameMode::SwitchToAttackerCamera(ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
 {
 	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
 	ABlasterPlayerState* VictimPlayerState = VictimController? Cast<ABlasterPlayerState>(VictimController->PlayerState) : nullptr;

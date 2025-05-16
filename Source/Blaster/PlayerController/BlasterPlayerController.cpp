@@ -162,16 +162,7 @@ void ABlasterPlayerController::ServerCheckMatchState_Implementation()
 void ABlasterPlayerController::OnRep_MatchState()
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	/*
 	
-	if (MatchState == MatchState::WaitingToStart)
-	{
-		if (BlasterHUD && BlasterHUD->Announcement)
-		{
-			BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
-		}
-	}
-	*/
 	if (MatchState == MatchState::InProgress)
 	{
 		HandleMatchHasStarted();

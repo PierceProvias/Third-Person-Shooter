@@ -40,6 +40,8 @@ void ABlasterPlayerState::OnRep_Deaths()
 		if (BlasterController.IsValid())
 		{
 			BlasterController->SetHUDDeaths(Deaths);
+			// BlasterController->SetViewTargetWithBlend(this->GetPawn(), 1.f);
+			// BlasterController->SetAttackerCam(BlasterController->);
 		}
 	}
 }

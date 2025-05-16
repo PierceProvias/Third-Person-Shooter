@@ -96,6 +96,7 @@ protected:
 	void FireButtonPressed(const FInputActionValue& Value);
 	void ReloadButtonPressed();
 	void DropWeaponPressed();
+	void DropOrDestroyWeapon(AWeapon* Weapon);
 	
 	UFUNCTION(BlueprintCallable)
 	void PauseMenuPressed();
