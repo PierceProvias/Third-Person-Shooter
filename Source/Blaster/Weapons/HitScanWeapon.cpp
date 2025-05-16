@@ -103,7 +103,7 @@ void AHitScanWeapon::WeaponTraceHit(const FVector& TraceStart, const FVector& Hi
 	
 	if (UWorld* World = GetWorld())
 	{
-		FVector End = bUseScatter ? TraceEndWithScatter(TraceStart, HitTarget, bEnableDebug) : TraceStart + (HitTarget - TraceStart) * TRACE_SCALING;
+		FVector End = bUseScatter ? TraceEndWithScatter(TraceStart, HitTarget, bEnableScatterDebug) : TraceStart + (HitTarget - TraceStart) * TRACE_SCALING;
 		World->LineTraceSingleByChannel(
 			OutHit,
 			TraceStart,

@@ -11,6 +11,7 @@
 
 #include "BlasterCharacter.generated.h"
 
+class UPostProcessComponent;
 class UWidgetAnimation;
 class UKillConfirmed;
 class UDamageCamera;
@@ -393,7 +394,8 @@ public:
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
 	FORCEINLINE void SetShield(float Amount) {Shield = Amount;}
-
+	
+	
 	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon() const;
 	FVector GetHitTarget() const;

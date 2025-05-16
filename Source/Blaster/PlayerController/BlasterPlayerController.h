@@ -56,6 +56,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	void CheckPing(float DeltaTime);
 	void SetHUDTime();
 	void PollInit();
 	/*
@@ -86,6 +87,9 @@ protected:
 	
 	UFUNCTION(Client, Reliable)
 	void ClientJoinMidGame(FName StateOfMatch, float Warmup_Time, float Match_Time, float Cooldown_Time, float StartingTime);
+
+	void HighPingWarning();
+	void StopHighPingWarning();
 
 private:
 	TWeakObjectPtr<ABlasterHUD> BlasterHUD;
@@ -139,6 +143,19 @@ private:
 	bool bInitializeSecondaryGrenades	= false;
 	bool bInitializeAttackerCam			= false;
 	bool bInitializeRespawnTimer		= false;
-	
-	
+
+	float HighPingRunningTime = 0.f;
+
+	UPROPERTY(EditAnywhere, Category = "Ping")
+	float HighPingDuration = 5.f;
+
+	UPROPERTY(EditAnywhere, Category = "Ping")
+	float PingAnimationRunningTime = 0.f;
+
+	UPROPERTY(EditAnywhere, Category = "Ping")
+	float CheckPingFrequency = 20.f;
+
+	// Noticeable high ping when ping >= 50ms
+	UPROPERTY(EditAnywhere, Category = "Ping")
+	float HighPingThreshold = 50.f;
 };

@@ -52,5 +52,11 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> SecondaryGrenadeCountText;
+
+	UPROPERTY(meta = (BindWidget))
+	TWeakObjectPtr<UImage> HighPingImage;
+
+	UPROPERTY(Transient , meta = (BindWidgetAnim))
+	TWeakObjectPtr<UWidgetAnimation> HighPingAnimation;
 	
 };

@@ -23,8 +23,8 @@ protected:
 	FVector TraceEndWithScatter(const FVector& TraceStart, const FVector& HitTarget, bool DebugEnabled = false);
 	void WeaponTraceHit(const FVector& TraceStart, const FVector& HitTarget, FHitResult& OutHit);
 	
-	UPROPERTY(EditAnywhere, Category = "Debug")
-	bool bEnableDebug = true;
+	UPROPERTY(EditAnywhere, Category = "Weapon Scatter | Debug")
+	bool bEnableScatterDebug = false;
 
 	UPROPERTY(EditAnywhere, Category = "Particles")
 	TObjectPtr<UParticleSystem> ImpactParticles;
