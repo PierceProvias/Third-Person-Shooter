@@ -219,6 +219,7 @@ private:
 	int32 StartingGrenadeLauncherAmmo = 0;
 
 	void InitCarriedAmmo();
+	bool LocalFire(const FVector_NetQuantize& TraceHitTarget);
 
 	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
 	ECombatState CombatState = ECombatState::ECS_Unoccupied;

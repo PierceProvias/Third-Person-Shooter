@@ -273,15 +273,14 @@ void UCombatComponent::Fire()
 	{
 		bCanFire = false;
 		ServerFire(HitTarget);
+		LocalFire(HitTarget);
 		if (EquippedWeapon)
 		{
 			bCanFire = false;
 			CrosshairShootingFactor = 0.75f;
 		}
 		FireTimerStart();
-
 	}
-	return;
 }
 
 void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
@@ -626,14 +625,28 @@ void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& Trac
 	MulticastFire(TraceHitTarget);   // Runs on server and all clients
 }
 
-void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
+bool UCombatComponent::LocalFire(const FVector_NetQuantize& TraceHitTarget)
 {
-	if (EquippedWeapon == nullptr) return;
+	if (EquippedWeapon == nullptr) return true;
+	if (BlasterController && CombatState == ECombatState::ECS_Reloading && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_Shotgun)
+	{
+		BlasterCharacter->PlayFireMontage(bAiming);
+		EquippedWeapon->Fire(TraceHitTarget);
+		CombatState = ECombatState::ECS_Unoccupied;
+	}
 	if (BlasterCharacter && CombatState == ECombatState::ECS_Unoccupied)
 	{
 		BlasterCharacter->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire(TraceHitTarget);
 	}
+	return false;
+}
+
+void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
+{
+	if (BlasterCharacter && BlasterCharacter->IsLocallyControlled() && !BlasterCharacter->HasAuthority()) return;
+	LocalFire((TraceHitTarget));
+	
 }
 
 void UCombatComponent::Reload()
