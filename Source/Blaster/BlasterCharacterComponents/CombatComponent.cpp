@@ -185,6 +185,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 void UCombatComponent::SwitchWeapons()
 {
+	if (CombatState != ECombatState::ECS_Unoccupied) return;
 	AWeapon* TempWeapon = EquippedWeapon;
 	EquippedWeapon = SecondaryWeapon;
 	SecondaryWeapon = TempWeapon;
