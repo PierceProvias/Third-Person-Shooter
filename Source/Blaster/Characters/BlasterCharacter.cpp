@@ -168,7 +168,7 @@ void ABlasterCharacter::MulticastElim_Implementation()
 		KillConfirmedTimer,
 		this, 
 		&ABlasterCharacter::KillConfirmedTimerFinished,
-		KillConfirmedAnnoucmentTime
+		KillConfirmedAnnouncementTime
 	);
 	
 	// Start dissolve effect when eliminated
@@ -182,13 +182,7 @@ void ABlasterCharacter::MulticastElim_Implementation()
 		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Glow"), 200.f);
 
 		// TODO: Turn off post-process effect for elimmed player while playing dissolve track
-		//DynamicToonShaderPostProcessInstance = UMaterialInstanceDynamic::Create(ToonShaderPostProcessInstance, this);
-		// DynamicToonShaderPostProcessInstance->SetScalarParameterValue(TEXT("MinThickness DO"), 0.f);
-		// DynamicToonShaderPostProcessInstance->SetScalarParameterValue(TEXT("MaxThickness DO"), 0.f);
-		// GetMesh()->SetMaterial(2, DynamicToonShaderPostProcessInstance);
-
-	
-
+		
 	}
 	StartDissolve();
 

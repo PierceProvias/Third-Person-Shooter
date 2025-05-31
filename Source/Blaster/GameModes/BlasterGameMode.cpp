@@ -93,15 +93,6 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABl
 		if (HasAuthority())
 		{
 			SwitchToAttackerCamera(VictimController, AttackerController);
-			// Server
-			UE_LOG(LogTemp, Warning, TEXT("HandleElimination: Server calling Client_SwitchToAttackerCamera. VictimPlayerState: %s, AttackerPlayerState: %s"),
-				   VictimPlayerState ? *VictimPlayerState->GetName() : TEXT("nullptr"),
-				   AttackerPlayerState ? *AttackerPlayerState->GetName() : TEXT("nullptr"));
-
-			// Client
-			UE_LOG(LogTemp, Warning, TEXT("Client_SwitchToAttackerCamera_Implementation: Called on client. VictimPlayerState: %s, AttackerPlayerState: %s"),
-				   VictimPlayerState ? *VictimPlayerState->GetName() : TEXT("nullptr"),
-				   AttackerPlayerState ? *AttackerPlayerState->GetName() : TEXT("nullptr"));
 		}
 	}
 }

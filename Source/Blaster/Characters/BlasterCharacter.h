@@ -288,7 +288,7 @@ private:
 	float ElimDelay = 3.f;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Elim")
-	float KillConfirmedAnnoucmentTime = 1.f;
+	float KillConfirmedAnnouncementTime = 1.f;
 
 	// Callback function for ElimTimer
 	void ElimTimerFinished();

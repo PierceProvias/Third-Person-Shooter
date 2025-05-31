@@ -25,8 +25,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> AttackerName;
-
-
+	
 	UPROPERTY(meta = (BindWidget))
 	TWeakObjectPtr<UTextBlock> RespawnTime;
 
@@ -48,10 +47,12 @@ public:
 	void ShowPlayerName(APawn* InPawn);
 	
 protected:
+
 	FTimerHandle SlideTimerHandle;
 	FTimerHandle RespawnTimerHandle;
-	float SlideDuration = 3.0f;
-	float RespawnDuration = 3.0f;
+
+	float SlideDuration		= 3.0f;
+	float RespawnDuration	= 3.0f;
 	float SlideStartTime;
 	float RespawnStartTime;
 

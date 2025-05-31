@@ -75,6 +75,7 @@ void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABlasterPlayerController, MatchState);
+	DOREPLIFETIME(ABlasterPlayerController, bInitializeAttackerCam);
 }
 
 void ABlasterPlayerController::SetHUDTime()
@@ -123,7 +124,7 @@ void ABlasterPlayerController::PollInit()
 				if (bInitializeShield)					SetHUDShield(HUDShield, HUDMaxShield);
 				if (bInitializeCarriedAmmo)				SetHUDCarriedAmmo(HUDCarriedAmmo);
 				if (bInitializeWeaponAmmo)				SetHUDWeaponAmmo(HUDWeaponAmmo);
-				if (bInitializeWeaponTexture)			SetHUDCarriedWeaponTexture(WeaponTexture);
+				if (bInitializeWeaponTexture)			SetHUDCarriedWeaponTexture(WeaponTexture.Get());
 				
 				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
 				if (BlasterCharacter && BlasterCharacter->GetCombatComponent())
@@ -192,13 +193,28 @@ void ABlasterPlayerController::StopHighPingWarning()
 	}
 }
 
+
+void ABlasterPlayerController::OnRep_InitAttackerCam(bool bInitAttackerCam)
+{
+	if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn()))
+	{
+		if (bInitAttackerCam && BlasterCharacter->IsElimmed())
+		{
+			if (ABlasterPlayerController* BlasterPlayerController = Cast<ABlasterPlayerController>(BlasterCharacter->GetController()))
+			{
+				SetAttackerCam(BlasterPlayerController);		
+			}
+		}
+	}
+}
+
 void ABlasterPlayerController::ClientJoinMidGame_Implementation(FName StateOfMatch, float Warmup_Time, float Match_Time, float Cooldown_Time, float StartingTime)
 {
-	WarmupTime			= Warmup_Time;
-	MatchTime			= Match_Time;
-	CooldownTime		= Cooldown_Time;
-	LevelStartingTime	= StartingTime;
-	MatchState			= StateOfMatch;
+	WarmupTime				= Warmup_Time;
+	MatchTime				= Match_Time;
+	CooldownTime			= Cooldown_Time;
+	LevelStartingTime		= StartingTime;
+	MatchState				= StateOfMatch;
 	
 	OnMatchStateSet(MatchState);
 	if (BlasterHUD.IsValid() && MatchState == MatchState::WaitingToStart)
@@ -237,7 +253,6 @@ void ABlasterPlayerController::OnRep_MatchState()
 	{
 		HandleCooldown();
 	}
-	
 }
 
 void ABlasterPlayerController::OnMatchStateSet(FName State)
@@ -332,7 +347,6 @@ void ABlasterPlayerController::ClientReportServerTime_Implementation(float TimeO
 	float CurrentServerTime = TimeServerReceivedClientRequest + (0.5f * RoundTripTime);
 	ClientServerDelta = CurrentServerTime - GetWorld()->GetTimeSeconds();
 }
-
 
 void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 {
@@ -677,7 +691,7 @@ void ABlasterPlayerController::SetHUDRespawmTimer(ABlasterCharacter* ElimmedBlas
 float ABlasterPlayerController::GetServerTime()
 {
 	if (HasAuthority()) return GetWorld()->GetTimeSeconds();
-		else return GetWorld()->GetTimeSeconds() + ClientServerDelta;
+	return GetWorld()->GetTimeSeconds() + ClientServerDelta;
 }
 
 void ABlasterPlayerController::ReceivedPlayer()

@@ -20,7 +20,6 @@ public:
 
 protected:
 
-	FVector TraceEndWithScatter(const FVector& TraceStart, const FVector& HitTarget, bool DebugEnabled = false);
 	void WeaponTraceHit(const FVector& TraceStart, const FVector& HitTarget, FHitResult& OutHit);
 	
 	UPROPERTY(EditAnywhere, Category = "Weapon Scatter | Debug")
@@ -45,18 +44,4 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	TObjectPtr<USoundCue> FireSound;
-
-	/*
-	* Trace end with scatter
-	*/
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
-	float DistanceToSphere = 800.f;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
-	float SphereRadius = 75.f;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
-	bool bUseScatter = false;
-
 };
