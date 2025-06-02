@@ -299,31 +299,45 @@ void UCombatComponent::Fire()
 
 void UCombatComponent::FireProjectileWeapon()
 {
-	if (EquippedWeapon)
+	if (EquippedWeapon && BlasterCharacter)
 	{
 		HitTarget = EquippedWeapon->bUseScatter ? EquippedWeapon->TraceEndWithScatter(HitTarget) : HitTarget;
-		LocalFire(HitTarget);
+		if (!BlasterCharacter->HasAuthority()) { LocalFire(HitTarget); }
 		ServerFire(HitTarget);	
 	}
 }
 
 void UCombatComponent::FireHitScanWeapon()
 {
-	if (EquippedWeapon)
+	if (EquippedWeapon && BlasterCharacter)
 	{
 		HitTarget = EquippedWeapon->bUseScatter ? EquippedWeapon->TraceEndWithScatter(HitTarget) : HitTarget;
-		LocalFire(HitTarget);
+		if (!BlasterCharacter->HasAuthority()) { LocalFire(HitTarget); }
 		ServerFire(HitTarget);	
 	}
 }
 
 void UCombatComponent::FireShotgun()
 {
-	if (AShotgun* Shotgun = Cast<AShotgun>(EquippedWeapon))
+	AShotgun* Shotgun = Cast<AShotgun>(EquippedWeapon);
+	if (Shotgun && BlasterCharacter)
 	{
-		TArray<FVector> HitTargets;
+		TArray<FVector_NetQuantize> HitTargets;
 		Shotgun->ShotgunTraceEndWithScatter(HitTarget, HitTargets);
+		if (!BlasterCharacter->HasAuthority()) { ShotgunLocalFire(HitTargets); }
+		ServerShotgunFire(HitTargets);
 	}
+}
+
+void UCombatComponent::ServerShotgunFire_Implementation(const TArray<FVector_NetQuantize>& TraceHitTargets)
+{
+	MultiCastShotgunFire(TraceHitTargets);
+}
+
+void UCombatComponent::MultiCastShotgunFire_Implementation(const TArray<FVector_NetQuantize>& TraceHitTargets)
+{
+	if (BlasterCharacter && BlasterCharacter->IsLocallyControlled() && !BlasterCharacter->HasAuthority()) return;
+	ShotgunLocalFire(TraceHitTargets);
 }
 
 void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
@@ -668,28 +682,33 @@ void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& Trac
 	MulticastFire(TraceHitTarget);   // Runs on server and all clients
 }
 
-bool UCombatComponent::LocalFire(const FVector_NetQuantize& TraceHitTarget)
+void UCombatComponent::LocalFire(const FVector_NetQuantize& TraceHitTarget)
 {
-	if (EquippedWeapon == nullptr) return true;
-	if (BlasterController && CombatState == ECombatState::ECS_Reloading && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_Shotgun)
-	{
-		BlasterCharacter->PlayFireMontage(bAiming);
-		EquippedWeapon->Fire(TraceHitTarget);
-		CombatState = ECombatState::ECS_Unoccupied;
-	}
+	if (EquippedWeapon == nullptr) return;
 	if (BlasterCharacter && CombatState == ECombatState::ECS_Unoccupied)
 	{
 		BlasterCharacter->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire(TraceHitTarget);
 	}
-	return false;
+}
+
+void UCombatComponent::ShotgunLocalFire(const TArray<FVector_NetQuantize>& TraceHitTargets)
+{
+	AShotgun* Shotgun = Cast<AShotgun>(EquippedWeapon);
+	if (Shotgun == nullptr || BlasterCharacter == nullptr) return;
+	if (CombatState == ECombatState::ECS_Reloading || CombatState == ECombatState::ECS_Unoccupied)
+	{
+		BlasterCharacter->PlayFireMontage(bAiming);
+		Shotgun->FireShotgun(TraceHitTargets);
+		CombatState = ECombatState::ECS_Unoccupied;
+		
+	}
 }
 
 void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	if (BlasterCharacter && BlasterCharacter->IsLocallyControlled() && !BlasterCharacter->HasAuthority()) return;
 	LocalFire((TraceHitTarget));
-	
 }
 
 void UCombatComponent::Reload()

@@ -13,32 +13,24 @@
 #define VOLUME_MULTIPLIER		0.5f
 #define PITCH_MULTIPLIER		FMath::FRandRange(-.5f, .5f)
 
-
-void AShotgun::Fire(const FVector& HitTarget)
+void AShotgun::FireShotgun(const TArray<FVector_NetQuantize>& HitTargets)
 {
-	AWeapon::Fire(HitTarget);
+	AWeapon::Fire(FVector());
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
 	if (OwnerPawn == nullptr) return;
 	AController* InstigatorController = OwnerPawn->GetController();
-	// Instigator controller is only controlled on the local machine therefore simulated proxies dont see any of that
-
-	// TODO: Use for Rocket Lauch boost
 	const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName("MuzzleFlash");
 	if (MuzzleFlashSocket)
 	{
-		FTransform SocketTransform = MuzzleFlashSocket->GetSocketTransform(GetWeaponMesh());
-		FVector Start = SocketTransform.GetLocation();
-		TMap<ABlasterCharacter*, uint32> HitMap;	// Number of players hit with weapon scatter
-		for (uint32 i = 0; i < NumberOfPellets; i++)
+		const FTransform SocketTransform = MuzzleFlashSocket->GetSocketTransform(GetWeaponMesh());
+		const FVector Start = SocketTransform.GetLocation();
+		TMap<ABlasterCharacter*, uint32> HitMap;
+		for (const auto& HitTarget : HitTargets)
 		{
 			FHitResult FireHit;
 			WeaponTraceHit(Start, HitTarget, FireHit);
 
-			// Count number of pellets that hit target and then add total damage to apply
-
-			// NOT EFFICIENT!! but works for now
-			ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(FireHit.GetActor());
-			if (BlasterCharacter && HasAuthority() && InstigatorController)
+			if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(FireHit.GetActor()))
 			{
 				if (HitMap.Contains(BlasterCharacter))
 				{
@@ -48,26 +40,25 @@ void AShotgun::Fire(const FVector& HitTarget)
 				{
 					HitMap.Emplace(BlasterCharacter, 1);
 				}
-		
-			}
-			if (ImpactParticles)
-			{
-				UGameplayStatics::SpawnEmitterAtLocation(
-					GetWorld(),
-					ImpactParticles,
-					FireHit.ImpactPoint,
-					FireHit.ImpactNormal.Rotation()
-				);
-			}
-			if (HitSound)
-			{
-				UGameplayStatics::PlaySoundAtLocation(
-					this,
-					HitSound,
-					FireHit.ImpactPoint,
-					VOLUME_MULTIPLIER,
-					PITCH_MULTIPLIER
-				);
+				if (ImpactParticles)
+				{
+					UGameplayStatics::SpawnEmitterAtLocation(
+						GetWorld(),
+						ImpactParticles,
+						FireHit.ImpactPoint,
+						FireHit.ImpactNormal.Rotation()
+					);
+				}
+				if (HitSound)
+				{
+					UGameplayStatics::PlaySoundAtLocation(
+						this,
+						HitSound,
+						FireHit.ImpactPoint,
+						VOLUME_MULTIPLIER,
+						PITCH_MULTIPLIER
+					);
+				}
 			}
 		}
 		for (auto& HitPair : HitMap)
@@ -75,8 +66,8 @@ void AShotgun::Fire(const FVector& HitTarget)
 			if (HitPair.Key && HasAuthority() && InstigatorController)
 			{
 				UGameplayStatics::ApplyDamage(
-					HitPair.Key,
-					Damage * HitPair.Value,
+					HitPair.Key,				// Player that was hit
+					Damage * HitPair.Value,		// Multiply damage by number of times hit
 					InstigatorController,
 					this,
 					UDamageType::StaticClass()
@@ -86,7 +77,7 @@ void AShotgun::Fire(const FVector& HitTarget)
 	}
 }
 
-void AShotgun::ShotgunTraceEndWithScatter(const FVector& HitTarget, TArray<FVector>& OutHits)
+void AShotgun::ShotgunTraceEndWithScatter(const FVector& HitTarget, TArray<FVector_NetQuantize>& OutHits)
 {
 	const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName("MuzzleFlash");
 	if (MuzzleFlashSocket == nullptr) return;

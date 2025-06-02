@@ -85,6 +85,12 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
+	UFUNCTION(Server, Reliable)
+	void ServerShotgunFire(const TArray<FVector_NetQuantize>& TraceHitTargets);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MultiCastShotgunFire(const TArray<FVector_NetQuantize>& TraceHitTargets);
+
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 	void SetHUDCrosshairs(float DeltaTime);
@@ -222,7 +228,8 @@ private:
 	int32 StartingGrenadeLauncherAmmo = 0;
 
 	void InitCarriedAmmo();
-	bool LocalFire(const FVector_NetQuantize& TraceHitTarget);
+	void LocalFire(const FVector_NetQuantize& TraceHitTarget);
+	void ShotgunLocalFire(const TArray<FVector_NetQuantize>& TraceHitTargets);
 
 	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
 	ECombatState CombatState = ECombatState::ECS_Unoccupied;

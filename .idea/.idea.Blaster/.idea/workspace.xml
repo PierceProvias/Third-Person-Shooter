@@ -10,10 +10,9 @@
     <list default="true" id="7c64b2a5-f495-4c70-966c-c2533f8b30a1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Blaster/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Blaster/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/BlasterCharacterComponents/CombatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/BlasterCharacterComponents/CombatComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Blaster/BlasterCharacterComponents/CombatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/BlasterCharacterComponents/CombatComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/Weapons/Shotgun.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Weapons/Shotgun.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Blaster/Weapons/Shotgun.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Weapons/Shotgun.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Blaster/Weapons/Weapon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Weapons/Weapon.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Blaster/Weapons/Weapon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Blaster/Weapons/Weapon.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +26,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Plugins/Marketplace/Developer/RiderLink/Source/RD/thirdparty/spdlog/include/spdlog/details/backtracer.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Developer/Android/AndroidDeviceDetection/Private/AndroidDeviceDetectionModule.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Developer/Apple/MetalShaderFormat/Private/MetalDerivedData.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -65,6 +65,7 @@
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AdvancedWidgets/Public/AdvancedWidgets.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AdvancedWidgets/Public/Components/RadialSlider.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/ApplicationCore/Private/Android/AndroidWindow.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/ApplicationCore/Private/Mac/Accessibility/CocoaAccessibilityView.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/ApplicationCore/Private/Mac/CocoaMenu.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/ApplicationCore/Public/IOS/IOSPaymentTransactionObserver.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AugmentedReality/Private/ARComponent.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -330,7 +331,7 @@
       <workItem from="1747598024700" duration="282000" />
       <workItem from="1747665382474" duration="5607000" />
       <workItem from="1748724293454" duration="1769000" />
-      <workItem from="1748874102207" duration="1299000" />
+      <workItem from="1748874102207" duration="4675000" />
     </task>
     <servers />
   </component>
