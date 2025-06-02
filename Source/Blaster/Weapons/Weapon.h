@@ -120,6 +120,19 @@ protected:
 
 	TObjectPtr<UMaterialInstanceDynamic> WidgetMaterialInstance;
 
+
+	/*
+	* Trace end with scatter
+	*/
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
+	float SphereRadius = 75.f;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
+	float DistanceToSphere = 800.f;
+
+
+	
 private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
@@ -199,17 +212,7 @@ private:
 	float ZoomInterpSpeed = 20.f;
 	
 	TWeakObjectPtr<UPickupWidget> PickupWidgetInstance;
-	
-	/*
-	* Trace end with scatter
-	*/
 
-	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
-	float DistanceToSphere = 800.f;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
-	float SphereRadius = 75.f;
-	
 public:	
 	
 	void SetWeaponState(EWeaponState State);
