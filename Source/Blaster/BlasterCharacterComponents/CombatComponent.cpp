@@ -18,7 +18,8 @@
 #include "../Weapons/Projectile.h"
 #include "../Weapons/Shotgun.h"
 
-UCombatComponent::UCombatComponent()
+UCombatComponent::UCombatComponent() :
+	bAimButtonPressed{false}
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
@@ -86,6 +87,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME_CONDITION(UCombatComponent, GrenadeCount, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 }
+
 void UCombatComponent::SetAiming(bool bIsAiming)
 {
 	if (BlasterCharacter == nullptr || EquippedWeapon == nullptr) return;
@@ -99,6 +101,7 @@ void UCombatComponent::SetAiming(bool bIsAiming)
 	{
 		BlasterCharacter->ShowSniperScopeWidget(bIsAiming);
 	}
+	if (BlasterCharacter->IsLocallyControlled()) { bAimButtonPressed = bIsAiming; }
 }
 
 // _Implementation is for RPC
@@ -216,6 +219,14 @@ void UCombatComponent::ShowAttachedGrenade(bool bShowGrenade)
 	if (BlasterCharacter && BlasterCharacter->GetAttachedGrenade())
 	{
 		BlasterCharacter->GetAttachedGrenade()->SetVisibility(bShowGrenade);
+	}
+}
+
+void UCombatComponent::OnRep_Aiming()	
+{
+	if (BlasterCharacter && BlasterCharacter->IsLocallyControlled())
+	{
+		bAiming = bAimButtonPressed;
 	}
 }
 

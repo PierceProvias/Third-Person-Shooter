@@ -134,8 +134,13 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_SecondaryWeapon)
 	TObjectPtr<AWeapon> SecondaryWeapon;
 	
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_Aiming)
 	bool bAiming;
+	
+	UFUNCTION()
+	void OnRep_Aiming();
+	
+	bool bAimButtonPressed;
 
 	UPROPERTY(EditAnywhere)
 	float BaseWalkSpeed;
