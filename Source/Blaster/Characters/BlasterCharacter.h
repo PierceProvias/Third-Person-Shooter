@@ -350,7 +350,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Elim")
 	float ElimBotHoverDistance = 200.f;
 
-	TObjectPtr<ABlasterPlayerState> BlasterPlayerState;
+	TWeakObjectPtr<ABlasterPlayerState> BlasterPlayerState;
 
 	bool bInputsSet = false;
 

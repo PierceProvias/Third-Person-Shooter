@@ -2,23 +2,39 @@
 
 
 #include "MovingActor.h"
+#include "Components/BoxComponent.h"
+#include "Components/InterpToMovementComponent.h"
 
-
-// Sets default values
 AMovingActor::AMovingActor()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
+	
+	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollider"));
+	RootComponent = BoxCollider;
+
+	PlatformMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlatformMesh"));
+	PlatformMesh->SetupAttachment(RootComponent);
+
+	InterpMovementComponent = CreateDefaultSubobject<UInterpToMovementComponent>(TEXT("InterpMovementComponent"));
+	InterpMovementComponent->Duration = 5.f;
+	InterpMovementComponent->bSweep = true;
+	InterpMovementComponent->BehaviourType = EInterpToBehaviourType::PingPong;
 }
 
-// Called when the game starts or when spawned
 void AMovingActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Setting up the control points for movement down our path
+	InterpMovementComponent->ControlPoints.Add(FInterpControlPoint(FVector(0.f, 0.f, 0.f), true));
+	for (int i = 0; i < ThePath.Num(); i++)
+	{
+		InterpMovementComponent->ControlPoints.Add(FInterpControlPoint(FVector(ThePath[i]), true));
+	}
+	InterpMovementComponent->FinaliseControlPoints();
 }
 
-// Called every frame
 void AMovingActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

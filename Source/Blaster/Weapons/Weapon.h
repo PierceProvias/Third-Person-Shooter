@@ -165,17 +165,24 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Ammo")
 	TSubclassOf<ACasing> CasingClass;
 
-	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo, Category = "Ammo")
+	UPROPERTY(EditAnywhere, Category = "Ammo")
 	int32 Ammo;
+
+	UFUNCTION(Client, Reliable)
+	void ClientUpdateAmmo(int32 ServerAmmo);
+
+	UFUNCTION(Client, Reliable)
+	void ClientAddAmmo(int32 AmmoToAdd);
 
 	UPROPERTY(EditAnywhere, Category = "Ammo")
 	int32 MagCapacity;
 
+	// Number of unprocessed server requests for Ammo
+	// Incremented in SpendRound(), decremented in ClientUpdateAmmo()
+	int32 Sequence = 0;
+
 	TWeakObjectPtr<ABlasterCharacter> BlasterOwnerCharacter;
 	TWeakObjectPtr<ABlasterPlayerController> BlasterOwnerController;
-
-	UFUNCTION()
-	void OnRep_Ammo();
 
 	void SpendRound();
 

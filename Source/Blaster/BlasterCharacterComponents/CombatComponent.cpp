@@ -510,7 +510,7 @@ void UCombatComponent::UpdateAmmoValues()
 		BlasterController->SetHUDCarriedAmmo(CarriedAmmo);
 	}
 
-	EquippedWeapon->AddAmmo(-ReloadAmount);
+	EquippedWeapon->AddAmmo(ReloadAmount);
 }
 
 void UCombatComponent::UpdateWeapon2DTextures()
