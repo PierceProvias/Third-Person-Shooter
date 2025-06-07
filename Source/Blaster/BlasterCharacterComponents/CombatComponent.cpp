@@ -19,6 +19,7 @@
 #include "../Weapons/Shotgun.h"
 
 UCombatComponent::UCombatComponent() :
+	bLocallyReloading{false},
 	bAimButtonPressed{false}
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -479,7 +480,7 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 
 void UCombatComponent::HandleReload()
 {
-	BlasterCharacter->PlayReloadMontage();
+	if (BlasterCharacter) { BlasterCharacter->PlayReloadMontage(); }
 }
 
 int32 UCombatComponent::AmountToReload()
@@ -500,8 +501,8 @@ void UCombatComponent::ServerReload_Implementation()
 	if (BlasterCharacter == nullptr || EquippedWeapon == nullptr) return;
 
 	CombatState = ECombatState::ECS_Reloading;
-	HandleReload();
-	UpdateAmmoValues();
+	if (!BlasterCharacter->IsLocallyControlled()) { HandleReload(); }
+	//UpdateAmmoValues();
 }
 
 void UCombatComponent::UpdateAmmoValues()
@@ -570,7 +571,7 @@ void UCombatComponent::OnRep_CombatState()
 	switch (CombatState)
 	{
 	case ECombatState::ECS_Reloading:
-		HandleReload();
+		if (BlasterCharacter && !BlasterCharacter->IsLocallyControlled()) { HandleReload(); }
 		break;
 	case ECombatState::ECS_Unoccupied:
 		if (bFireButtonPressed)
@@ -660,6 +661,7 @@ void UCombatComponent::FireTimerFinished()
 bool UCombatComponent::CanFire()
 {
 	if (!EquippedWeapon) return false;
+	if (bLocallyReloading) return false;
 	if (EquippedWeapon->IsEmpty()) return false;
 	if (!bCanFire) return false;
 	if (CombatState != ECombatState::ECS_Unoccupied) return false;
@@ -724,9 +726,11 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 
 void UCombatComponent::Reload()
 {
-	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied && EquippedWeapon && !EquippedWeapon->IsFull())
+	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied && EquippedWeapon && !EquippedWeapon->IsFull() && !bLocallyReloading)
 	{
 		ServerReload();
+		HandleReload();
+		bLocallyReloading = true;
 	}
 }
 
@@ -819,11 +823,13 @@ void UCombatComponent::ServerThrowGrenade_Implementation()
 void UCombatComponent::FinishedReloading()
 {
 	if (BlasterCharacter == nullptr) return;
+	bLocallyReloading = false;
 	if (BlasterCharacter->HasAuthority())
 	{
 		CombatState = ECombatState::ECS_Unoccupied;
 		UpdateAmmoValues();
 	}
+	if (bFireButtonPressed) { Fire(); }
 }
 
 void UCombatComponent::FinishedThrowingGrenade()

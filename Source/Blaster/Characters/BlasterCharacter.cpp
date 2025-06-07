@@ -737,6 +737,11 @@ FVector ABlasterCharacter::GetHitTarget() const
 	return CombatComponent->HitTarget;
 }
 
+bool ABlasterCharacter::IsLocallyReloading() const
+{
+	if (CombatComponent == nullptr) return false;
+	return CombatComponent->bLocallyReloading;
+}
 
 
 void ABlasterCharacter::PostInitializeComponents()

@@ -34,7 +34,8 @@ public:
 	
 	void DropCurrentWeapon();
 	void Reload();
-	
+
+	// AnimNotify to call at the end of reloading anim
 	UFUNCTION(BlueprintCallable)
 	void FinishedReloading();
 
@@ -48,6 +49,7 @@ public:
 	void ServerLaunchGrenade(const FVector_NetQuantize& Target);
 
 	void PickupAmmo(EWeaponType WeaponType, int32 AmmoAmount);
+	bool bLocallyReloading;
 	
 protected:
 

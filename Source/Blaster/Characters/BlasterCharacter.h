@@ -395,9 +395,9 @@ public:
 	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
 	FORCEINLINE void SetShield(float Amount) {Shield = Amount;}
 	
-	
 	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon() const;
 	FVector GetHitTarget() const;
+	bool IsLocallyReloading() const;
 
 };

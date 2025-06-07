@@ -8,6 +8,7 @@
 
 #include "../Weapons/Weapon.h"
 #include "../BlasterTypes/CombatState.h"
+#include "Blaster/BlasterCharacterComponents/CombatComponent.h"
 
 void UBlasterAnimInstance::NativeInitializeAnimation()
 {
@@ -92,6 +93,10 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	} 
 
 	bUseFABRIK			= BlasterCharacter->GetCombatState() == ECombatState::ECS_Unoccupied;
+	if (BlasterCharacter->IsLocallyReloading() && BlasterCharacter->GetCombatState() != ECombatState::ECS_ThrowingGrenade)
+	{
+		bUseFABRIK = !BlasterCharacter->IsLocallyReloading();
+	}
 	bUseAimOffsets		= BlasterCharacter->GetCombatState() == ECombatState::ECS_Unoccupied;
 	bTransformRightHand = BlasterCharacter->GetCombatState() != ECombatState::ECS_Unoccupied;
 }
