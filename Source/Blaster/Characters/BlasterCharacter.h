@@ -31,6 +31,10 @@ class USoundCue;
 class ABlasterPlayerState;
 class UPauseMenu;
 
+#define LIST_DATA_ACCESSOR(DataType, PropertyName) \
+	FORCEINLINE DataType Get##PropertyName() const { return PropertyName; } \
+	void Set##PropertyName(DataType In##PropertyName) {PropertyName = In##PropertyName; } 
+
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
 {
@@ -370,34 +374,31 @@ public:
 	bool IsWeaponEquipped();
 	bool IsAiming();
 	void ShowKillConfirmedWidget(bool bShowWidget);
-
-	FORCEINLINE auto GetDefaultWeaponClass() const {return DefaultWeaponClass;}
-	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
-	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
-	FORCEINLINE float GetHealth() const { return Health; }
-	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
-	FORCEINLINE float GetShield() const { return Shield; }
-	FORCEINLINE float GetMaxShield() const { return MaxShield; }
-	FORCEINLINE float GetElimDelay() const { return ElimDelay; }
-	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
-	FORCEINLINE UInputMappingContext* GetCharacterInputMappingContext() const { return CharacterMappingContext; }
-	FORCEINLINE UInputAction* GetFireAction() const { return FireAction; }
-	FORCEINLINE UStaticMeshComponent* GetAttachedGrenade() const { return AttachedGrenade; }
-	FORCEINLINE UCombatComponent* GetCombatComponent() const {return CombatComponent;}	
-	FORCEINLINE UBuffComponent* GetBuffComponent() const {return BuffComponent;}
-	FORCEINLINE FName GetEffectorTargetName() const { return EffectorTarget; }
-	FORCEINLINE FTimerHandle GetElimTimer() const { return ElimTimer; }
-	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
-	FORCEINLINE UTexture2D* GetKillConfirmedSprite() const {return KillConfirmedSprite; }
+	
+	LIST_DATA_ACCESSOR(TSubclassOf<AWeapon>, DefaultWeaponClass)
+	LIST_DATA_ACCESSOR(float, AO_Yaw)
+	LIST_DATA_ACCESSOR(float, AO_Pitch)
+	LIST_DATA_ACCESSOR(float, Health);
+	LIST_DATA_ACCESSOR(float, MaxHealth)
+	LIST_DATA_ACCESSOR(float, Shield)
+	LIST_DATA_ACCESSOR(float, MaxShield)
+	LIST_DATA_ACCESSOR(float, ElimDelay)
+	LIST_DATA_ACCESSOR(UCameraComponent*, Camera)
+	LIST_DATA_ACCESSOR(UInputMappingContext*, CharacterMappingContext)
+	LIST_DATA_ACCESSOR(UInputAction*, FireAction )
+	LIST_DATA_ACCESSOR(UStaticMeshComponent*, AttachedGrenade)
+	LIST_DATA_ACCESSOR(UCombatComponent*, CombatComponent)
+	LIST_DATA_ACCESSOR(UBuffComponent*, BuffComponent)
+	LIST_DATA_ACCESSOR(FTimerHandle, ElimTimer)
+	LIST_DATA_ACCESSOR(ETurningInPlace, TurningInPlace)
+	LIST_DATA_ACCESSOR(UTexture2D*, KillConfirmedSprite)
 	
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
 	FORCEINLINE bool IsElimmed() const { return bElimmed; }
-	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
-	FORCEINLINE void SetShield(float Amount) {Shield = Amount;}
+	FORCEINLINE FName GetEffectorTargetName() const { return EffectorTarget; }
 	
 	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon() const;
 	FVector GetHitTarget() const;
 	bool IsLocallyReloading() const;
-
 };
