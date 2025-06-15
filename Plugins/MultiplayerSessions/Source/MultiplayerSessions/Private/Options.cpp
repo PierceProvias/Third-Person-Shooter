@@ -10,11 +10,8 @@
 #include "SelectionBase.h"
 #include "Framerates.h"
 #include "Kismet/GameplayStatics.h"
-//#include "GameSettingCollection.h"
-//#include "GameSetting.h"
-//#include "Engine/LocalPlayer.h"
 #include <functional>
-//#include <iostream>
+
 
 // Anonymous namespace used only in this implementation file and prevents it from leaking to other files
 namespace

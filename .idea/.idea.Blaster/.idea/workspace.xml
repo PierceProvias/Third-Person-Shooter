@@ -7,7 +7,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c64b2a5-f495-4c70-966c-c2533f8b30a1" name="Changes" comment="" />
+    <list default="true" id="7c64b2a5-f495-4c70-966c-c2533f8b30a1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Blaster/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Blaster/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Private/Menu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Private/Menu.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Private/Options.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Private/Options.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Public/Options.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Public/Options.h" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,6 +55,7 @@
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyAllTypes.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AIModule/Classes/BehaviorTree/Blackboard/BlackboardKeyType_String.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AIModule/Classes/BehaviorTree/BlackboardAssetProvider.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AIModule/Classes/BehaviorTree/BlackboardComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AIModule/Private/BehaviorTree/BlackboardAssetProvider.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/AIModule/Private/BehaviorTree/BlackboardComponent.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -92,6 +98,7 @@
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectPtr.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/CoreUObject/Public/UObject/Package.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/CoreUObject/Public/UObject/Stack.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectGlobals.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/CoreUObject/Public/UObject/WeakFieldPtr.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/CoreUObject/Public/UObject/WeakObjectPtr.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Datasmith/CADKernel/Public/CADKernel/Math/Aabb.h" root0="FORCE_HIGHLIGHTING" />
@@ -160,6 +167,7 @@
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Launch/Private/LaunchEngineLoop.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/MeshUtilitiesCommon/Public/DisjointSet.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/RenderCore/Private/Shader.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/Slate/Public/Framework/Application/AnalogCursor.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/TraceLog/Private/Trace/Codec.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/TraceLog/Private/Trace/Important/Cache.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic Games/UE_5.1/Engine/Source/Runtime/TraceLog/Public/Trace/Detail/Channel.inl" root0="FORCE_HIGHLIGHTING" />
@@ -327,6 +335,11 @@
       <workItem from="1748874102207" duration="6109000" />
       <workItem from="1749169814637" duration="668000" />
       <workItem from="1749302004647" duration="8935000" />
+      <workItem from="1749333780720" duration="2634000" />
+      <workItem from="1749484987445" duration="6560000" />
+      <workItem from="1749560303088" duration="707000" />
+      <workItem from="1749569519079" duration="1850000" />
+      <workItem from="1749929621822" duration="1802000" />
     </task>
     <servers />
   </component>

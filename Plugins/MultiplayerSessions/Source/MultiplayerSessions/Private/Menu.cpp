@@ -140,7 +140,6 @@ void UMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
 			{
 				PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 			}
-
 		}
 	}
 

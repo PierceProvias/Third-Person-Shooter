@@ -25,7 +25,7 @@ public:
 	void MenuSetup();
 
 	virtual void NativeConstruct() override;
-	
+	 
 
 protected:
 

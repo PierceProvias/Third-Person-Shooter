@@ -17,6 +17,10 @@ class UWidgetComponent;
 class UAnimationAsset;
 class UPickupWidget;
 
+#define LIST_DATA_ACCESSOR(DataType, PropertyName) \
+	FORCEINLINE DataType Get##PropertyName() const { return PropertyName; } \
+	void Set##PropertyName(DataType In##PropertyName) {PropertyName = In##PropertyName; } 
+
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
 {
@@ -225,24 +229,21 @@ public:
 	void SetWeaponState(EWeaponState State);
 	bool IsEmpty();
 	bool IsFull();
-
-	FORCEINLINE USphereComponent* GetAreaSphere() const { return AreaSphere; }
-	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
-
-	FORCEINLINE UTexture2D* GetWeaponTexture2D() const { return WeaponTexture2D; }
-	FORCEINLINE UTexture2D* GetKillConfirmedSprite() const { return KillConfirmedSprite; }
+	
+	LIST_DATA_ACCESSOR(USphereComponent*, AreaSphere);
+	LIST_DATA_ACCESSOR(USkeletalMeshComponent*, WeaponMesh);
+	LIST_DATA_ACCESSOR(UTexture2D*, KillConfirmedSprite);
+	LIST_DATA_ACCESSOR(UTexture2D*, WeaponTexture2D)
+	LIST_DATA_ACCESSOR(TArray<UTexture2D*>, KillConfirmedSprites)
+	LIST_DATA_ACCESSOR(float, ZoomedFOV)
+	LIST_DATA_ACCESSOR(float, ZoomInterpSpeed)
+	LIST_DATA_ACCESSOR(EWeaponType, WeaponType)
+	LIST_DATA_ACCESSOR(int32, Ammo)
+	LIST_DATA_ACCESSOR(int32, MagCapacity)
+	
 	FORCEINLINE UTexture2D* GetCrosshairs_Center() const { return CrosshairsCenter; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Left() const { return CrosshairsLeft; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Right() const { return CrosshairsRight; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Top() const { return CrosshairsTop; }
 	FORCEINLINE UTexture2D* GetCrosshairs_Bottom() const { return CrosshairsBottom; }
-	FORCEINLINE TArray<UTexture2D*> GetKillConfirmedSprites() const {return KillConfirmedSprites;};
-	
-	FORCEINLINE float GetZoomedFOV() const { return ZoomedFOV; }
-	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }
-
-	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
-	FORCEINLINE int32 GetAmmo() const { return Ammo; }
-	FORCEINLINE int32 GetMagCapacity() const { return MagCapacity; }
-
 };
